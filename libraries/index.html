@@ -103,6 +103,22 @@ main{max-width:1080px;margin:18px auto 40px;padding:0 16px}
 .rank.r3{background:var(--matsu);color:#fff;border-color:var(--matsu)}
 .feature-lib .visited-mark{margin-left:auto;color:var(--shu);font-family:var(--serif);font-weight:700;transform:rotate(-12deg);font-size:15px;flex:0 0 auto}
 
+/* ---------- feature view (メインページ展開) ---------- */
+.f-head{background:var(--ink);color:#fff;border-radius:12px;padding:18px 20px;margin-bottom:14px}
+.f-head h2{font-family:var(--serif);font-size:20px;font-weight:600;line-height:1.5}
+.f-head .f-sub{font-size:12px;color:rgba(255,255,255,.7);margin:2px 0 8px}
+.f-head .f-lead{font-size:13.5px;line-height:1.9;color:rgba(255,255,255,.92)}
+.f-head .f-actions{margin-top:12px;display:flex;gap:10px;flex-wrap:wrap}
+.f-head .link-btn{border-color:rgba(255,255,255,.5);color:#fff}
+.f-back{border:1px solid rgba(255,255,255,.5);background:transparent;color:#fff;border-radius:8px;padding:7px 14px;font:inherit;font-size:13px;cursor:pointer}
+#featureMap{height:320px;border:1px solid var(--line);border-radius:10px;margin-bottom:16px}
+.card .rank-ov{position:absolute;left:10px;top:10px;z-index:3;width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  font-family:var(--serif);font-weight:700;font-size:15px;background:rgba(255,255,255,.92);color:var(--ink);border:1.5px solid var(--line)}
+.card .rank-ov.r1{background:var(--shu);color:#fff;border-color:var(--shu)}
+.card .rank-ov.r2{background:var(--ink);color:#fff;border-color:var(--ink)}
+.card .rank-ov.r3{background:var(--matsu);color:#fff;border-color:var(--matsu)}
+.card .why{font-size:12px;color:var(--sub);margin-top:6px;line-height:1.7}
+
 /* ---------- map ---------- */
 #mapview{display:none;max-width:1080px;margin:18px auto;padding:0 16px}
 #map{height:70vh;min-height:420px;border:1px solid var(--line);border-radius:10px}
@@ -190,6 +206,8 @@ footer{border-top:3px double var(--line);background:var(--card);padding:24px 16p
 </section>
 
 <main id="listview">
+  <div id="featureHead"></div>
+  <div id="featureMapWrap" style="display:none"><div id="featureMap"></div></div>
   <p class="count-line" id="countLine"></p>
   <div class="grid" id="grid"></div>
 </main>
@@ -289,17 +307,17 @@ const tabsEl=document.getElementById("areaTabs");
 AREAS.forEach(a=>{
   const b=document.createElement("button");
   b.className="tab"+(a===state.area?" active":"");b.textContent=a;
-  b.onclick=()=>{state.area=a;document.querySelectorAll(".tab").forEach(t=>t.classList.toggle("active",t.textContent===a));render();};
+  b.onclick=()=>{exitFeature();state.area=a;document.querySelectorAll(".tab").forEach(t=>t.classList.toggle("active",t.textContent===a));render();};
   tabsEl.appendChild(b);
 });
 const chipsEl=document.getElementById("tagChips");
 TAGS.forEach(t=>{
   const b=document.createElement("button");
   b.className="chip";b.textContent=t;
-  b.onclick=()=>{state.tags.has(t)?state.tags.delete(t):state.tags.add(t);b.classList.toggle("active");render();};
+  b.onclick=()=>{exitFeature();state.tags.has(t)?state.tags.delete(t):state.tags.add(t);b.classList.toggle("active");render();};
   chipsEl.appendChild(b);
 });
-document.getElementById("search").addEventListener("input",e=>{state.q=e.target.value;render();});
+document.getElementById("search").addEventListener("input",e=>{exitFeature();state.q=e.target.value;render();});
 document.getElementById("sortBtn").onclick=e=>{state.sortByDist=!state.sortByDist;e.target.classList.toggle("active");render();};
 document.getElementById("homeBtn").onclick=openHomeModal;
 
@@ -379,7 +397,7 @@ function openHomeModal(){
   overlay.classList.add("open");
 }
 document.getElementById("listBtn").onclick=()=>switchView("list");
-document.getElementById("mapBtn").onclick=()=>switchView("map");
+document.getElementById("mapBtn").onclick=()=>{exitFeature();render();switchView("map");};
 
 function switchView(v){
   state.view=v;
@@ -404,23 +422,26 @@ function thumbHtml(l,big){
   </div>`;
 }
 function render(){
-  const arr=filtered();
-  document.getElementById("countLine").textContent=`${arr.length}館を表示${state.sortByDist?"（枚方市駅からの直線距離順）":""}`;
+  const f=state.feature;
+  const entries=f?featureEntries(f):filtered().map(l=>({lib:l}));
+  document.getElementById("countLine").textContent=f?`特集: ${f.title}（${entries.length}館）`:`${entries.length}館を表示${state.sortByDist?`（${originLabel()}からの直線距離順）`:""}`;
   const grid=document.getElementById("grid");
   grid.innerHTML="";
-  arr.forEach(l=>{
+  entries.forEach((e,i)=>{
+    const l=e.lib;
     const c=document.createElement("article");
     c.className="card";
     c.innerHTML=`${thumbHtml(l)}
+      ${f&&f.ranked?`<span class="rank-ov r${i+1}">${i+1}</span>`:""}
       <button class="stamp-btn${visited.has(l.id)?" on":""}" aria-label="訪問済みにする">${visited.has(l.id)?"訪":"未訪"}</button>
       <div class="card-body">
         <h3>${esc(l.name)}</h3>
         <p class="meta">${esc(l.pref)} ${esc(l.city)}${l.opened?` ・ ${esc(l.opened)}年開館`:""}</p>
         <div class="tagrow">${l.tags.map(t=>`<span class="tag">${t}</span>`).join("")}</div>
-        <p class="pt">${esc(l.points[0])}</p>
+        ${e.why?`<p class="why">${esc(e.why)}</p>`:`<p class="pt">${esc(l.points[0])}</p>`}
         ${(home||state.sortByDist)&&isFinite(l.km)?`<p class="dist">${esc(accessText(l))}（約${Math.round(l.km)}km・目安）</p>`:""}
       </div>`;
-    c.querySelector(".stamp-btn").onclick=e=>{e.stopPropagation();toggleVisit(l.id,e.target);};
+    c.querySelector(".stamp-btn").onclick=e2=>{e2.stopPropagation();toggleVisit(l.id,e2.target);};
     c.onclick=()=>openModal(l);
     grid.appendChild(c);
   });
@@ -519,26 +540,63 @@ FEATURES.forEach((f,i)=>{
   c.onclick=()=>openFeature(f);
   stripEl.appendChild(c);
 });
+function featureEntries(f){return (f.items||f.ids.map(id=>({id}))).map(it=>({...it,lib:LIBS.find(x=>x.id===it.id)})).filter(e=>e.lib);}
 function openFeature(f){
-  modalEl.innerHTML=`
-    <button class="close-x" aria-label="閉じる">×</button>
-    <div class="modal-body feature-body">
+  state.feature=f;
+  switchView("list");
+  renderFeatureHead();
+  render();
+  document.getElementById("featureHead").scrollIntoView({behavior:"smooth",block:"start"});
+}
+function exitFeature(){
+  if(!state.feature)return;
+  state.feature=null;
+  document.getElementById("featureHead").innerHTML="";
+  document.getElementById("featureMapWrap").style.display="none";
+  document.getElementById("features").style.display="";
+}
+function renderFeatureHead(){
+  const f=state.feature;
+  document.getElementById("features").style.display="none";
+  document.getElementById("featureHead").innerHTML=`
+    <div class="f-head">
       <h2>${esc(f.title)}</h2>
-      <p class="meta">${esc(f.sub)}</p>
-      <p class="lead">${esc(f.lead)}</p>
-      ${f.link?`<p style="margin:4px 0 8px"><a class="link-btn" href="${esc(f.link.u)}" target="_blank" rel="noopener">${esc(f.link.t)}</a></p>`:""}
-      ${(f.items||f.ids.map(id=>({id}))).map((it,i)=>{const l=LIBS.find(x=>x.id===it.id);return `
-        <div class="feature-lib" data-id="${it.id}">
-          ${f.ranked?`<span class="rank r${i+1}">${i+1}</span>`:""}
-          <div><p class="n">${esc(l.name)}</p><p class="c">${esc(l.pref)} ${esc(l.city)}｜${it.why?esc(it.why):esc(l.access)}</p></div>
-          ${visited.has(it.id)?'<span class="visited-mark">訪</span>':""}
-        </div>`;}).join("")}
+      <p class="f-sub">${esc(f.sub)}｜${featureEntries(f).length}館</p>
+      <p class="f-lead">${esc(f.lead)}</p>
+      <div class="f-actions">
+        <button class="f-back">← すべての図書館に戻る</button>
+        ${f.link?`<a class="link-btn" href="${esc(f.link.u)}" target="_blank" rel="noopener">${esc(f.link.t)}</a>`:""}
+      </div>
     </div>`;
-  modalEl.querySelector(".close-x").onclick=closeModal;
-  modalEl.querySelectorAll(".feature-lib").forEach(el=>{
-    el.onclick=()=>openModal(LIBS.find(x=>x.id===el.dataset.id));
+  document.getElementById("featureHead").querySelector(".f-back").onclick=()=>{exitFeature();render();};
+  renderFeatureMap();
+}
+let fmap=null,fmarkers=null;
+function renderFeatureMap(){
+  const f=state.feature;
+  document.getElementById("featureMapWrap").style.display="";
+  if(!fmap){
+    fmap=L.map("featureMap");
+    L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png",{
+      maxZoom:19,attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(fmap);
+    fmarkers=L.layerGroup().addTo(fmap);
+  }
+  fmarkers.clearLayers();
+  const pts=[];
+  featureEntries(f).forEach((e,i)=>{
+    const l=e.lib;
+    if(l.lat==null)return;
+    pts.push([l.lat,l.lng]);
+    const icon=L.divIcon({className:"",iconSize:[26,26],iconAnchor:[13,13],
+      html:`<div style="width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font:700 12px var(--serif);border:2px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,.4);background:${i===0&&f.ranked?"var(--shu)":"var(--matsu)"};color:#fff">${f.ranked?i+1:"●"}</div>`});
+    const m=L.marker([l.lat,l.lng],{icon}).addTo(fmarkers);
+    const div=document.createElement("div");
+    div.innerHTML=`<p class="popup-name">${esc(l.name)}</p><p class="popup-city">${esc(l.pref)} ${esc(l.city)}</p><span class="popup-open">詳細を見る</span>`;
+    div.querySelector(".popup-open").onclick=()=>openModal(l);
+    m.bindPopup(div);
   });
-  overlay.classList.add("open");
+  setTimeout(()=>{fmap.invalidateSize();if(pts.length)fmap.fitBounds(pts,{padding:[30,30]});},60);
 }
 
 /* ---------- map ---------- */
