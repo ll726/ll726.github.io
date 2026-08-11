@@ -1,0 +1,966 @@
+[
+ {
+  "id": "nakajima",
+  "name": "国際教養大学 中嶋記念図書館",
+  "area": "北海道・東北",
+  "pref": "秋田県",
+  "city": "秋田市",
+  "tags": [
+   "建築"
+  ],
+  "points": [
+   "『本のコロセウム』半円形の秋田杉傘型屋根",
+   "24時間365日開館",
+   "仙田満設計"
+  ],
+  "access": "秋田駅からバス約30分",
+  "visit_note": "大学図書館。学外者の利用時間に制限あり、公式サイトで要確認",
+  "opened": "2008",
+  "lat": 39.6274282,
+  "lng": 140.1982904,
+  "url": "https://library.aiu.ac.jp/"
+ },
+ {
+  "id": "sendai-mediatheque",
+  "name": "せんだいメディアテーク",
+  "area": "北海道・東北",
+  "pref": "宮城県",
+  "city": "仙台市",
+  "tags": [
+   "建築",
+   "規模"
+  ],
+  "points": [
+   "伊東豊雄の代表作。13本のチューブとガラスのダブルスキン",
+   "日本建築学会賞・グッドデザイン大賞ほか受賞",
+   "蔵書50万冊超・カフェ併設"
+  ],
+  "access": "地下鉄勾当台公園駅から徒歩6分",
+  "visit_note": null,
+  "opened": "2001",
+  "lat": 38.2655142,
+  "lng": 140.8655467,
+  "url": "https://www.smt.jp/"
+ },
+ {
+  "id": "kawanokami",
+  "name": "川の上・百俵館",
+  "area": "北海道・東北",
+  "pref": "宮城県",
+  "city": "石巻市",
+  "tags": [
+   "歴史",
+   "コンセプト"
+  ],
+  "points": [
+   "大正時代の農業倉庫を改修した私設『まちの図書館』",
+   "コメ・カフェ併設。お茶とおしゃべり自由",
+   "震災後の地域づくり『石巻・川の上プロジェクト』の拠点"
+  ],
+  "access": "石巻市小船越（石巻市街から車で約15分）",
+  "visit_note": "月曜定休。私設図書館のため営業時間は公式サイトで要確認",
+  "opened": "2015",
+  "lat": 38.5049129,
+  "lng": 141.3016116,
+  "url": "http://kawanokami.com/hyappyokan"
+ },
+ {
+  "id": "tono-honnomori",
+  "name": "こども本の森 遠野",
+  "area": "北海道・東北",
+  "pref": "岩手県",
+  "city": "遠野市",
+  "tags": [
+   "建築",
+   "コンセプト"
+  ],
+  "points": [
+   "安藤忠雄設計・寄贈。築120年の旧呉服店をリノベ",
+   "『遠野物語』を軸にした選書",
+   "入館無料（貸出なし）"
+  ],
+  "access": "JR遠野駅から徒歩3分",
+  "visit_note": "貸出は行っていない",
+  "opened": "2021",
+  "lat": 39.3298281,
+  "lng": 141.5295098,
+  "url": "https://kodomohonnomori-tono.com/"
+ },
+ {
+  "id": "shiwa-ogal",
+  "name": "紫波町図書館（オガールプラザ）",
+  "area": "北海道・東北",
+  "pref": "岩手県",
+  "city": "紫波町",
+  "tags": [
+   "コンセプト"
+  ],
+  "points": [
+   "公民連携まちづくり『オガール』の中核施設",
+   "Library of the Year 2016 大賞",
+   "紫波中央駅前"
+  ],
+  "access": "JR紫波中央駅から徒歩4分",
+  "visit_note": null,
+  "opened": "2012",
+  "lat": 39.5547549,
+  "lng": 141.160039,
+  "url": "https://lib.town.shiwa.iwate.jp/"
+ },
+ {
+  "id": "sukagawa-tette",
+  "name": "須賀川市民交流センター tette",
+  "area": "北海道・東北",
+  "pref": "福島県",
+  "city": "須賀川市",
+  "tags": [
+   "建築",
+   "コンセプト"
+  ],
+  "points": [
+   "3層吹抜けと斜路が連続する立体建築",
+   "円谷英二ミュージアム併設（特撮の街・須賀川）"
+  ],
+  "access": "JR須賀川駅から徒歩9分",
+  "visit_note": null,
+  "opened": "2019",
+  "lat": 37.288412,
+  "lng": 140.375601,
+  "url": "https://s-tette.jp/"
+ },
+ {
+  "id": "kadokawa-musashino",
+  "name": "角川武蔵野ミュージアム",
+  "area": "関東",
+  "pref": "埼玉県",
+  "city": "所沢市",
+  "tags": [
+   "建築",
+   "コンセプト"
+  ],
+  "points": [
+   "隈研吾設計の巨石建築",
+   "高さ約8mの『本棚劇場』とプロジェクションマッピング",
+   "マンガ・ラノベ図書館併設"
+  ],
+  "access": "JR東所沢駅から徒歩10分",
+  "visit_note": "有料（入館チケット制）",
+  "opened": "2020",
+  "lat": 35.797689,
+  "lng": 139.5078666,
+  "url": "https://kadcul.com/"
+ },
+ {
+  "id": "miruru",
+  "name": "那須塩原市図書館 みるる",
+  "area": "関東",
+  "pref": "栃木県",
+  "city": "那須塩原市",
+  "tags": [
+   "建築",
+   "コンセプト"
+  ],
+  "points": [
+   "『森』をテーマにした空間。グッドデザイン賞受賞",
+   "黒磯駅前・カフェ併設"
+  ],
+  "access": "JR黒磯駅から徒歩1分",
+  "visit_note": null,
+  "opened": "2020",
+  "lat": 36.9693645,
+  "lng": 140.0586007,
+  "url": "https://www.nasushiobara-library.jp/"
+ },
+ {
+  "id": "ota-artlib",
+  "name": "太田市美術館・図書館",
+  "area": "関東",
+  "pref": "群馬県",
+  "city": "太田市",
+  "tags": [
+   "建築",
+   "コンセプト"
+  ],
+  "points": [
+   "美術館と図書館が連続スロープで融合",
+   "雲形の本棚・屋上庭園・カフェ"
+  ],
+  "access": "東武太田駅から徒歩1分",
+  "visit_note": "美術館展示は有料",
+  "opened": "2017",
+  "lat": 36.294793,
+  "lng": 139.3784668,
+  "url": "https://www.artmuseumlibraryota.jp/"
+ },
+ {
+  "id": "toyo-bunko",
+  "name": "東洋文庫ミュージアム",
+  "area": "関東",
+  "pref": "東京都",
+  "city": "文京区",
+  "tags": [
+   "専門",
+   "建築",
+   "歴史"
+  ],
+  "points": [
+   "『日本一美しい書棚』モリソン書庫",
+   "国宝・重要文化財を含む東洋学コレクション約100万冊",
+   "カフェ併設"
+  ],
+  "access": "JR駒込駅から徒歩8分",
+  "visit_note": "有料（ミュージアム入場料）",
+  "opened": "2011",
+  "lat": 35.7312515,
+  "lng": 139.7487051,
+  "url": "https://toyo-bunko.or.jp/museum/"
+ },
+ {
+  "id": "kodomo-tosho",
+  "name": "国立国会図書館 国際子ども図書館",
+  "area": "関東",
+  "pref": "東京都",
+  "city": "台東区",
+  "tags": [
+   "歴史",
+   "専門"
+  ],
+  "points": [
+   "明治期の帝国図書館建築を保存再生",
+   "上野公園内・児童書専門の国立図書館"
+  ],
+  "access": "JR上野駅から徒歩10分",
+  "visit_note": null,
+  "opened": "2000（建物は1906）",
+  "lat": 35.719485,
+  "lng": 139.773752,
+  "url": "https://www.kodomo.go.jp/"
+ },
+ {
+  "id": "ndl-tokyo",
+  "name": "国立国会図書館 東京本館",
+  "area": "関東",
+  "pref": "東京都",
+  "city": "千代田区",
+  "tags": [
+   "規模",
+   "歴史",
+   "専門"
+  ],
+  "points": [
+   "国内の出版物をすべて収集する日本唯一の納本図書館",
+   "国会議事堂の隣。蔵書は国内最大",
+   "満18歳以上なら誰でも利用できる"
+  ],
+  "access": "地下鉄永田町駅から徒歩5分／国会議事堂前駅から徒歩8分",
+  "visit_note": "満18歳以上。登録利用者カード（当日発行可）が必要。館内は資料請求方式（開架は一部のみ）",
+  "opened": "1948（本館建物は1961）",
+  "lat": 35.6786024,
+  "lng": 139.7442643,
+  "url": "https://www.ndl.go.jp/"
+ },
+ {
+  "id": "hibiya",
+  "name": "日比谷図書文化館",
+  "area": "関東",
+  "pref": "東京都",
+  "city": "千代田区",
+  "tags": [
+   "歴史",
+   "コンセプト",
+   "専門"
+  ],
+  "points": [
+   "日比谷公園の緑に囲まれた三角形の建物",
+   "図書館×ミュージアム×カレッジの複合文化施設",
+   "旧都立日比谷図書館を千代田区が引き継ぎ再生"
+  ],
+  "access": "地下鉄霞ケ関駅・日比谷駅から徒歩約5分",
+  "visit_note": null,
+  "opened": "2011（建物は1957）",
+  "lat": 35.671945,
+  "lng": 139.754641,
+  "url": "https://www.library.chiyoda.tokyo.jp/hibiya/"
+ },
+ {
+  "id": "sirius",
+  "name": "大和市文化創造拠点シリウス",
+  "area": "関東",
+  "pref": "神奈川県",
+  "city": "大和市",
+  "tags": [
+   "規模",
+   "コンセプト"
+  ],
+  "points": [
+   "蔵書約58万冊・地下1階地上6階の複合施設",
+   "開館後2年連続で年間来館300万人超",
+   "カフェで本の持込可"
+  ],
+  "access": "小田急・相鉄 大和駅から徒歩3分",
+  "visit_note": null,
+  "opened": "2016",
+  "lat": 35.4695135,
+  "lng": 139.4652679,
+  "url": "https://yamato-bunka.jp/"
+ },
+ {
+  "id": "toyama-kirari",
+  "name": "富山市立図書館本館 TOYAMAキラリ",
+  "area": "中部・北陸",
+  "pref": "富山県",
+  "city": "富山市",
+  "tags": [
+   "建築",
+   "コンセプト"
+  ],
+  "points": [
+   "隈研吾設計。5層吹抜けに斜めに射す光",
+   "富山市ガラス美術館と同居"
+  ],
+  "access": "市電 西町電停すぐ",
+  "visit_note": null,
+  "opened": "2015",
+  "lat": 36.6885615,
+  "lng": 137.2149038,
+  "url": "https://www.library.toyama.toyama.jp/"
+ },
+ {
+  "id": "umimirai",
+  "name": "金沢海みらい図書館",
+  "area": "中部・北陸",
+  "pref": "石川県",
+  "city": "金沢市",
+  "tags": [
+   "建築"
+  ],
+  "points": [
+   "白いキューブに約6000個の丸窓",
+   "米Fodor's『世界の魅力的な図書館ベスト20』選出",
+   "シーラカンスK&H設計"
+  ],
+  "access": "金沢駅からバス約20分",
+  "visit_note": null,
+  "opened": "2011",
+  "lat": 36.594339,
+  "lng": 136.604294,
+  "url": "https://www.lib.kanazawa.ishikawa.jp/umimirai"
+ },
+ {
+  "id": "ishikawa-pref",
+  "name": "石川県立図書館（百万石ビブリオバウム）",
+  "area": "中部・北陸",
+  "pref": "石川県",
+  "city": "金沢市",
+  "tags": [
+   "建築",
+   "規模",
+   "最新"
+  ],
+  "points": [
+   "円形劇場状の閲覧空間が圧巻",
+   "蔵書100万冊超・会話OK・カフェ併設"
+  ],
+  "access": "金沢駅からバス約25分",
+  "visit_note": null,
+  "opened": "2022",
+  "lat": 36.5486923,
+  "lng": 136.6803683,
+  "url": "https://www.library.pref.ishikawa.lg.jp/"
+ },
+ {
+  "id": "terrasow",
+  "name": "まちとしょテラソ（小布施町立図書館）",
+  "area": "中部・北陸",
+  "pref": "長野県",
+  "city": "小布施町",
+  "tags": [
+   "建築"
+  ],
+  "points": [
+   "三角形の木造ワンルーム空間",
+   "日本図書館協会建築賞・Library of the Year大賞",
+   "古谷誠章＋NASCA設計"
+  ],
+  "access": "長野電鉄小布施駅から徒歩2分",
+  "visit_note": null,
+  "opened": "2009",
+  "lat": 36.6988906,
+  "lng": 138.3127841,
+  "url": "https://www.town.obuse.nagano.jp/lib/"
+ },
+ {
+  "id": "media-cosmos",
+  "name": "みんなの森 ぎふメディアコスモス",
+  "area": "中部・北陸",
+  "pref": "岐阜県",
+  "city": "岐阜市",
+  "tags": [
+   "建築",
+   "規模"
+  ],
+  "points": [
+   "伊東豊雄設計。東濃ひのきの波打つ格子屋根",
+   "クラゲ状の照明『グローブ』が浮かぶ閲覧空間",
+   "閲覧席910席・カフェ併設"
+  ],
+  "access": "岐阜駅からバス約10分",
+  "visit_note": null,
+  "opened": "2015",
+  "lat": 35.4272893,
+  "lng": 136.7599149,
+  "url": "https://g-mediacosmos.jp/"
+ },
+ {
+  "id": "anforet",
+  "name": "安城市図書情報館アンフォーレ",
+  "area": "中部・北陸",
+  "pref": "愛知県",
+  "city": "安城市",
+  "tags": [
+   "コンセプト"
+  ],
+  "points": [
+   "飲食・会話自由の新世代図書館",
+   "開館後3年連続で来館100万人超"
+  ],
+  "access": "JR安城駅から徒歩5分",
+  "visit_note": null,
+  "opened": "2017",
+  "lat": 34.959556,
+  "lng": 137.083935,
+  "url": "https://www.library.city.anjo.aichi.jp/"
+ },
+ {
+  "id": "nakanoshima",
+  "name": "大阪府立中之島図書館",
+  "area": "関西",
+  "pref": "大阪府",
+  "city": "大阪市北区",
+  "tags": [
+   "歴史",
+   "建築"
+  ],
+  "points": [
+   "1904年築・国重要文化財。ギリシャ神殿風の外観",
+   "教会のような中央ホールのドーム",
+   "北欧カフェ『スモーブローキッチン』併設"
+  ],
+  "access": "京阪・地下鉄 淀屋橋駅から徒歩5分／京阪中之島線 大江橋駅すぐ",
+  "visit_note": null,
+  "opened": "1904",
+  "lat": 34.693505,
+  "lng": 135.5031979,
+  "url": "https://www.nakanoshima-library.jp/"
+ },
+ {
+  "id": "honnomori-nakanoshima",
+  "name": "こども本の森 中之島",
+  "area": "関西",
+  "pref": "大阪府",
+  "city": "大阪市北区",
+  "tags": [
+   "建築",
+   "コンセプト"
+  ],
+  "points": [
+   "安藤忠雄設計・寄贈。全壁面本棚と青リンゴのオブジェ",
+   "中之島公園内。中之島図書館とセットで巡れる"
+  ],
+  "access": "京阪なにわ橋駅すぐ",
+  "visit_note": "混雑時は事前予約制。公式サイトで要確認",
+  "opened": "2020",
+  "lat": 34.6931003,
+  "lng": 135.5063306,
+  "url": "https://kodomohonnomori.osaka/"
+ },
+ {
+  "id": "kadomado",
+  "name": "文化創造図書館 KADOMADO",
+  "area": "関西",
+  "pref": "大阪府",
+  "city": "門真市",
+  "tags": [
+   "最新",
+   "コンセプト",
+   "近場"
+  ],
+  "points": [
+   "2026年5月開館。京阪古川橋駅前の学び×地域活性化拠点",
+   "図書館・多目的室・学習室・カフェの複合施設",
+   "枚方発祥のCCC（TSUTAYA）グループが運営"
+  ],
+  "access": "京阪古川橋駅から徒歩すぐ（枚方市駅から電車約15分）",
+  "visit_note": null,
+  "opened": "2026",
+  "lat": 34.7404719,
+  "lng": 135.5922428,
+  "url": "https://kadomado.jp/"
+ },
+ {
+  "id": "ndl-kansai",
+  "name": "国立国会図書館 関西館",
+  "area": "関西",
+  "pref": "京都府",
+  "city": "精華町",
+  "tags": [
+   "規模",
+   "建築",
+   "近場"
+  ],
+  "points": [
+   "国会図書館の西日本拠点。書庫能力は国内最大級",
+   "ガラス張りの大閲覧室が近未来的",
+   "けいはんな学研都市。枚方から車で約30分"
+  ],
+  "access": "JR祝園駅・近鉄新祝園駅からバス",
+  "visit_note": "満18歳以上。登録利用者カード（当日発行可）が必要",
+  "opened": "2002",
+  "lat": 34.7448499,
+  "lng": 135.7710587,
+  "url": "https://www.ndl.go.jp/jp/kansai/"
+ },
+ {
+  "id": "osaka-pref-central",
+  "name": "大阪府立中央図書館",
+  "area": "関西",
+  "pref": "大阪府",
+  "city": "東大阪市",
+  "tags": [
+   "規模",
+   "近場"
+  ],
+  "points": [
+   "公共図書館として国内最大級の蔵書規模",
+   "国際児童文学館を併設",
+   "『なんでもある』を求めるならまずここ"
+  ],
+  "access": "近鉄けいはんな線 荒本駅から徒歩5分",
+  "visit_note": null,
+  "opened": "1996",
+  "lat": 34.6808992,
+  "lng": 135.6006685,
+  "url": "https://www.library.pref.osaka.jp/"
+ },
+ {
+  "id": "osaka-city-central",
+  "name": "大阪市立中央図書館",
+  "area": "関西",
+  "pref": "大阪府",
+  "city": "大阪市西区",
+  "tags": [
+   "規模",
+   "近場"
+  ],
+  "points": [
+   "蔵書数で全国トップ級の市立図書館",
+   "地下鉄直結でアクセス至便"
+  ],
+  "access": "地下鉄西長堀駅直結",
+  "visit_note": null,
+  "opened": "1996",
+  "lat": 34.6738148,
+  "lng": 135.4862048,
+  "url": "https://www.oml.city.osaka.lg.jp/"
+ },
+ {
+  "id": "morinomiya",
+  "name": "大阪公立大学 森之宮ライブラリー",
+  "area": "関西",
+  "pref": "大阪府",
+  "city": "大阪市城東区",
+  "tags": [
+   "最新",
+   "建築",
+   "近場"
+  ],
+  "points": [
+   "2025年秋開設の新キャンパス中核施設。コンセプトは『知の森』",
+   "大阪城東部の再開発エリアの新名所"
+  ],
+  "access": "JR・地下鉄 森ノ宮駅から徒歩圏",
+  "visit_note": "一般利用は登録制（登録料2,000円/2年、近畿在住18歳以上）。試験期は利用制限あり",
+  "opened": "2025",
+  "lat": 34.7017354,
+  "lng": 135.5365081,
+  "url": "https://www.omu.ac.jp/library/outline/morinomiya/"
+ },
+ {
+  "id": "neyagawa",
+  "name": "寝屋川市立中央図書館",
+  "area": "関西",
+  "pref": "大阪府",
+  "city": "寝屋川市",
+  "tags": [
+   "近場",
+   "コンセプト"
+  ],
+  "points": [
+   "寝屋川市駅前ビルに移転した駅近図書館",
+   "枚方の隣町。仕事帰り・買い物ついでに寄れる"
+  ],
+  "access": "京阪寝屋川市駅すぐ",
+  "visit_note": null,
+  "opened": "2020",
+  "lat": 34.7853022,
+  "lng": 135.6256255,
+  "url": "https://www.city.neyagawa.osaka.jp/organization_list/kyoiku_shakaikyoiku/tyuutosyo/tosyotop/index.html"
+ },
+ {
+  "id": "hirakata-central",
+  "name": "枚方市立中央図書館",
+  "area": "関西",
+  "pref": "大阪府",
+  "city": "枚方市",
+  "tags": [
+   "近場"
+  ],
+  "points": [
+   "地元のホーム図書館（輝きプラザきらら内）",
+   "電子図書館・Wi-Fi等サービス拡充中",
+   "巡礼の起点・比較の基準点として収録"
+  ],
+  "access": "京阪御殿山駅から徒歩約15分",
+  "visit_note": null,
+  "opened": "2005",
+  "lat": 34.833367,
+  "lng": 135.671662,
+  "url": "https://www.city.hirakata.osaka.jp/0000027069.html"
+ },
+ {
+  "id": "honnomori-kobe",
+  "name": "こども本の森 神戸",
+  "area": "関西",
+  "pref": "兵庫県",
+  "city": "神戸市中央区",
+  "tags": [
+   "建築",
+   "コンセプト"
+  ],
+  "points": [
+   "安藤忠雄設計・寄贈の第3弾",
+   "東遊園地内。六甲山系の木材を使った家具"
+  ],
+  "access": "地下鉄三宮・花時計前駅から徒歩5分",
+  "visit_note": "混雑時は事前予約制の場合あり",
+  "opened": "2022",
+  "lat": 34.6866764,
+  "lng": 135.1969324,
+  "url": "https://kodomohonnomori-kobe.jp/"
+ },
+ {
+  "id": "sumoto",
+  "name": "洲本図書館",
+  "area": "関西",
+  "pref": "兵庫県",
+  "city": "洲本市",
+  "tags": [
+   "歴史",
+   "建築"
+  ],
+  "points": [
+   "旧鐘紡洲本工場の赤レンガ建築を再生",
+   "近代化産業遺産×図書館。淡路島観光と組める"
+  ],
+  "access": "洲本バスセンターから徒歩5分",
+  "visit_note": null,
+  "opened": "1998（建物は明治期）",
+  "lat": 34.3459269,
+  "lng": 134.8945114,
+  "url": "https://www.im.licsre-saas.jp/sumoto/index2.html"
+ },
+ {
+  "id": "wakayama-civic",
+  "name": "和歌山市民図書館",
+  "area": "関西",
+  "pref": "和歌山県",
+  "city": "和歌山市",
+  "tags": [
+   "コンセプト",
+   "最新"
+  ],
+  "points": [
+   "CCC運営。蔦屋書店・スタバ併設の駅直結館",
+   "屋上テラスと吹抜けの大階段"
+  ],
+  "access": "南海和歌山市駅直結",
+  "visit_note": null,
+  "opened": "2020",
+  "lat": 34.2366938,
+  "lng": 135.1673785,
+  "url": "https://wakayama.civic-library.jp/"
+ },
+ {
+  "id": "nara-pref",
+  "name": "奈良県立図書情報館",
+  "area": "関西",
+  "pref": "奈良県",
+  "city": "奈良市",
+  "tags": [
+   "建築",
+   "専門"
+  ],
+  "points": [
+   "ガラスと木の大空間。戦争体験文庫など特色ある蔵書",
+   "イベント・展示が活発な『情報館』型"
+  ],
+  "access": "JR奈良駅からバス約10分",
+  "visit_note": null,
+  "opened": "2005",
+  "lat": 34.6755405,
+  "lng": 135.8053316,
+  "url": "https://www.library.pref.nara.jp/"
+ },
+ {
+  "id": "moriyama",
+  "name": "守山市立図書館",
+  "area": "関西",
+  "pref": "滋賀県",
+  "city": "守山市",
+  "tags": [
+   "建築"
+  ],
+  "points": [
+   "隈研吾設計『本と人とをつなぐ 湖のような図書館』",
+   "木の大屋根が連なる park-side の空間。琵琶湖観光と組める"
+  ],
+  "access": "JR守山駅からバス・徒歩約15分",
+  "visit_note": null,
+  "opened": "2018",
+  "lat": 35.0583128,
+  "lng": 135.9933533,
+  "url": "https://moriyama-city-lib.jp/"
+ },
+ {
+  "id": "kyoto-manga",
+  "name": "京都国際マンガミュージアム",
+  "area": "関西",
+  "pref": "京都府",
+  "city": "京都市中京区",
+  "tags": [
+   "専門",
+   "歴史"
+  ],
+  "points": [
+   "元・龍池小学校の校舎を活用",
+   "壁一面5万冊の『マンガの壁』。芝生で読める",
+   "博物館×図書館のハイブリッド"
+  ],
+  "access": "地下鉄烏丸御池駅から徒歩2分",
+  "visit_note": "有料（入場料制）",
+  "opened": "2006",
+  "lat": 35.0116959,
+  "lng": 135.7591764,
+  "url": "https://kyotomm.jp/"
+ },
+ {
+  "id": "tokuyama",
+  "name": "周南市立徳山駅前図書館",
+  "area": "中国・四国",
+  "pref": "山口県",
+  "city": "周南市",
+  "tags": [
+   "建築",
+   "コンセプト"
+  ],
+  "points": [
+   "内藤廣設計。駅直結・全長約120mの本棚アート",
+   "CCC運営、蔦屋書店・スタバ併設で22時まで開館"
+  ],
+  "access": "JR徳山駅直結",
+  "visit_note": null,
+  "opened": "2018",
+  "lat": 34.0515208,
+  "lng": 131.8029391,
+  "url": "https://shunan.ekimae-library.jp/"
+ },
+ {
+  "id": "taki",
+  "name": "出雲市立 海辺の多伎図書館",
+  "area": "中国・四国",
+  "pref": "島根県",
+  "city": "出雲市",
+  "tags": [
+   "景観"
+  ],
+  "points": [
+   "日本海に面したオーシャンビューの閲覧席",
+   "テラス席は飲食可。しまね景観賞",
+   "道の駅キララ多伎とセットで"
+  ],
+  "access": "JR小田駅から徒歩約10分",
+  "visit_note": null,
+  "opened": "1998",
+  "lat": 35.3984575,
+  "lng": 132.6837351,
+  "url": "https://izumolib.icv.ne.jp/library/lib-taki/"
+ },
+ {
+  "id": "momiwa",
+  "name": "瀬戸内市民図書館 もみわ広場",
+  "area": "中国・四国",
+  "pref": "岡山県",
+  "city": "瀬戸内市",
+  "tags": [
+   "建築",
+   "コンセプト"
+  ],
+  "points": [
+   "Library of the Year 2016 大賞＆オーディエンス賞のダブル受賞",
+   "香山壽夫設計の吹抜け空間"
+  ],
+  "access": "JR邑久駅から徒歩約15分",
+  "visit_note": null,
+  "opened": "2016",
+  "lat": 34.6624562,
+  "lng": 134.0996522,
+  "url": "https://lib.city.setouchi.lg.jp/"
+ },
+ {
+  "id": "yusuhara",
+  "name": "ゆすはら雲の上の図書館",
+  "area": "中国・四国",
+  "pref": "高知県",
+  "city": "梼原町",
+  "tags": [
+   "建築"
+  ],
+  "points": [
+   "隈研吾設計。天井から降り注ぐ木格子の森",
+   "土足禁止・靴を脱いで過ごす図書館",
+   "町内の隈建築群とあわせて巡礼できる"
+  ],
+  "access": "高知市から車で約1時間30分",
+  "visit_note": null,
+  "opened": "2018",
+  "lat": 33.3924398,
+  "lng": 132.9301689,
+  "url": "https://kumonoue-lib.jp/"
+ },
+ {
+  "id": "otepia",
+  "name": "オーテピア高知図書館",
+  "area": "中国・四国",
+  "pref": "高知県",
+  "city": "高知市",
+  "tags": [
+   "規模",
+   "コンセプト"
+  ],
+  "points": [
+   "県立＋市立の合築による全国有数規模",
+   "プラネタリウム（科学館）・点字図書館を併設"
+  ],
+  "access": "とさでん大橋通電停から徒歩3分",
+  "visit_note": null,
+  "opened": "2018",
+  "lat": 33.5610083,
+  "lng": 133.5371567,
+  "url": "https://otepia.kochi.jp/library/"
+ },
+ {
+  "id": "takeo",
+  "name": "武雄市図書館・歴史資料館",
+  "area": "九州・沖縄",
+  "pref": "佐賀県",
+  "city": "武雄市",
+  "tags": [
+   "コンセプト"
+  ],
+  "points": [
+   "元祖TSUTAYA図書館（2013年〜）",
+   "吹抜けの大空間に蔵書約25万冊・スタバ併設",
+   "武雄温泉とセットで"
+  ],
+  "access": "JR武雄温泉駅から徒歩15分",
+  "visit_note": null,
+  "opened": "2013",
+  "lat": 33.1891306,
+  "lng": 130.0236617,
+  "url": "https://takeo.city-library.jp/"
+ },
+ {
+  "id": "tobata",
+  "name": "北九州市立戸畑図書館",
+  "area": "九州・沖縄",
+  "pref": "福岡県",
+  "city": "北九州市",
+  "tags": [
+   "歴史",
+   "建築"
+  ],
+  "points": [
+   "1933年築の旧戸畑市庁舎をリノベーション",
+   "スクラッチタイルと塔屋が残る昭和モダン建築",
+   "保存再生の優良事例としてBELCA賞受賞"
+  ],
+  "access": "JR戸畑駅から徒歩約10分",
+  "visit_note": null,
+  "opened": "2014（建物は1933）",
+  "lat": 33.89121,
+  "lng": 130.827406,
+  "url": "https://www.toshokan.city.kitakyushu.jp/"
+ },
+ {
+  "id": "tarami",
+  "name": "諫早市立たらみ図書館",
+  "area": "九州・沖縄",
+  "pref": "長崎県",
+  "city": "諫早市",
+  "tags": [
+   "建築",
+   "景観"
+  ],
+  "points": [
+   "南欧リゾート風の建築",
+   "大村湾を一望。運が良ければスナメリも見える"
+  ],
+  "access": "JR喜々津駅から車約5分",
+  "visit_note": null,
+  "opened": "2000",
+  "lat": 32.838146,
+  "lng": 129.981643,
+  "url": "https://www.lib.isahaya.nagasaki.jp/"
+ },
+ {
+  "id": "akatsuki",
+  "name": "泊まれる図書館 暁",
+  "area": "九州・沖縄",
+  "pref": "佐賀県",
+  "city": "佐賀市",
+  "tags": [
+   "コンセプト"
+  ],
+  "points": [
+   "古湯温泉の築120年古民家。1日1組貸切",
+   "本棚の間に布団を敷いて泊まる私設図書館の宿"
+  ],
+  "access": "佐賀駅からバス約40分（古湯温泉）",
+  "visit_note": "宿泊者専用・要予約",
+  "opened": "2018",
+  "lat": 33.3747703,
+  "lng": 130.1993846,
+  "url": "https://library-inn.jp/"
+ },
+ {
+  "id": "okinawa-pref",
+  "name": "沖縄県立図書館",
+  "area": "九州・沖縄",
+  "pref": "沖縄県",
+  "city": "那覇市",
+  "tags": [
+   "規模",
+   "専門"
+  ],
+  "points": [
+   "琉球・沖縄資料の収蔵で国内最大",
+   "ゆいレール旭橋駅直結"
+  ],
+  "access": "ゆいレール旭橋駅直結",
+  "visit_note": null,
+  "opened": "2018（移転）",
+  "lat": 26.2112077,
+  "lng": 127.6765519,
+  "url": "https://www.library.pref.okinawa.jp/"
+ }
+]

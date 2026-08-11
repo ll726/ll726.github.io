@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>図書館をめぐる旅 | 旅の目的地になる図書館ガイド</title>
+<meta name="description" content="全国の『旅の目的地になる図書館』41館を紹介する個人キュレーションサイト。関西・京阪沿線を厚めに収録。">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;600;700&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#f5f6f3;
+  --card:#ffffff;
+  --ink:#1f2a3a;
+  --sub:#66738a;
+  --line:#dcdfd8;
+  --shu:#b23a2f;      /* 蔵書印の朱 */
+  --matsu:#40695b;    /* 松葉緑 */
+  --serif:"Shippori Mincho",serif;
+  --sans:"Zen Kaku Gothic New",sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--paper);color:var(--ink);font-family:var(--sans);line-height:1.7;font-size:15px}
+a{color:var(--matsu)}
+
+/* ---------- header ---------- */
+header{border-bottom:3px double var(--line);background:var(--card);padding:20px 16px 0}
+.h-inner{max-width:1080px;margin:0 auto}
+h1{font-family:var(--serif);font-size:clamp(22px,4.5vw,30px);letter-spacing:.12em;font-weight:600}
+h1 small{display:block;font-size:12px;letter-spacing:.28em;color:var(--sub);font-family:var(--sans);font-weight:400;margin-top:2px}
+.h-top{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.visited-count{font-family:var(--serif);font-size:14px;color:var(--shu);border:1.5px solid var(--shu);border-radius:999px;padding:4px 14px;white-space:nowrap}
+.visited-count b{font-size:18px}
+/* area tabs = 蔵書ラベル風 */
+.tabs{display:flex;gap:2px;margin-top:18px;overflow-x:auto;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{flex:0 0 auto;border:1px solid var(--line);border-bottom:none;background:var(--paper);color:var(--sub);
+  padding:8px 14px 6px;border-radius:8px 8px 0 0;cursor:pointer;font-family:var(--serif);font-size:13px;letter-spacing:.08em}
+.tab.active{background:var(--ink);color:#fff;border-color:var(--ink)}
+
+/* ---------- controls ---------- */
+.controls{max-width:1080px;margin:14px auto 0;padding:0 16px;display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.search{flex:1 1 200px;min-width:160px;border:1px solid var(--line);border-radius:8px;padding:8px 12px;font:inherit;background:var(--card);color:var(--ink)}
+.search:focus{outline:2px solid var(--matsu)}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{border:1px solid var(--line);background:var(--card);color:var(--sub);border-radius:999px;padding:4px 12px;font-size:12px;cursor:pointer}
+.chip.active{background:var(--matsu);border-color:var(--matsu);color:#fff}
+.ctl-right{display:flex;gap:8px;margin-left:auto}
+.btn{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:8px;padding:7px 13px;font:inherit;font-size:13px;cursor:pointer}
+.btn.active{background:var(--ink);color:#fff;border-color:var(--ink)}
+
+/* ---------- list ---------- */
+main{max-width:1080px;margin:18px auto 40px;padding:0 16px}
+.count-line{color:var(--sub);font-size:12px;margin-bottom:10px;letter-spacing:.06em}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:16px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;overflow:hidden;cursor:pointer;position:relative;
+  transition:transform .18s,box-shadow .18s}
+.card:hover{transform:translateY(-3px);box-shadow:0 6px 18px rgba(31,42,58,.12)}
+.thumb{height:130px;position:relative;display:flex;align-items:center;justify-content:center;overflow:hidden;background:var(--ink)}
+.thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.ph-initial{font-family:var(--serif);font-size:44px;color:rgba(255,255,255,.85);letter-spacing:.05em}
+.thumb .band{position:absolute;left:0;top:0;bottom:0;width:6px}
+.card-body{padding:12px 14px 14px}
+.card h3{font-family:var(--serif);font-size:16px;font-weight:600;line-height:1.45}
+.meta{font-size:12px;color:var(--sub);margin:2px 0 6px}
+.tagrow{display:flex;flex-wrap:wrap;gap:4px}
+.tag{font-size:11px;color:var(--matsu);border:1px solid var(--matsu);border-radius:3px;padding:0 6px}
+.pt{font-size:12.5px;color:var(--ink);margin-top:7px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.dist{font-size:11px;color:var(--sub);margin-top:5px}
+/* 蔵書印スタンプ */
+.stamp-btn{position:absolute;right:10px;top:10px;z-index:3;width:44px;height:44px;border-radius:50%;border:1.5px dashed rgba(255,255,255,.7);
+  background:rgba(31,42,58,.35);color:#fff;font-size:10px;cursor:pointer;font-family:var(--serif)}
+.stamp-btn.on{border:2.5px solid var(--shu);background:rgba(255,255,255,.92);color:var(--shu);
+  font-size:17px;font-weight:700;transform:rotate(-12deg);letter-spacing:0}
+.stamp-btn.animate{animation:stamp .35s ease-out}
+@keyframes stamp{0%{transform:scale(2.2) rotate(-25deg);opacity:0}60%{transform:scale(.92) rotate(-12deg);opacity:1}100%{transform:scale(1) rotate(-12deg)}}
+
+/* ---------- features (おすすめ特集) ---------- */
+.features{max-width:1080px;margin:20px auto 4px;padding:0 16px}
+.features h2{font-family:var(--serif);font-size:16px;letter-spacing:.15em;color:var(--ink);margin-bottom:10px}
+.features h2::before{content:"◆ ";color:var(--shu);font-size:11px}
+.feature-strip{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:10px}
+.feature-card{background:var(--ink);color:#fff;border-radius:10px;padding:14px 16px;cursor:pointer;
+  border:1px solid var(--ink);transition:transform .18s,box-shadow .18s;position:relative;overflow:hidden}
+.feature-card:hover{transform:translateY(-3px);box-shadow:0 6px 18px rgba(31,42,58,.25)}
+.feature-card::after{content:attr(data-num);position:absolute;right:8px;bottom:-12px;font-family:var(--serif);
+  font-size:56px;color:rgba(255,255,255,.08);font-weight:700}
+.feature-card h3{font-family:var(--serif);font-size:14.5px;font-weight:600;line-height:1.5}
+.feature-card p{font-size:11.5px;color:rgba(255,255,255,.75);margin-top:4px}
+.feature-body p.lead{font-size:14px;margin:12px 0 4px;line-height:1.9}
+.feature-lib{display:flex;gap:12px;align-items:center;border:1px solid var(--line);border-radius:8px;
+  padding:8px 12px;margin-top:8px;cursor:pointer;background:var(--card)}
+.feature-lib:hover{background:var(--paper)}
+.feature-lib .n{font-family:var(--serif);font-weight:600;font-size:14px}
+.feature-lib .c{font-size:11px;color:var(--sub)}
+.rank{flex:0 0 auto;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  font-family:var(--serif);font-weight:700;font-size:14px;background:var(--paper);color:var(--sub);border:1px solid var(--line)}
+.rank.r1{background:var(--shu);color:#fff;border-color:var(--shu)}
+.rank.r2{background:var(--ink);color:#fff;border-color:var(--ink)}
+.rank.r3{background:var(--matsu);color:#fff;border-color:var(--matsu)}
+.feature-lib .visited-mark{margin-left:auto;color:var(--shu);font-family:var(--serif);font-weight:700;transform:rotate(-12deg);font-size:15px;flex:0 0 auto}
+
+/* ---------- map ---------- */
+#mapview{display:none;max-width:1080px;margin:18px auto;padding:0 16px}
+#map{height:70vh;min-height:420px;border:1px solid var(--line);border-radius:10px}
+.popup-name{font-family:var(--serif);font-weight:600;font-size:14px}
+.popup-city{font-size:11px;color:var(--sub)}
+.popup-open{display:inline-block;margin-top:6px;font-size:12px;color:#fff;background:var(--matsu);border-radius:6px;padding:2px 10px;cursor:pointer}
+
+/* ---------- modal ---------- */
+.overlay{position:fixed;inset:0;background:rgba(31,42,58,.55);display:none;z-index:1000;align-items:center;justify-content:center;padding:16px}
+.overlay.open{display:flex}
+.modal{background:var(--card);border-radius:12px;max-width:560px;width:100%;max-height:88vh;overflow-y:auto;position:relative}
+.modal-thumb{height:150px;position:relative;background:var(--ink);display:flex;align-items:center;justify-content:center;overflow:hidden;border-radius:12px 12px 0 0}
+.modal-thumb img{width:100%;height:100%;object-fit:cover}
+.modal-body{padding:20px 22px 24px}
+.modal h2{font-family:var(--serif);font-size:21px;font-weight:600;line-height:1.4;padding-right:36px}
+.modal .meta{margin:4px 0 10px}
+.modal ul{list-style:none;margin:12px 0}
+.modal ul li{padding-left:1.2em;position:relative;margin-bottom:6px;font-size:14px}
+.modal ul li::before{content:"◆";position:absolute;left:0;color:var(--matsu);font-size:10px;top:.45em}
+.info-row{font-size:13.5px;margin-top:8px;color:var(--ink)}
+.info-row b{font-family:var(--serif);color:var(--sub);font-weight:600;margin-right:8px;font-size:12.5px}
+.intro{font-size:14.5px;line-height:2;margin:14px 0 4px;padding-bottom:12px;border-bottom:1px solid var(--line)}
+.sec{font-family:var(--serif);font-size:13px;letter-spacing:.18em;color:var(--matsu);margin:16px 0 4px}
+.sec::before{content:"◆ ";font-size:9px}
+.sec-tip{color:var(--shu);margin:0 0 4px}
+.detail-text{font-size:13.5px;line-height:1.95;color:var(--ink);margin-top:4px}
+.tipbox{background:var(--paper);border-radius:8px;padding:12px 14px;margin-top:14px}
+.tipbox p{font-size:13px;line-height:1.9}
+.related{margin:4px 0 0!important}
+.related li{font-size:13px;margin-bottom:4px}
+.related li::before{content:"→";color:var(--matsu);font-size:12px;top:.2em}
+.related a{color:var(--matsu);text-decoration:underline;text-underline-offset:3px}
+.note{background:var(--paper);border-left:3px solid var(--shu);padding:8px 12px;font-size:13px;margin-top:12px;border-radius:0 6px 6px 0}
+.links{display:flex;gap:10px;margin-top:16px;flex-wrap:wrap}
+.link-btn{font-size:13px;text-decoration:none;border:1px solid var(--matsu);color:var(--matsu);border-radius:8px;padding:7px 14px}
+.link-btn.primary{background:var(--matsu);color:#fff}
+.modal .visit-toggle{margin-top:16px;width:100%;padding:10px;border-radius:8px;border:1.5px solid var(--shu);background:var(--card);color:var(--shu);font:inherit;cursor:pointer;font-family:var(--serif);letter-spacing:.1em}
+.modal .visit-toggle.on{background:var(--shu);color:#fff}
+.close-x{position:absolute;right:12px;top:10px;z-index:5;background:rgba(31,42,58,.5);color:#fff;border:none;border-radius:50%;width:32px;height:32px;font-size:16px;cursor:pointer}
+.credit{font-size:11px;color:var(--sub);margin-top:10px}
+.credit a{color:var(--sub)}
+
+/* ---------- footer ---------- */
+footer{border-top:3px double var(--line);background:var(--card);padding:24px 16px;color:var(--sub);font-size:12px}
+.f-inner{max-width:1080px;margin:0 auto}
+.f-inner p{margin-bottom:6px}
+
+@media(max-width:480px){
+  .modal-thumb{height:110px}
+  .modal-body{padding:16px 16px 20px}
+  .grid{grid-template-columns:1fr 1fr;gap:10px}
+  .thumb{height:96px}
+  .card h3{font-size:13.5px}
+  .pt{display:none}
+  .stamp-btn{width:36px;height:36px;font-size:9px}
+  .stamp-btn.on{font-size:14px}
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="h-inner">
+    <div class="h-top">
+      <h1>図書館をめぐる旅<small>TRAVELING LIBRARIES OF JAPAN</small></h1>
+      <div class="visited-count">訪問 <b id="visitNum">0</b> / <span id="totalNum">41</span> 館</div>
+    </div>
+    <nav class="tabs" id="areaTabs"></nav>
+  </div>
+</header>
+
+<div class="controls">
+  <input class="search" id="search" type="search" placeholder="館名・都市・キーワードで検索">
+  <div class="chips" id="tagChips"></div>
+  <div class="ctl-right">
+    <button class="btn" id="homeBtn" title="自宅の郵便番号と移動手段を登録">🏠 出発地設定</button>
+    <button class="btn" id="sortBtn" title="出発地からの直線距離順">近い順</button>
+    <button class="btn active" id="listBtn">一覧</button>
+    <button class="btn" id="mapBtn">地図</button>
+  </div>
+</div>
+
+<section class="features" id="features">
+  <h2>おすすめのめぐり方</h2>
+  <div class="feature-strip" id="featureStrip"></div>
+</section>
+
+<main id="listview">
+  <p class="count-line" id="countLine"></p>
+  <div class="grid" id="grid"></div>
+</main>
+
+<div id="mapview"><div id="map"></div></div>
+
+<div class="overlay" id="overlay">
+  <div class="modal" id="modal" role="dialog" aria-modal="true"></div>
+</div>
+
+<footer>
+  <div class="f-inner">
+    <p>掲載内容は2026年8月時点の情報です。開館時間・利用条件は変わることがあります。<strong>訪問前に各館の公式サイトで最新情報をご確認ください。</strong></p>
+    <p>座標・地図データ: © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors ／ 地図表示: <a href="https://leafletjs.com/">Leaflet</a></p>
+    <p>個人が趣味で運営するキュレーションサイトです。大阪府枚方市を起点に「旅の目的地になる図書館」を集めています。</p>
+  </div>
+</footer>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<script>
+const DETAILS={"nakajima":{"intro":"秋田市郊外の丘の上、国際教養大学のキャンパスに建つ『眠らない図書館』。半円形の閲覧室を秋田杉の傘型屋根がすっぽり覆い、書架が同心円状に段々と立ち上がる姿はまさに『本のコロセウム』です。","highlight":"設計は環境建築の第一人者・仙田満。地元の杉と宮大工の技術を活かした木組みの天井は、下から見上げると巨大な番傘のよう。夜通し灯りがともる閲覧席で学生が勉強する光景も含めて、この図書館の風景です。","tip":"学外者は利用できる時間帯が限られるので、必ず公式サイトで開放時間を確認してから。秋田駅からバスで約30分と遠いぶん、たどり着いたときの感動はひとしおです。"},"sendai-mediatheque":{"intro":"チューブ状の鉄骨柱13本がガラスの箱を貫く、伊東豊雄の代表作にして現代建築史に残る一棟。図書館・ギャラリー・スタジオが積層する『メディアの公共施設』の先駆けです。","highlight":"揺らぐ海藻のようなチューブは構造柱でありながら光と設備を運ぶ通り道。フロアごとに天井高も家具も違うので、階段を上るたびに景色が変わります。2階の仙台市民図書館では蔵書50万冊超が待っています。","tip":"定禅寺通のケヤキ並木側から眺める外観がいちばん美しいので、入館前にまず通りの向かいから全景を。1階のカフェとショップだけでも立ち寄る価値があります。"},"kawanokami":{"intro":"大正時代の農業倉庫を改修した、石巻の小さな私設『まちの図書館』。震災後の地域づくりプロジェクトから生まれた、お茶とおしゃべりOKのにぎやかな本の場所です。","highlight":"土蔵造りの空間に本棚と薪ストーブ、そして併設のコメ・カフェ。本を読む人、お茶する人、遊びまわる子どもが同居する風景そのものが見どころです。『図書館は静かにする場所』という常識を気持ちよく裏切ってくれます。","tip":"月曜定休・営業時間は公式サイトで要確認。石巻市街や石ノ森萬画館の観光と組み合わせて、カフェのランチ目当てに訪れるのがおすすめです。"},"tono-honnomori":{"intro":"『遠野物語』のふるさとに安藤忠雄が贈った、築120年の旧呉服店を再生した本の空間。河童や座敷わらしの物語世界と現代建築が同居しています。","highlight":"中央の吹抜けにそびえる壁面本棚と螺旋階段が見どころ。選書は『遠野と東北』『世界を見る』など13のテーマで構成され、遠野物語を軸に民話・民俗学の世界へ誘います。貸出はせず、その場で読む『本と出会う場所』です。","tip":"JR遠野駅から徒歩3分と近いので、遠野の民話スポットめぐりの起点に最適。水曜休館に注意してください。"},"shiwa-ogal":{"intro":"『補助金に頼らない公民連携まちづくり』の成功例として全国から視察が絶えないオガールプロジェクト。その心臓部が紫波町図書館です。","highlight":"産直マルシェやカフェと同居し、農業支援コーナーなど『町の産業に効く』選書が光ります。Library of the Year 2016大賞は伊達ではなく、図書館がまちの経済を回す姿を体感できます。","tip":"図書館単体ではなくオガールエリア全体を歩くのがおすすめ。バレーボール専用体育館やホテルまである『駅前の奇跡』を丸ごと見学しましょう。"},"sukagawa-tette":{"intro":"3層吹抜けを斜路（スロープ）がぐるぐると貫き、歩きながら本と出会う立体回遊建築。震災復興のシンボルとして生まれた市民交流センターです。","highlight":"設計は石本建築事務所＋畝森泰行。フロアの区切りがなく、児童書エリアからカフェ、円谷英二ミュージアムまでゆるやかにつながります。ウルトラマンの生みの親の故郷らしく、随所に特撮ネタが潜んでいるのも楽しい。","tip":"須賀川駅から徒歩9分。館内の円谷英二ミュージアムは無料なので、図書館とセットで。松明あかし（11月）の時期は町全体が盛り上がります。"},"kadokawa-musashino":{"intro":"隈研吾が『大地から隆起した岩』として設計した花崗岩61,000枚の巨石建築。図書館・美術館・博物館が混ざり合う、分類不能の文化施設です。","highlight":"高さ約8mの吹抜け書架『本棚劇場』では、プロジェクションマッピングが本棚を駆け上がる演出が圧巻。松岡正剛監修の『エディットタウン』は、本の並びそのものが物語になっています。","tip":"入館はチケット制で、本棚劇場を含むエリアは日時指定が確実。ところざわサクラタウン全体がアニメ・マンガの聖地なので、半日がかりで楽しむつもりで。"},"miruru":{"intro":"黒磯駅前に2020年に開館した『森の中で本を読む』がコンセプトの図書館。細い列柱が木立のように立ち並び、グッドデザイン賞を受賞しました。","highlight":"設計はUAo・伊藤麻理。天井から吊られた照明が木漏れ日のように光り、本棚の配置も等高線のように有機的。1階のカフェは地元牧場の直営で、2階は静寂な学習空間と、賑わいと静けさが立体で棲み分けられています。","tip":"黒磯駅から徒歩1分と抜群のアクセス。那須高原の行き帰りに寄りやすく、駅周辺のカフェ街『黒磯クラフト圏』の散策と相性◎。"},"ota-artlib":{"intro":"美術館と図書館がスロープで絡み合いながらひとつになった、平田晃久設計の『知の丘』。駅前すぐの立地で、太田のまちの新しい顔になっています。","highlight":"5つのボックスを螺旋状のスロープでつなぐ構成で、絵を見て、本を読んで、屋上庭園で休んで…と行き来が自由。雲形の曲面本棚に絵本が並ぶ子どもエリアも人気です。","tip":"東武太田駅北口から徒歩1分。美術館の企画展は有料ですが図書館部分は無料。スロープを最上部まで登って屋上から降りてくるルートがおすすめです。"},"toyo-bunko":{"intro":"三菱第三代当主・岩崎久彌が設立した東洋学の殿堂。国宝5点・重文7点を含む約100万冊のコレクションを持つ、日本最古級の研究図書館のミュージアムです。","highlight":"高さ約9mの書架に約24,000冊が並ぶ『モリソン書庫』は、『日本一美しい本棚』と呼ばれる荘厳な空間。暗闇に本の背表紙が浮かび上がる展示演出は、本を宝物として扱う本気を感じさせます。","tip":"庭園の奥のオリエント・カフェは小岩井農場直営（岩崎家つながり）。展示は1時間ほどで回れるので、六義園（徒歩8分）とセットの文京区散歩が定番コースです。"},"kodomo-tosho":{"intro":"明治39年築の帝国図書館を保存・再生した、児童書専門の国立図書館。ルネサンス様式の壮麗な洋館に、世界中の子どもの本が集まっています。","highlight":"安藤忠雄＋日建設計の改修で、明治の煉瓦棟にガラスのカーテンウォールを貫入させた対比が見事。3階の『本のミュージアム』の展示会も質が高く、大人こそ楽しめます。漆喰天井や大階段など、建物細部の意匠も必見。","tip":"入館無料。上野公園の奥にあり動物園や博物館より空いているので、上野の喧騒に疲れたときの避難所としても優秀です。"},"ndl-tokyo":{"intro":"日本で出版されたすべての本が納本される、国内最大にして唯一の国立国会図書館の本丸。国会議事堂の隣に建ち、『日本の知の金庫』として機能し続けています。","highlight":"蔵書は書庫方式で、端末から請求して受け取るスタイル。『日本中のどんな本もここにはある』という事実そのものが最大の見どころです。6階の食堂から見下ろす国会議事堂、地下8層に及ぶ大書庫の存在感など、規模のスケール感は他のどの図書館とも違います。","tip":"満18歳以上・登録利用者カード（当日発行可）が必要。資料の受け取りに時間がかかるので、調べたい本を事前にオンライン検索しておくとスムーズ。永田町・霞が関の官庁街散歩と組み合わせると『国家の中枢』を体感する一日になります。"},"hibiya":{"intro":"日比谷公園の緑の中に建つ三角形の図書館。旧都立日比谷図書館を千代田区が引き継ぎ、図書館・ミュージアム・カレッジが一体になった複合文化施設として再生しました。","highlight":"三角形の平面がつくる独特の閲覧空間と、公園の木々を望む窓際席が魅力。地下の千代田区史ミュージアムや神田古書店街と連携した企画も多く、『本の街・東京』の入口として機能しています。カフェ・ショップ併設で滞在も快適。","tip":"霞ケ関駅・日比谷駅から徒歩5分。日比谷公園の散歩や皇居外苑とセットで。夜22時まで開いている日が多く（要確認）、仕事帰りに使えるのも都心館ならではです。"},"sirius":{"intro":"図書館・ホール・生涯学習センター・こども広場をひとつに束ねた大和市の複合拠点。『図書館城下町』を掲げ、年間300万人が訪れる駅前のにぎわい装置です。","highlight":"1階は健康テーマの書架とカフェ、上階に上がるほど静かになるグラデーション設計。6階の『市民交流ラウンジ』からは丹沢の山並みも望めます。健康遊具やこども広場を併設し、『滞在する図書館』を徹底しています。","tip":"大和駅から徒歩3分。カフェは本の持ち込みOKなので、借りる前の『試し読み』に最適。土日は家族連れで混むため、静かに過ごすなら平日夕方を。"},"toyama-kirari":{"intro":"富山市ガラス美術館と市立図書館本館が同居する、隈研吾設計の複合ビル。御影石・ガラス・アルミの外装が路面電車の走る街並みにきらめきます。","highlight":"内部は富山県産杉のルーバーが吹抜けを斜めに貫き、最上部のトップライトから光が射し込む『光の谷』。本を読みながらガラスアートに出会える、美術館と図書館の幸せな同居です。","tip":"市電・西町電停すぐ。2〜4階が図書館、3〜6階が美術館なので、上から下りながら両方めぐるのが効率的。富山駅からの市電乗車自体も旅の楽しみです。"},"umimirai":{"intro":"約6,000個の丸窓から柔らかな光が降る白いキューブ。『世界の魅力的な図書館』として海外メディアにもたびたび選ばれる、金沢の建築名所です。","highlight":"シーラカンスK&H（工藤和美＋堀場弘）の設計。壁一面のパンチング窓のおかげで、晴れでも曇りでも室内は均質な明るさに包まれます。天井高12mのワンルーム空間に浮かぶ閲覧席は、まるで光の海の中で読書する感覚。","tip":"金沢駅からバス約20分と兼六園エリアからは離れるので、旅程の最初か最後に組み込むのがコツ。外観写真は南東角からがベストアングルです。"},"ishikawa-pref":{"intro":"2022年開館、蔵書100万冊超の『百万石ビブリオバウム』。円形劇場のようにすり鉢状に書架が取り囲む大閲覧空間は、開館直後から全国区の話題になりました。","highlight":"設計は仙田満・環境デザイン研究所。12のテーマで編まれた書架の回遊路は、歩くだけで知らない本と出会える仕掛けです。会話OK・飲み物OK・カフェ併設と、滞在のハードルも徹底的に下げられています。","tip":"金沢駅からバス約25分。人気の円形閲覧エリアは土日混雑するので平日午前が狙い目。2階から見下ろす全景写真を撮ってから、1階へ降りて本に浸るのがおすすめの順路。"},"terrasow":{"intro":"栗と葛飾北斎の町・小布施の駅前に建つ、三角形の大屋根がかわいい木造ワンルーム図書館。『交流と創造を楽しむ、文化の拠点』として町民と観光客が混ざり合います。","highlight":"古谷誠章＋NASCAの設計で、柱を極力減らした開放的な空間に、本棚が低く緩やかに並びます。『まちじゅう図書館』の取り組みで、町の商店にも小さな本棚が点在。図書館が町全体ににじみ出しています。","tip":"小布施駅から徒歩2分。北斎館や栗菓子店めぐりとセットで半日コースに。窓際席から見える北信五岳の眺めも隠れた見どころです。"},"media-cosmos":{"intro":"東濃ひのきの木格子屋根が波打つ大空間に、クラゲのような白い『グローブ』が浮かぶ。伊東豊雄がせんだいメディアテークの先に辿り着いた、岐阜市の『みんなの森』です。","highlight":"11個のグローブ（傘状の照明兼空調装置）の下ごとに『郷土の本』『子どもの本』などテーマが変わり、光の柔らかさまで違います。閲覧席910席はどこも居心地がよく、席探しの散歩さえ楽しい。","tip":"岐阜駅からバス約10分。屋上テラスから金華山と岐阜城が見えるので、天気の良い日はぜひ。隣接の岐阜市役所展望スペースとセットで眺望を楽しめます。"},"anforet":{"intro":"『飲食も会話も自由』をいち早く掲げた新世代図書館の代表格。安城駅近くの中心市街地に建ち、開館後3年連続で来館100万人を超えた集客力を誇ります。","highlight":"三上建築事務所の設計で、2〜4階の図書フロアは吹抜けでつながるスパイラル構成。願いごと広場や健康支援コーナーなど『暮らしの課題に効く』サービス設計が秀逸で、公共図書館運営のお手本として視察が絶えません。","tip":"JR安城駅から徒歩5分。1階の証明写真機ならぬ『自動貸出機』の使いやすさも体感してほしいポイント。名古屋からJRで約20分と、意外と気軽に行けます。"},"nakanoshima":{"intro":"住友家の寄贈により明治37年に建てられた、ギリシャ神殿風の玄関とドームを持つ国重要文化財。現役の公共図書館として120年働き続ける、大阪の誇りです。","highlight":"野口孫市設計の中央ホールは、吹抜けのドームとステンドグラスが教会のような静謐さ。ビジネス・大阪資料に特化した蔵書構成で、調べ物の場としても現役バリバリです。3階の北欧カフェ『スモーブローキッチン』は行列必至。","tip":"淀屋橋駅から徒歩5分。大阪市中央公会堂（辰野金吾）と隣り合うので、中之島の近代建築散歩とセットで。カフェ目当てなら開店直後が確実です。"},"honnomori-nakanoshima":{"intro":"安藤忠雄が大阪に贈った、壁一面の本棚と青リンゴのオブジェで知られる子どものための本の殿堂。中之島公園の緑と川に囲まれたロケーションも含めて作品です。","highlight":"3層吹抜けの大階段状本棚は圧巻のフォトスポット。本は12のテーマで並び、階段や隠れ家のような読書スペースで自由に読めます。『青春』を象徴する青リンゴはテラスに鎮座。","tip":"事前予約制の時間帯が多いので公式サイトから予約を。京阪なにわ橋駅すぐ、中之島図書館まで徒歩5分なので、新旧の名建築図書館ハシゴが鉄板コースです。"},"kadomado":{"intro":"2026年5月に開館したばかりの、京阪古川橋駅前の文化創造図書館。図書館・学習室・多目的室・カフェを束ねた、門真の新しい『まちの窓』です。","highlight":"建物外周を螺旋状のテラス『スパイラルガーデン』が取り巻き、屋外でも本が読める設計。枚方発祥のCCC（TSUTAYA）グループの運営で、書店的な売り場感覚の本の見せ方が特徴です。","tip":"開館直後で運用が変わりやすいため、行く前に公式サイトの最新情報を確認。枚方市駅から京阪で約15分なので、平日夕方にふらっと様子を見に行けるのが地元民の特権です。"},"ndl-kansai":{"intro":"国立国会図書館の西日本拠点。ガラス張りの大閲覧室が地下に広がる陶器二三雄設計の建築は、公共建築百選クラスの端正さです。","highlight":"地上からは芝生の丘にしか見えないのに、中に入ると天井高いっぱいのガラス越しに緑が透ける大閲覧室が出現する驚き。書庫能力は国内最大級で、東京本館の資料も取り寄せられます。","tip":"満18歳以上・登録利用者カード（当日発行可）が必要。学研都市の研究施設群と合わせて『知の未来』見学コースに。枚方からは車で約30分と、実は近所です。"},"osaka-pref-central":{"intro":"蔵書規模で公共図書館として国内最大級を誇る、東大阪の巨大図書館。『なんでもある』への信頼感は、調べ物好きにとって何よりのごちそうです。","highlight":"専門書から実用書までの物量に加え、国内有数の児童文学研究機関である国際児童文学館を併設。荒本駅から徒歩5分でこの蔵書量にアクセスできるのは関西の贅沢です。","tip":"じっくり滞在する日と割り切って、飲食できる休憩スペースの場所を先に確認しておくと快適。大阪都心から地下鉄直通の近鉄けいはんな線で一本です。"},"osaka-city-central":{"intro":"地下鉄西長堀駅直結、蔵書数で全国トップ級の市立図書館。1996年開館のベテランながら、利便性では今も関西最強クラスです。","highlight":"地上5階・地下6階の書庫に約200万冊。大阪関連の資料が特に厚く、住宅地図や新聞縮刷版など『調べる道具』が揃います。駅直結なので雨の日も濡れずに本の海へ。","tip":"心斎橋・堀江エリアから徒歩圏なので、買い物ついでに寄れるのが強み。自習席は人気なので午前中の確保が無難です。"},"morinomiya":{"intro":"2025年秋に開設された大阪公立大学の新キャンパス中核施設。『知の森』をコンセプトに、大阪城の東側に生まれた最新の大学ライブラリーです。","highlight":"木ルーバーに包まれた外観と、キャンパス全体を貫く開放的なラーニングコモンズが見どころ。大学図書館ながら一般利用の門戸を開いており、最新の学術書に触れられます。","tip":"一般利用は登録制（近畿在住18歳以上・登録料2,000円/2年）で、試験期は制限あり。森ノ宮駅から徒歩圏なので、大阪城公園の散歩と組み合わせて。"},"neyagawa":{"intro":"京阪寝屋川市駅前の商業ビル『アドバンスねやがわ』4階に移転した、駅近のまちなか図書館。買い物帰りに寄れる気軽さが身上です。","highlight":"移転リニューアルで書架も席もぐっと今風に。窓際のカウンター席から駅前の人の流れを見下ろしながら読書できます。駅直結ビルという立地は、雨の多い季節に真価を発揮。","tip":"枚方市駅から京阪で数分の隣町なので、『今日はちょっと違う図書館で』という日の選択肢に。周辺の商店街ランチとセットでどうぞ。"},"hirakata-central":{"intro":"われらが地元・枚方のホーム図書館。輝きプラザきらら内にあり、市内最大の蔵書とバリアフリー設計で、この旅サイトの『基準点』を務めます。","highlight":"点字図書・録音図書の製作貸出や電子図書館サービスなど、堅実にサービスを積み上げるタイプ。旅先で出会った名建築図書館と比べることで、『ふだんの図書館』の良さも見えてきます。","tip":"御殿山駅から徒歩約15分。金曜休館に注意。旅の計画はまずここで旅行ガイドと時刻表を借りるところから始めましょう。"},"honnomori-kobe":{"intro":"安藤忠雄『こども本の森』第3弾は、震災復興のシンボル・東遊園地の一角に。神戸の街と海を感じながら本と過ごせる、公園の中の本の家です。","highlight":"六甲山系の木材を使った家具や、壁面いっぱいの本棚は神戸ならではのしつらえ。すぐ隣は阪神・淡路大震災の慰霊モニュメントで、『命の大切さを学ぶ』という設立趣旨が景色とつながります。","tip":"三宮から徒歩圏。混雑時は予約制になるので公式サイトを確認してから。旧居留地・元町の街歩きと組み合わせるのが神戸らしい一日です。"},"sumoto":{"intro":"明治期の鐘紡（カネボウ）洲本工場の赤レンガ建築を図書館として再生。近代化産業遺産の中で本を読むという、淡路島の隠れた名所です。","highlight":"ノコギリ屋根と煉瓦壁をそのまま活かした内部は、天井の高さと歴史の重みが同居する特別な空間。設計は鬼頭梓建築設計事務所で、新旧の接ぎ方が丁寧です。","tip":"洲本バスセンターから徒歩5分。周辺一帯が赤レンガの『洲本レトロ』エリアなので、カフェや雑貨店めぐりとセットで。淡路島観光の雨の日プランとしても優秀。"},"wakayama-civic":{"intro":"南海和歌山市駅直結、蔦屋書店とスターバックスが同居するCCC運営の駅前図書館。『駅ビル丸ごと本の空間』という潔さが魅力です。","highlight":"吹抜けの大階段は座って読書できるイベントスペースを兼ね、屋上テラスからは和歌山城方面の眺めも。書店の販売棚と図書館の書架がシームレスに並ぶ売り場感覚は、CCC運営館の完成形のひとつです。","tip":"開館は朝9時から夜9時までと長く、旅の始発・終着に組み込みやすいのが強み。和歌山ラーメンの人気店が徒歩圏に複数あります。"},"nara-pref":{"intro":"ガラスと木格子の端正な箱に、『図書館』を超えた情報発信機能を詰め込んだ奈良県の知の拠点。戦争体験文庫など、ここにしかない蔵書群を持ちます。","highlight":"2〜3階の吹抜け閲覧室は木の温もりとガラスの開放感が同居。公文書・古地図のデジタル閲覧や活発な企画展・イベントなど、『情報館』の名に恥じない運営が続いています。","tip":"JR奈良駅からバス約10分と観光中心部から少し離れるぶん、静かに過ごせます。大和郡山方面へ抜ける奈良南部ドライブの立ち寄り先としても好位置。"},"moriyama":{"intro":"『本と人とをつなぐ 湖のような図書館』をテーマに隈研吾が設計した、木の大屋根が連なる park-side の図書館。琵琶湖畔の町・守山の自慢です。","highlight":"うねる大屋根の下、天井の木ルーバーが柔らかく光を拡散し、庭に向かって開いた閲覧席はどこも特等席。カフェ併設で、住宅地の図書館とは思えない滞在の質です。","tip":"守山駅からバスか徒歩約15分。琵琶湖大橋・佐川美術館・第1なぎさ公園（菜の花や向日葵）と合わせた湖東ドライブコースに組み込むのがおすすめ。"},"kyoto-manga":{"intro":"昭和初期の元・龍池小学校の校舎に、約30万点のマンガ資料が眠る博物館×図書館。壁一面5万冊の『マンガの壁』から自由に取り出して、校庭の芝生で読めます。","highlight":"京都市と京都精華大学の共同事業で、研究機関としても世界的存在。木の廊下や講堂など小学校の記憶を残した空間で読むマンガは格別です。紙芝居実演や似顔絵コーナーなどの体験も充実。","tip":"烏丸御池駅から徒歩2分。晴れた日は芝生読書が最高なのでレジャーシート感覚で。人気作は午前中に確保し、昼は界隈の町家ランチへ。"},"tokuyama":{"intro":"JR徳山駅の駅ビルそのものが図書館という、内藤廣設計の駅直結ライブラリー。全長約120mの本棚が新幹線ホームと並走する光景は唯一無二です。","highlight":"2階の『本の道』は圧巻の長さで、窓の外を新幹線が滑り込む瞬間は鉄道好きでなくても心が躍ります。CCC運営でスタバ・蔦屋書店併設、夜10時まで開いているのも旅人に優しい。","tip":"新幹線待ちの30分でも楽しめる、乗り換え途中下車の価値がある駅図書館。周南コンビナートの工場夜景ツアーと組み合わせる夜プランも一興です。"},"taki":{"intro":"目の前が日本海。波音を聞きながら本を読める、全国でも希少なオーシャンビュー図書館です。円錐形の屋根がかわいい小さな町の館ながら、景観だけなら全国屈指。","highlight":"海側に大きく開いた閲覧席からは水平線まで一望。テラス席は飲食可で、夕暮れどきの読書は忘れられない体験になります。しまね景観賞受賞の建物は道の駅キララ多伎のすぐ近く。","tip":"JR小田駅から徒歩約10分。キララ多伎の夕日は『日本の夕陽百選』級なので、午後遅めに訪れて読書→夕日のコースが黄金プラン。出雲大社から車で約20分です。"},"momiwa":{"intro":"『もちより・みつけ・わけあう』を合言葉に、市民と一緒につくり上げた図書館。Library of the Year 2016で大賞とオーディエンス賞をダブル受賞した、住民参加型図書館の金字塔です。","highlight":"香山壽夫設計の吹抜けは、木の温かさと端正さが同居する落ち着いた空間。郷土の人形作家を顕彰するギャラリーや地域資料コーナーなど、『まちの記憶を分かち合う』仕掛けが随所にあります。","tip":"JR邑久駅から徒歩約15分。牛窓（日本のエーゲ海）や備前長船刀剣博物館と合わせた瀬戸内ドライブの途中に寄るのがおすすめです。"},"yusuhara":{"intro":"標高の高い『雲の上の町』梼原に隈研吾が設計した、木格子が天井から降り注ぐ図書館。靴を脱いで杉の床を歩く、日本でいちばん『はだしが似合う』図書館かもしれません。","highlight":"地元産の杉材が組み木のように天井を覆い、森の中で本を読んでいるような没入感。館内にはボルダリングウォールまであります。町内には隈建築が6棟あり、まち全体が建築ミュージアムです。","tip":"高知市から車で約1時間30分。梼原の隈建築6棟スタンプラリーを組むなら1泊が理想。雲の上のホテル別館『マルシェ・ユスハラ』宿泊が定番です。"},"otepia":{"intro":"県立と市立の合築で生まれた四国最大の図書館。プラネタリウム（科学館）と点字図書館も同居する、高知の『知の総合ビル』です。","highlight":"開架約30万冊・書庫約120万冊のスケールに加え、産業支援や健康情報など課題解決型サービスが充実。よさこいや土佐の歴史など郷土資料の厚みは、旅行者が読んでも面白いレベルです。","tip":"大橋通電停から徒歩3分、ひろめ市場まで徒歩数分という抜群の立地。昼はひろめ市場でカツオ、午後はオーテピアで涼みながら読書が高知の正解ルートです。"},"takeo":{"intro":"2013年、スターバックスと蔦屋書店を図書館に持ち込んで日本中を驚かせた『元祖TSUTAYA図書館』。賛否両論を巻き起こしながら、図書館の風景を変えた歴史的1館です。","highlight":"吹抜けの大空間に約25万冊がそびえる開架は、今見ても迫力十分。隣接の武雄市こども図書館もかわいらしい空間で、家族連れなら両方セットで楽しめます。","tip":"武雄温泉駅から徒歩15分。楼門で有名な武雄温泉の入浴、樹齢3000年の武雄の大楠とセットで半日コースに。読書と温泉の組み合わせは最強です。"},"tobata":{"intro":"1933年築の旧戸畑市庁舎（のち戸畑区役所）をリノベーションした、昭和モダン建築の図書館。スクラッチタイルの重厚な外観と塔屋が、ものづくりの街・北九州の歴史を物語ります。","highlight":"アーチ窓や階段まわりなど昭和初期の意匠を丁寧に残した改修で、建物保存再生の優良事例としてBELCA賞を受賞。1階のこども図書室や郷土資料室など、地域の記憶を継ぐ構成も見どころです。","tip":"JR戸畑駅から徒歩約10分。7月の戸畑祇園大山笠（ユネスコ無形文化遺産）の時期や、若戸大橋の赤いアーチとセットで訪れると北九州の近代史散歩になります。"},"tarami":{"intro":"大村湾を見下ろす丘に建つ、南欧リゾート風の図書館。オレンジ屋根と白壁、そして海。『ここは本当に図書館？』と疑いたくなる景観です。","highlight":"閲覧席の大窓いっぱいに大村湾が広がり、運が良ければスナメリ（小型のイルカ）の背びれが見えることも。夕方の海の色の変化を眺めながらの読書は、時間を忘れます。","tip":"JR喜々津駅から車で約5分。長崎市街と諫早の中間にあるので、長崎観光の行き帰りに寄りやすい立地。フルーツバス停（小長井）方面と合わせても楽しい。"},"akatsuki":{"intro":"古湯温泉の築120年古民家を改装した、1日1組限定『泊まれる図書館』。本棚の谷間に布団を敷き、夜通し本を読んで眠る、本好きの夢をそのまま形にした私設図書館の宿です。","highlight":"蔵書約1,400冊は『一生モノの本』をテーマにした選書。昼はカフェ付き図書館として開放され、夜は貸切に。ぬる湯で有名な古湯温泉の外湯めぐりと組み合わせれば、極上の休養日になります。","tip":"完全予約制なので早めの計画を。佐賀駅からバス約40分。チェックイン後は何も予定を入れず、『読んで、浸かって、寝る』だけの一日を過ごすのが正しい使い方です。"},"okinawa-pref":{"intro":"ゆいレール旭橋駅直結のカフーナ旭橋に2018年移転した、琉球・沖縄資料の収蔵で国内最大の図書館。沖縄を深く知りたくなったら、まずここです。","highlight":"貴重な琉球史料から移民資料、島ごとの郷土誌まで、郷土資料の網羅性は圧倒的。家系図調査（門中調べ）支援など沖縄ならではのサービスも。窓際席から那覇の街を見下ろしながら読書できます。","tip":"那覇空港からゆいレールで2駅・駅直結なので、フライト前の待ち時間に立ち寄れるのが最高。旅の最終日に『次の沖縄旅』の予習をする場所として推薦します。"}};
+const RELATED={"nakajima":[{"t":"MATCHA｜日本でもっとも美しい図書館のひとつ","u":"https://matcha-jp.com/jp/1208"},{"t":"GENIC｜世界が認めた中嶋記念図書館","u":"https://genic-web.com/articles/9189677"}],"sendai-mediatheque":[{"t":"せんだい旅日和｜スポット紹介","u":"https://www.sentabi.jp/spots/47"},{"t":"KURASHITO｜建築の見所を徹底リポート","u":"https://kurashito.co.jp/column/sendai-mediatheque-library/"}],"tono-honnomori":[{"t":"遠野時間｜こども本の森 遠野","u":"https://tonojikan.jp/tourism/kodomohonnomori-tono/"},{"t":"BACH｜選書プロジェクト紹介","u":"http://www.bach-inc.com/works/post_24.html"}],"shiwa-ogal":[{"t":"公共R不動産｜町と人に寄り添う紫波町図書館","u":"https://www.realpublicestate.jp/post/library-01/"},{"t":"りぶしる｜図書館サービス紹介","u":"https://www.libsil.library.ne.jp/shiwa-library/"}],"sukagawa-tette":[{"t":"arg｜tette 視察レポート","u":"https://arg-corp.jp/reports/reports_sukagawa/"}],"kadokawa-musashino":[{"t":"QUI｜訪れるべき10の理由","u":"https://qui.tokyo/feature/kadokawa-museum-210422"},{"t":"アートアジェンダ｜展覧会・施設情報","u":"https://www.artagenda.jp/museum/detail/503"},{"t":"ことりっぷ｜つい長居したくなる全国のおしゃれな図書館16選","u":"https://co-trip.jp/article/510820"}],"miruru":[{"t":"Discover Japan｜森の中を散歩するような図書空間","u":"https://discoverjapan-web.com/article/91840"},{"t":"じゃぱん旅｜1日中楽しめる みるる","u":"https://jpsk.jp/articles/librarymiruru.html"}],"ota-artlib":[{"t":"Casa BRUTUS｜平田晃久が市民とつくった居心地","u":"https://casabrutus.com/categories/architecture/47049"},{"t":"Discover Japan｜市民のものづくりをカタチに","u":"https://discoverjapan-web.com/article/89025"},{"t":"ことりっぷ｜つい長居したくなる全国のおしゃれな図書館16選","u":"https://co-trip.jp/article/510820"}],"toyo-bunko":[{"t":"artscape｜ミュージアム紹介","u":"https://artscape.jp/museum/3067/"},{"t":"インターネットミュージアム｜展覧会情報","u":"https://www.museum.or.jp/museum/2265"},{"t":"ことりっぷ｜つい長居したくなる全国のおしゃれな図書館16選","u":"https://co-trip.jp/article/510820"}],"kodomo-tosho":[{"t":"藝大アートプラザ｜建築にも注目の徹底解説","u":"https://artplaza.geidai.ac.jp/sights/6928/"},{"t":"artscape｜施設紹介","u":"https://artscape.jp/museum/2773/"},{"t":"ことりっぷ｜つい長居したくなる全国のおしゃれな図書館16選","u":"https://co-trip.jp/article/510820"}],"ndl-tokyo":[{"t":"MEDIA DOGS｜1日満喫するための完全レビュー","u":"https://mediadogs.jp/2025/10/07/kokkaidoshokan-nagatacho/"},{"t":"artscape｜東京本館の建築紹介","u":"https://artscape.jp/museum/1848/"},{"t":"国立国会図書館｜東京本館の参観（見学）案内","u":"https://www.ndl.go.jp/jp/tokyo/visit/index.html"}],"sirius":[{"t":"神奈川県｜シリウス紹介ページ","u":"https://www.pref.kanagawa.jp/docs/u5r/cnt/f550/tabi-024.html"}],"toyama-kirari":[{"t":"たびこふれ｜観光できる図書館シリーズ","u":"https://tabicoffret.com/article/80837/"},{"t":"富山市観光協会｜スポット紹介","u":"https://www.toyamashi-kankoukyoukai.jp/spot/toyamacity-library/"},{"t":"ことりっぷ｜つい長居したくなる全国のおしゃれな図書館16選","u":"https://co-trip.jp/article/510820"}],"umimirai":[{"t":"週末、金沢。｜美しいデザインの建物で金沢の文化を","u":"https://www.weekend-kanazawa.com/entry/umimirai-library"},{"t":"金沢旅物語｜観光スポット紹介","u":"https://www.kanazawa-kankoukyoukai.or.jp/spot/detail_10049.html"},{"t":"ことりっぷ｜つい長居したくなる全国のおしゃれな図書館16選","u":"https://co-trip.jp/article/510820"}],"ishikawa-pref":[{"t":"ほっと石川旅ねっと｜魅力を解説（駐車場・カフェも）","u":"https://www.hot-ishikawa.jp/blog/detail_454.html"},{"t":"ことりっぷ｜つい長居したくなる全国のおしゃれな図書館16選","u":"https://co-trip.jp/article/510820"}],"terrasow":[{"t":"季刊地域｜まちじゅう図書館の取り組み","u":"https://kikanchiiki.net/archives/1572"},{"t":"八十二文化財団｜信州の文化施設","u":"https://www.82bunka.or.jp/bunkashisetsu/detail.php?no=359"}],"media-cosmos":[{"t":"#casa｜伊東豊雄の波打つ屋根と天井","u":"https://hash-casa.com/2022/11/29/gifumediacosmos/"},{"t":"建築とアートを巡る｜昼も夜も美しい大空間","u":"https://www.artarchi-japan.jp/2025/01/gifu-media-cosmos.html"},{"t":"ことりっぷ｜つい長居したくなる全国のおしゃれな図書館16選","u":"https://co-trip.jp/article/510820"}],"anforet":[{"t":"カレントアウェアネス｜アンフォーレの挑戦","u":"https://current.ndl.go.jp/e2354"}],"nakanoshima":[{"t":"OSAKA-INFO｜重要文化財のレトロ建築を愉しむ","u":"https://osaka-info.jp/spot/osaka-prefectural-nakanoshima-library/"},{"t":"るるぶ&more.｜スポット紹介","u":"https://rurubu.jp/andmore/spot/80028162"}],"honnomori-nakanoshima":[{"t":"るるぶKids｜親子で楽しむ安藤忠雄建築","u":"https://kids.rurubu.jp/article/55223/"},{"t":"大阪市｜広報担当が行く！","u":"https://www.city.osaka.lg.jp/kita/page/0000496720.html"},{"t":"ことりっぷ｜つい長居したくなる全国のおしゃれな図書館16選","u":"https://co-trip.jp/article/510820"}],"kadomado":[{"t":"Time Out Osaka｜KADOMADO紹介","u":"https://www.timeout.jp/osaka/ja/things-to-do/kadomado"},{"t":"カレントアウェアネス｜開館ニュース","u":"https://current.ndl.go.jp/car/278357"}],"ndl-kansai":[{"t":"お茶の京都｜観光スポット紹介","u":"https://ochanokyoto.jp/spot/detail.php?sid=423"},{"t":"Narakko!｜国立国会図書館 関西館","u":"https://www.narakko.jp/nationallibrarykansai/"}],"osaka-pref-central":[{"t":"OSAKA-INFO｜大阪随一の蔵書数を誇る知的スポット","u":"https://osaka-info.jp/spot/osaka-prefectural-central-library/"}],"osaka-city-central":[{"t":"じゃらん｜アクセス・口コミ情報","u":"https://www.jalan.net/kankou/spt_guide000000162568/"}],"morinomiya":[{"t":"うちまちだんち｜新キャンパスをいち早く探訪","u":"https://uchi-machi-danchi.ur-net.go.jp/article/osaka-metropolitan-university-morinomiya-campus-202508/"}],"neyagawa":[{"t":"キハラ｜納入事例に見る館内紹介","u":"https://www.kihara-lib.co.jp/galleries/neyagawa/"}],"hirakata-central":[{"t":"枚方市｜市立図書館 施設案内","u":"https://www.city.hirakata.osaka.jp/0000022869.html"}],"honnomori-kobe":[{"t":"KissPRESS｜魅力を深掘り","u":"https://www.kisspress.jp/articles/43024/"},{"t":"こどもっとKOBE｜インタビュー記事","u":"https://kodomotto-kobe.jp/article/interview/0008.html"},{"t":"Feel KOBE｜神戸公式観光サイト","u":"https://www.feel-kobe.jp/facilities/kodomohonnomori_kobe/"}],"sumoto":[{"t":"せとうち建築家クラブ｜鬼頭梓・洲本図書館の魅力を探る","u":"https://clubsetoken.com/cn11/sumoto_library.html"},{"t":"ことりっぷ｜つい長居したくなる全国のおしゃれな図書館16選","u":"https://co-trip.jp/article/510820"}],"wakayama-civic":[{"t":"tabicocolo｜図書館の概念を超えた新しい図書館","u":"https://www.tabicocolo.com/article/1508-wakayamashimintoshokan.html"},{"t":"あちこちミュージアム｜設備充実で一日いられそう","u":"https://tokidoki-art.hatenablog.com/entry/wakayama-library"}],"nara-pref":[{"t":"なら旅ネット｜観光スポット紹介","u":"https://yamatoji.nara-kankou.or.jp/04public/02museum/01north_area/djbw8aichl/"},{"t":"ええ古都なら｜みどころ紹介","u":"https://www.nantokanko.jp/midokoro/1341.html"}],"moriyama":[{"t":"しがトコ｜隈研吾建築が溶け込む町・守山","u":"https://shigatoco.com/toco/moriyama_kenchiku/"},{"t":"Lmaga.jp｜隈研吾設計で活性化","u":"https://www.lmaga.jp/news/2019/05/64891/"},{"t":"建築とアートを巡る｜守山のふたつの隈建築","u":"https://www.artarchi-japan.jp/2024/08/kengokuma-moriyama.html"}],"kyoto-manga":[{"t":"ほとんど0円大学｜マンガミュージアムに行ってみた","u":"https://hotozero.com/museum/kyotomm/"},{"t":"京都府観光連盟｜スポット紹介","u":"https://www.kyoto-kankou.or.jp/info_search/8692"}],"tokuyama":[{"t":"Discover Japan｜大迫力の本棚アート","u":"https://discoverjapan-web.com/article/96291"},{"t":"徳山エリアガイド｜駅前図書館紹介","u":"https://yamaguchi.itot.jp/tokuyama/87"},{"t":"ことりっぷ｜つい長居したくなる全国のおしゃれな図書館16選","u":"https://co-trip.jp/article/510820"}],"taki":[{"t":"号外NET出雲｜波の音を聴きながら読書タイム","u":"https://izumo-unnan.goguynet.jp/2020/06/18/takitosyokan/"},{"t":"日刊ゲンダイ｜絶景の中の読書空間","u":"https://www.nikkan-gendai.com/articles/view/life/363333"}],"momiwa":[{"t":"公共R不動産｜市民と一緒につくった図書館","u":"https://www.realpublicestate.jp/post/library-02/"},{"t":"岡山観光WEB｜スポット紹介","u":"https://www.okayama-kanko.jp/spot/detail_11190.html"}],"yusuhara":[{"t":"ゆすはら雲の上観光協会｜雲の上の図書館","u":"https://yusuhara-kumonoue-kanko.jp/spot/yusuharatownlibrary/"},{"t":"四国ツーリズム｜スポット紹介","u":"https://shikoku-tourism.com/spot/14090"},{"t":"ことりっぷ｜つい長居したくなる全国のおしゃれな図書館16選","u":"https://co-trip.jp/article/510820"}],"otepia":[{"t":"Discover Japan｜高知の『知』を育てる複合施設","u":"https://discoverjapan-web.com/article/71329"}],"takeo":[{"t":"あそぼーさが｜武雄市図書館・歴史資料館","u":"https://www.asobo-saga.jp/spots/detail/dfe18e6b-3f36-46b2-9bdc-cbda775e4b37"},{"t":"じゃらん｜アクセス・口コミ情報","u":"https://www.jalan.net/kankou/spt_41206cc3290153733/"},{"t":"ことりっぷ｜つい長居したくなる全国のおしゃれな図書館16選","u":"https://co-trip.jp/article/510820"}],"tarami":[{"t":"Wikipedia｜諫早市立たらみ図書館","u":"https://ja.wikipedia.org/wiki/%E8%AB%AB%E6%97%A9%E5%B8%82%E7%AB%8B%E3%81%9F%E3%82%89%E3%81%BF%E5%9B%B3%E6%9B%B8%E9%A4%A8"}],"akatsuki":[{"t":"たびらい｜本好きの間で話題のユニーク図書館","u":"https://www.tabirai.net/sightseeing/column/0006965.aspx"},{"t":"るるぶKids｜本好きの夢が叶う宿","u":"https://kids.rurubu.jp/article/106758/"},{"t":"Sheage｜本にたっぷりと浸る夜を","u":"https://sheage.jp/article/14051"}],"okinawa-pref":[{"t":"ガジェット通信｜なんども訪れたくなる理由","u":"https://getnews.jp/archives/3675160"}],"kawanokami":[{"t":"海街さんぽ｜百俵館の紹介","u":"https://www.umimachi-sanpo.com/spot100/59/"},{"t":"旅東北｜川の上・百俵館、コメ・カフェ","u":"https://www.tohokukanko.jp/attractions/detail_1003484.html"},{"t":"ことりっぷ｜つい長居したくなる全国のおしゃれな図書館16選","u":"https://co-trip.jp/article/510820"}],"hibiya":[{"t":"Visit Chiyoda｜スポット紹介","u":"https://visit-chiyoda.tokyo/app/spot/detail/547"},{"t":"インターネットミュージアム｜展覧会情報","u":"https://www.museum.or.jp/museum/17424"},{"t":"ことりっぷ｜つい長居したくなる全国のおしゃれな図書館16選","u":"https://co-trip.jp/article/510820"}],"tobata":[{"t":"金剛｜1933年建設の建物を図書館へ再生利用","u":"https://www.kongo-corp.co.jp/case/library-tobata/"},{"t":"BELCA賞｜受賞概要","u":"http://www.belca.or.jp/l107.htm"},{"t":"ことりっぷ｜つい長居したくなる全国のおしゃれな図書館16選","u":"https://co-trip.jp/article/510820"}]};
+const LIBS=[{"id":"nakajima","name":"国際教養大学 中嶋記念図書館","area":"北海道・東北","pref":"秋田県","city":"秋田市","tags":["建築"],"points":["『本のコロセウム』半円形の秋田杉傘型屋根","24時間365日開館","仙田満設計"],"access":"秋田駅からバス約30分","visit_note":"大学図書館。学外者の利用時間に制限あり、公式サイトで要確認","opened":"2008","lat":39.6274282,"lng":140.1982904,"url":"https://library.aiu.ac.jp/"},{"id":"sendai-mediatheque","name":"せんだいメディアテーク","area":"北海道・東北","pref":"宮城県","city":"仙台市","tags":["建築","規模"],"points":["伊東豊雄の代表作。13本のチューブとガラスのダブルスキン","日本建築学会賞・グッドデザイン大賞ほか受賞","蔵書50万冊超・カフェ併設"],"access":"地下鉄勾当台公園駅から徒歩6分","visit_note":null,"opened":"2001","lat":38.2655142,"lng":140.8655467,"url":"https://www.smt.jp/"},{"id":"kawanokami","name":"川の上・百俵館","area":"北海道・東北","pref":"宮城県","city":"石巻市","tags":["歴史","コンセプト"],"points":["大正時代の農業倉庫を改修した私設『まちの図書館』","コメ・カフェ併設。お茶とおしゃべり自由","震災後の地域づくり『石巻・川の上プロジェクト』の拠点"],"access":"石巻市小船越（石巻市街から車で約15分）","visit_note":"月曜定休。私設図書館のため営業時間は公式サイトで要確認","opened":"2015","lat":38.5049129,"lng":141.3016116,"url":"http://kawanokami.com/hyappyokan"},{"id":"tono-honnomori","name":"こども本の森 遠野","area":"北海道・東北","pref":"岩手県","city":"遠野市","tags":["建築","コンセプト"],"points":["安藤忠雄設計・寄贈。築120年の旧呉服店をリノベ","『遠野物語』を軸にした選書","入館無料（貸出なし）"],"access":"JR遠野駅から徒歩3分","visit_note":"貸出は行っていない","opened":"2021","lat":39.3298281,"lng":141.5295098,"url":"https://kodomohonnomori-tono.com/"},{"id":"shiwa-ogal","name":"紫波町図書館（オガールプラザ）","area":"北海道・東北","pref":"岩手県","city":"紫波町","tags":["コンセプト"],"points":["公民連携まちづくり『オガール』の中核施設","Library of the Year 2016 大賞","紫波中央駅前"],"access":"JR紫波中央駅から徒歩4分","visit_note":null,"opened":"2012","lat":39.5547549,"lng":141.160039,"url":"https://lib.town.shiwa.iwate.jp/"},{"id":"sukagawa-tette","name":"須賀川市民交流センター tette","area":"北海道・東北","pref":"福島県","city":"須賀川市","tags":["建築","コンセプト"],"points":["3層吹抜けと斜路が連続する立体建築","円谷英二ミュージアム併設（特撮の街・須賀川）"],"access":"JR須賀川駅から徒歩9分","visit_note":null,"opened":"2019","lat":37.288412,"lng":140.375601,"url":"https://s-tette.jp/"},{"id":"kadokawa-musashino","name":"角川武蔵野ミュージアム","area":"関東","pref":"埼玉県","city":"所沢市","tags":["建築","コンセプト"],"points":["隈研吾設計の巨石建築","高さ約8mの『本棚劇場』とプロジェクションマッピング","マンガ・ラノベ図書館併設"],"access":"JR東所沢駅から徒歩10分","visit_note":"有料（入館チケット制）","opened":"2020","lat":35.797689,"lng":139.5078666,"url":"https://kadcul.com/"},{"id":"miruru","name":"那須塩原市図書館 みるる","area":"関東","pref":"栃木県","city":"那須塩原市","tags":["建築","コンセプト"],"points":["『森』をテーマにした空間。グッドデザイン賞受賞","黒磯駅前・カフェ併設"],"access":"JR黒磯駅から徒歩1分","visit_note":null,"opened":"2020","lat":36.9693645,"lng":140.0586007,"url":"https://www.nasushiobara-library.jp/"},{"id":"ota-artlib","name":"太田市美術館・図書館","area":"関東","pref":"群馬県","city":"太田市","tags":["建築","コンセプト"],"points":["美術館と図書館が連続スロープで融合","雲形の本棚・屋上庭園・カフェ"],"access":"東武太田駅から徒歩1分","visit_note":"美術館展示は有料","opened":"2017","lat":36.294793,"lng":139.3784668,"url":"https://www.artmuseumlibraryota.jp/"},{"id":"toyo-bunko","name":"東洋文庫ミュージアム","area":"関東","pref":"東京都","city":"文京区","tags":["専門","建築","歴史"],"points":["『日本一美しい書棚』モリソン書庫","国宝・重要文化財を含む東洋学コレクション約100万冊","カフェ併設"],"access":"JR駒込駅から徒歩8分","visit_note":"有料（ミュージアム入場料）","opened":"2011","lat":35.7312515,"lng":139.7487051,"url":"https://toyo-bunko.or.jp/museum/"},{"id":"kodomo-tosho","name":"国立国会図書館 国際子ども図書館","area":"関東","pref":"東京都","city":"台東区","tags":["歴史","専門"],"points":["明治期の帝国図書館建築を保存再生","上野公園内・児童書専門の国立図書館"],"access":"JR上野駅から徒歩10分","visit_note":null,"opened":"2000（建物は1906）","lat":35.719485,"lng":139.773752,"url":"https://www.kodomo.go.jp/"},{"id":"ndl-tokyo","name":"国立国会図書館 東京本館","area":"関東","pref":"東京都","city":"千代田区","tags":["規模","歴史","専門"],"points":["国内の出版物をすべて収集する日本唯一の納本図書館","国会議事堂の隣。蔵書は国内最大","満18歳以上なら誰でも利用できる"],"access":"地下鉄永田町駅から徒歩5分／国会議事堂前駅から徒歩8分","visit_note":"満18歳以上。登録利用者カード（当日発行可）が必要。館内は資料請求方式（開架は一部のみ）","opened":"1948（本館建物は1961）","lat":35.6786024,"lng":139.7442643,"url":"https://www.ndl.go.jp/"},{"id":"hibiya","name":"日比谷図書文化館","area":"関東","pref":"東京都","city":"千代田区","tags":["歴史","コンセプト","専門"],"points":["日比谷公園の緑に囲まれた三角形の建物","図書館×ミュージアム×カレッジの複合文化施設","旧都立日比谷図書館を千代田区が引き継ぎ再生"],"access":"地下鉄霞ケ関駅・日比谷駅から徒歩約5分","visit_note":null,"opened":"2011（建物は1957）","lat":35.671945,"lng":139.754641,"url":"https://www.library.chiyoda.tokyo.jp/hibiya/"},{"id":"sirius","name":"大和市文化創造拠点シリウス","area":"関東","pref":"神奈川県","city":"大和市","tags":["規模","コンセプト"],"points":["蔵書約58万冊・地下1階地上6階の複合施設","開館後2年連続で年間来館300万人超","カフェで本の持込可"],"access":"小田急・相鉄 大和駅から徒歩3分","visit_note":null,"opened":"2016","lat":35.4695135,"lng":139.4652679,"url":"https://yamato-bunka.jp/"},{"id":"toyama-kirari","name":"富山市立図書館本館 TOYAMAキラリ","area":"中部・北陸","pref":"富山県","city":"富山市","tags":["建築","コンセプト"],"points":["隈研吾設計。5層吹抜けに斜めに射す光","富山市ガラス美術館と同居"],"access":"市電 西町電停すぐ","visit_note":null,"opened":"2015","lat":36.6885615,"lng":137.2149038,"url":"https://www.library.toyama.toyama.jp/"},{"id":"umimirai","name":"金沢海みらい図書館","area":"中部・北陸","pref":"石川県","city":"金沢市","tags":["建築"],"points":["白いキューブに約6000個の丸窓","米Fodor's『世界の魅力的な図書館ベスト20』選出","シーラカンスK&H設計"],"access":"金沢駅からバス約20分","visit_note":null,"opened":"2011","lat":36.594339,"lng":136.604294,"url":"https://www.lib.kanazawa.ishikawa.jp/umimirai"},{"id":"ishikawa-pref","name":"石川県立図書館（百万石ビブリオバウム）","area":"中部・北陸","pref":"石川県","city":"金沢市","tags":["建築","規模","最新"],"points":["円形劇場状の閲覧空間が圧巻","蔵書100万冊超・会話OK・カフェ併設"],"access":"金沢駅からバス約25分","visit_note":null,"opened":"2022","lat":36.5486923,"lng":136.6803683,"url":"https://www.library.pref.ishikawa.lg.jp/"},{"id":"terrasow","name":"まちとしょテラソ（小布施町立図書館）","area":"中部・北陸","pref":"長野県","city":"小布施町","tags":["建築"],"points":["三角形の木造ワンルーム空間","日本図書館協会建築賞・Library of the Year大賞","古谷誠章＋NASCA設計"],"access":"長野電鉄小布施駅から徒歩2分","visit_note":null,"opened":"2009","lat":36.6988906,"lng":138.3127841,"url":"https://www.town.obuse.nagano.jp/lib/"},{"id":"media-cosmos","name":"みんなの森 ぎふメディアコスモス","area":"中部・北陸","pref":"岐阜県","city":"岐阜市","tags":["建築","規模"],"points":["伊東豊雄設計。東濃ひのきの波打つ格子屋根","クラゲ状の照明『グローブ』が浮かぶ閲覧空間","閲覧席910席・カフェ併設"],"access":"岐阜駅からバス約10分","visit_note":null,"opened":"2015","lat":35.4272893,"lng":136.7599149,"url":"https://g-mediacosmos.jp/"},{"id":"anforet","name":"安城市図書情報館アンフォーレ","area":"中部・北陸","pref":"愛知県","city":"安城市","tags":["コンセプト"],"points":["飲食・会話自由の新世代図書館","開館後3年連続で来館100万人超"],"access":"JR安城駅から徒歩5分","visit_note":null,"opened":"2017","lat":34.959556,"lng":137.083935,"url":"https://www.library.city.anjo.aichi.jp/"},{"id":"nakanoshima","name":"大阪府立中之島図書館","area":"関西","pref":"大阪府","city":"大阪市北区","tags":["歴史","建築"],"points":["1904年築・国重要文化財。ギリシャ神殿風の外観","教会のような中央ホールのドーム","北欧カフェ『スモーブローキッチン』併設"],"access":"京阪・地下鉄 淀屋橋駅から徒歩5分／京阪中之島線 大江橋駅すぐ","visit_note":null,"opened":"1904","lat":34.693505,"lng":135.5031979,"url":"https://www.nakanoshima-library.jp/"},{"id":"honnomori-nakanoshima","name":"こども本の森 中之島","area":"関西","pref":"大阪府","city":"大阪市北区","tags":["建築","コンセプト"],"points":["安藤忠雄設計・寄贈。全壁面本棚と青リンゴのオブジェ","中之島公園内。中之島図書館とセットで巡れる"],"access":"京阪なにわ橋駅すぐ","visit_note":"混雑時は事前予約制。公式サイトで要確認","opened":"2020","lat":34.6931003,"lng":135.5063306,"url":"https://kodomohonnomori.osaka/"},{"id":"kadomado","name":"文化創造図書館 KADOMADO","area":"関西","pref":"大阪府","city":"門真市","tags":["最新","コンセプト","近場"],"points":["2026年5月開館。京阪古川橋駅前の学び×地域活性化拠点","図書館・多目的室・学習室・カフェの複合施設","枚方発祥のCCC（TSUTAYA）グループが運営"],"access":"京阪古川橋駅から徒歩すぐ（枚方市駅から電車約15分）","visit_note":null,"opened":"2026","lat":34.7404719,"lng":135.5922428,"url":"https://kadomado.jp/"},{"id":"ndl-kansai","name":"国立国会図書館 関西館","area":"関西","pref":"京都府","city":"精華町","tags":["規模","建築","近場"],"points":["国会図書館の西日本拠点。書庫能力は国内最大級","ガラス張りの大閲覧室が近未来的","けいはんな学研都市。枚方から車で約30分"],"access":"JR祝園駅・近鉄新祝園駅からバス","visit_note":"満18歳以上。登録利用者カード（当日発行可）が必要","opened":"2002","lat":34.7448499,"lng":135.7710587,"url":"https://www.ndl.go.jp/jp/kansai/"},{"id":"osaka-pref-central","name":"大阪府立中央図書館","area":"関西","pref":"大阪府","city":"東大阪市","tags":["規模","近場"],"points":["公共図書館として国内最大級の蔵書規模","国際児童文学館を併設","『なんでもある』を求めるならまずここ"],"access":"近鉄けいはんな線 荒本駅から徒歩5分","visit_note":null,"opened":"1996","lat":34.6808992,"lng":135.6006685,"url":"https://www.library.pref.osaka.jp/"},{"id":"osaka-city-central","name":"大阪市立中央図書館","area":"関西","pref":"大阪府","city":"大阪市西区","tags":["規模","近場"],"points":["蔵書数で全国トップ級の市立図書館","地下鉄直結でアクセス至便"],"access":"地下鉄西長堀駅直結","visit_note":null,"opened":"1996","lat":34.6738148,"lng":135.4862048,"url":"https://www.oml.city.osaka.lg.jp/"},{"id":"morinomiya","name":"大阪公立大学 森之宮ライブラリー","area":"関西","pref":"大阪府","city":"大阪市城東区","tags":["最新","建築","近場"],"points":["2025年秋開設の新キャンパス中核施設。コンセプトは『知の森』","大阪城東部の再開発エリアの新名所"],"access":"JR・地下鉄 森ノ宮駅から徒歩圏","visit_note":"一般利用は登録制（登録料2,000円/2年、近畿在住18歳以上）。試験期は利用制限あり","opened":"2025","lat":34.7017354,"lng":135.5365081,"url":"https://www.omu.ac.jp/library/outline/morinomiya/"},{"id":"neyagawa","name":"寝屋川市立中央図書館","area":"関西","pref":"大阪府","city":"寝屋川市","tags":["近場","コンセプト"],"points":["寝屋川市駅前ビルに移転した駅近図書館","枚方の隣町。仕事帰り・買い物ついでに寄れる"],"access":"京阪寝屋川市駅すぐ","visit_note":null,"opened":"2020","lat":34.7853022,"lng":135.6256255,"url":"https://www.city.neyagawa.osaka.jp/organization_list/kyoiku_shakaikyoiku/tyuutosyo/tosyotop/index.html"},{"id":"hirakata-central","name":"枚方市立中央図書館","area":"関西","pref":"大阪府","city":"枚方市","tags":["近場"],"points":["地元のホーム図書館（輝きプラザきらら内）","電子図書館・Wi-Fi等サービス拡充中","巡礼の起点・比較の基準点として収録"],"access":"京阪御殿山駅から徒歩約15分","visit_note":null,"opened":"2005","lat":34.833367,"lng":135.671662,"url":"https://www.city.hirakata.osaka.jp/0000027069.html"},{"id":"honnomori-kobe","name":"こども本の森 神戸","area":"関西","pref":"兵庫県","city":"神戸市中央区","tags":["建築","コンセプト"],"points":["安藤忠雄設計・寄贈の第3弾","東遊園地内。六甲山系の木材を使った家具"],"access":"地下鉄三宮・花時計前駅から徒歩5分","visit_note":"混雑時は事前予約制の場合あり","opened":"2022","lat":34.6866764,"lng":135.1969324,"url":"https://kodomohonnomori-kobe.jp/"},{"id":"sumoto","name":"洲本図書館","area":"関西","pref":"兵庫県","city":"洲本市","tags":["歴史","建築"],"points":["旧鐘紡洲本工場の赤レンガ建築を再生","近代化産業遺産×図書館。淡路島観光と組める"],"access":"洲本バスセンターから徒歩5分","visit_note":null,"opened":"1998（建物は明治期）","lat":34.3459269,"lng":134.8945114,"url":"https://www.im.licsre-saas.jp/sumoto/index2.html"},{"id":"wakayama-civic","name":"和歌山市民図書館","area":"関西","pref":"和歌山県","city":"和歌山市","tags":["コンセプト","最新"],"points":["CCC運営。蔦屋書店・スタバ併設の駅直結館","屋上テラスと吹抜けの大階段"],"access":"南海和歌山市駅直結","visit_note":null,"opened":"2020","lat":34.2366938,"lng":135.1673785,"url":"https://wakayama.civic-library.jp/"},{"id":"nara-pref","name":"奈良県立図書情報館","area":"関西","pref":"奈良県","city":"奈良市","tags":["建築","専門"],"points":["ガラスと木の大空間。戦争体験文庫など特色ある蔵書","イベント・展示が活発な『情報館』型"],"access":"JR奈良駅からバス約10分","visit_note":null,"opened":"2005","lat":34.6755405,"lng":135.8053316,"url":"https://www.library.pref.nara.jp/"},{"id":"moriyama","name":"守山市立図書館","area":"関西","pref":"滋賀県","city":"守山市","tags":["建築"],"points":["隈研吾設計『本と人とをつなぐ 湖のような図書館』","木の大屋根が連なる park-side の空間。琵琶湖観光と組める"],"access":"JR守山駅からバス・徒歩約15分","visit_note":null,"opened":"2018","lat":35.0583128,"lng":135.9933533,"url":"https://moriyama-city-lib.jp/"},{"id":"kyoto-manga","name":"京都国際マンガミュージアム","area":"関西","pref":"京都府","city":"京都市中京区","tags":["専門","歴史"],"points":["元・龍池小学校の校舎を活用","壁一面5万冊の『マンガの壁』。芝生で読める","博物館×図書館のハイブリッド"],"access":"地下鉄烏丸御池駅から徒歩2分","visit_note":"有料（入場料制）","opened":"2006","lat":35.0116959,"lng":135.7591764,"url":"https://kyotomm.jp/"},{"id":"tokuyama","name":"周南市立徳山駅前図書館","area":"中国・四国","pref":"山口県","city":"周南市","tags":["建築","コンセプト"],"points":["内藤廣設計。駅直結・全長約120mの本棚アート","CCC運営、蔦屋書店・スタバ併設で22時まで開館"],"access":"JR徳山駅直結","visit_note":null,"opened":"2018","lat":34.0515208,"lng":131.8029391,"url":"https://shunan.ekimae-library.jp/"},{"id":"taki","name":"出雲市立 海辺の多伎図書館","area":"中国・四国","pref":"島根県","city":"出雲市","tags":["景観"],"points":["日本海に面したオーシャンビューの閲覧席","テラス席は飲食可。しまね景観賞","道の駅キララ多伎とセットで"],"access":"JR小田駅から徒歩約10分","visit_note":null,"opened":"1998","lat":35.3984575,"lng":132.6837351,"url":"https://izumolib.icv.ne.jp/library/lib-taki/"},{"id":"momiwa","name":"瀬戸内市民図書館 もみわ広場","area":"中国・四国","pref":"岡山県","city":"瀬戸内市","tags":["建築","コンセプト"],"points":["Library of the Year 2016 大賞＆オーディエンス賞のダブル受賞","香山壽夫設計の吹抜け空間"],"access":"JR邑久駅から徒歩約15分","visit_note":null,"opened":"2016","lat":34.6624562,"lng":134.0996522,"url":"https://lib.city.setouchi.lg.jp/"},{"id":"yusuhara","name":"ゆすはら雲の上の図書館","area":"中国・四国","pref":"高知県","city":"梼原町","tags":["建築"],"points":["隈研吾設計。天井から降り注ぐ木格子の森","土足禁止・靴を脱いで過ごす図書館","町内の隈建築群とあわせて巡礼できる"],"access":"高知市から車で約1時間30分","visit_note":null,"opened":"2018","lat":33.3924398,"lng":132.9301689,"url":"https://kumonoue-lib.jp/"},{"id":"otepia","name":"オーテピア高知図書館","area":"中国・四国","pref":"高知県","city":"高知市","tags":["規模","コンセプト"],"points":["県立＋市立の合築による全国有数規模","プラネタリウム（科学館）・点字図書館を併設"],"access":"とさでん大橋通電停から徒歩3分","visit_note":null,"opened":"2018","lat":33.5610083,"lng":133.5371567,"url":"https://otepia.kochi.jp/library/"},{"id":"takeo","name":"武雄市図書館・歴史資料館","area":"九州・沖縄","pref":"佐賀県","city":"武雄市","tags":["コンセプト"],"points":["元祖TSUTAYA図書館（2013年〜）","吹抜けの大空間に蔵書約25万冊・スタバ併設","武雄温泉とセットで"],"access":"JR武雄温泉駅から徒歩15分","visit_note":null,"opened":"2013","lat":33.1891306,"lng":130.0236617,"url":"https://takeo.city-library.jp/"},{"id":"tobata","name":"北九州市立戸畑図書館","area":"九州・沖縄","pref":"福岡県","city":"北九州市","tags":["歴史","建築"],"points":["1933年築の旧戸畑市庁舎をリノベーション","スクラッチタイルと塔屋が残る昭和モダン建築","保存再生の優良事例としてBELCA賞受賞"],"access":"JR戸畑駅から徒歩約10分","visit_note":null,"opened":"2014（建物は1933）","lat":33.89121,"lng":130.827406,"url":"https://www.toshokan.city.kitakyushu.jp/"},{"id":"tarami","name":"諫早市立たらみ図書館","area":"九州・沖縄","pref":"長崎県","city":"諫早市","tags":["建築","景観"],"points":["南欧リゾート風の建築","大村湾を一望。運が良ければスナメリも見える"],"access":"JR喜々津駅から車約5分","visit_note":null,"opened":"2000","lat":32.838146,"lng":129.981643,"url":"https://www.lib.isahaya.nagasaki.jp/"},{"id":"akatsuki","name":"泊まれる図書館 暁","area":"九州・沖縄","pref":"佐賀県","city":"佐賀市","tags":["コンセプト"],"points":["古湯温泉の築120年古民家。1日1組貸切","本棚の間に布団を敷いて泊まる私設図書館の宿"],"access":"佐賀駅からバス約40分（古湯温泉）","visit_note":"宿泊者専用・要予約","opened":"2018","lat":33.3747703,"lng":130.1993846,"url":"https://library-inn.jp/"},{"id":"okinawa-pref","name":"沖縄県立図書館","area":"九州・沖縄","pref":"沖縄県","city":"那覇市","tags":["規模","専門"],"points":["琉球・沖縄資料の収蔵で国内最大","ゆいレール旭橋駅直結"],"access":"ゆいレール旭橋駅直結","visit_note":null,"opened":"2018（移転）","lat":26.2112077,"lng":127.6765519,"url":"https://www.library.pref.okinawa.jp/"}];
+
+/* Wikimedia Commons等の画像クレジット。img/<id>.jpg を置いたらここに追記する
+   例: {"umimirai":{author:"撮影者名",license:"CC BY-SA 4.0",link:"https://commons.wikimedia.org/..."}} */
+const CREDITS={"nakajima":{"author":"Peguim","license":"CC BY-SA 3.0","link":"https://commons.wikimedia.org/wiki/File:AIU_Library.png"},"sendai-mediatheque":{"author":"scarletgreen from Japan","license":"CC BY 2.0","link":"https://commons.wikimedia.org/wiki/File:Sendai_Mediatheque_2009.jpg"},"shiwa-ogal":{"author":"Suikotei","license":"CC BY 4.0","link":"https://commons.wikimedia.org/wiki/File:Ogal_Plaza_Central_Building_20250427.jpg"},"sukagawa-tette":{"author":"Suikotei","license":"CC BY-SA 4.0","link":"https://commons.wikimedia.org/wiki/File:Sukagawa_Citizen_Exchange_Center_Tette.jpg"},"kadokawa-musashino":{"author":"Photo credit: Scott Kouchi","license":"CC BY 2.0","link":"https://commons.wikimedia.org/wiki/File:Kadokawa_Culture_Museum_at_Tokorozawa_Sakura_Town_(50608208297).jpg"},"miruru":{"author":"Miyuki Meinaka","license":"CC BY-SA 4.0","link":"https://commons.wikimedia.org/wiki/File:Nasushiobara_Library_Miruru_2.jpg"},"ota-artlib":{"author":"Hasec","license":"CC0","link":"https://commons.wikimedia.org/wiki/File:Art-Museum%26Library,Ota-2017092402.jpg"},"toyo-bunko":{"author":"Dzz77","license":"CC BY-SA 3.0","link":"https://commons.wikimedia.org/wiki/File:Toyobunko_new2.jpg"},"kodomo-tosho":{"author":"Wiiii","license":"CC BY-SA 3.0","link":"https://commons.wikimedia.org/wiki/File:International_Library_of_Children%27s_Literature.jpg"},"umimirai":{"author":"Asturio Cantabrio","license":"CC BY-SA 4.0","link":"https://commons.wikimedia.org/wiki/File:Kanazawa_Umimirai_Library_exterior_ac_(4).jpg"},"ishikawa-pref":{"author":"Asturio Cantabrio","license":"CC BY-SA 4.0","link":"https://commons.wikimedia.org/wiki/File:Ishikawa_Prefectural_Library_2022-07_ac_(1).jpg"},"terrasow":{"author":"Asturio Cantabrio","license":"CC BY-SA 4.0","link":"https://commons.wikimedia.org/wiki/File:Obuse_machi_tosho_terrasow_ac_(2).jpg"},"media-cosmos":{"author":"Kanesue","license":"CC BY 2.0","link":"https://commons.wikimedia.org/wiki/File:%E3%81%BF%E3%82%93%E3%81%AA%E3%81%AE%E6%A3%AE_%E3%81%8E%E3%81%B5%E3%83%A1%E3%83%87%E3%82%A3%E3%82%A2%E3%82%B3%E3%82%B9%E3%83%A2%E3%82%B9_(52197682506).jpg"},"anforet":{"author":"Asturio Cantabrio","license":"CC BY-SA 4.0","link":"https://commons.wikimedia.org/wiki/File:Anforet_exterior_2019-02_ac_(4).jpg"},"nakanoshima":{"author":"まぐろのふらい","license":"CC BY-SA 4.0","link":"https://commons.wikimedia.org/wiki/File:%E5%A4%A7%E9%98%AA%E5%BA%9C%E7%AB%8B%E4%B8%AD%E4%B9%8B%E5%B3%B6%E5%9B%B3%E6%9B%B8%E9%A4%A8.jpg"},"honnomori-nakanoshima":{"author":"まぐろのふらい","license":"CC BY-SA 4.0","link":"https://commons.wikimedia.org/wiki/File:%E3%81%93%E3%81%A9%E3%82%82%E6%9C%AC%E3%81%AE%E6%A3%AE_%E4%B8%AD%E4%B9%8B%E5%B3%B6(%E6%AD%A3%E9%9D%A2).jpg"},"ndl-kansai":{"author":"Degueulasse","license":"CC BY 3.0","link":"https://commons.wikimedia.org/wiki/File:Kansai-kan_of_the_National_Diet_Library_201610a.jpg"},"osaka-pref-central":{"author":"Degueulasse","license":"CC BY 3.0","link":"https://commons.wikimedia.org/wiki/File:Osaka_Prefectural_Central_Library_201611.jpg"},"osaka-city-central":{"author":"Asturio Cantabrio","license":"CC BY-SA 4.0","link":"https://commons.wikimedia.org/wiki/File:Osaka_Municipal_Central_Library_ac_exterior_(1).jpg"},"neyagawa":{"author":"Asgawaji","license":"CC0","link":"https://commons.wikimedia.org/wiki/File:Neyagawa_Central_Library.jpg"},"hirakata-central":{"author":"User:Kei-NIKAIDOH","license":"CC BY-SA 3.0","link":"https://commons.wikimedia.org/wiki/File:Hirakatashiritu-chuo-toshokann-for-wiki.jpg"},"honnomori-kobe":{"author":"KishujiRapid","license":"CC BY-SA 4.0","link":"https://commons.wikimedia.org/wiki/File:Kobe_Children%E2%80%99s_Book_Forest.jpg"},"sumoto":{"author":"663highland","license":"CC BY 2.5","link":"https://commons.wikimedia.org/wiki/File:Sumoto_Library_Sumoto_Awaji_Island_Japan01bs5.jpg"},"wakayama-civic":{"author":"Tokyo-Good","license":"CC BY-SA 4.0","link":"https://commons.wikimedia.org/wiki/File:Wakayama-civic-Library2020.jpg"},"nara-pref":{"author":"No machine-readable author provided. Ideru~commonswiki assum","license":"CC BY 2.5","link":"https://commons.wikimedia.org/wiki/File:Nara_Prefectural_library.jpg"},"moriyama":{"author":"Fotointheworld","license":"CC BY 4.0","link":"https://commons.wikimedia.org/wiki/File:Moriyama_City_Library_2025.jpg"},"kyoto-manga":{"author":"ja:利用者:珈琲ルンバ","license":"CC BY-SA 3.0","link":"https://commons.wikimedia.org/wiki/File:%E4%BA%AC%E9%83%BD%E5%9B%BD%E9%9A%9B%E3%83%9E%E3%83%B3%E3%82%AC%E3%83%9F%E3%83%A5%E3%83%BC%E3%82%B8%E3%82%A2%E3%83%A0.jpg"},"tokuyama":{"author":"いりえる","license":"CC BY-SA 4.0","link":"https://commons.wikimedia.org/wiki/File:%E5%91%A8%E5%8D%97%E5%B8%82%E7%AB%8B%E5%BE%B3%E5%B1%B1%E9%A7%85%E5%89%8D%E5%9B%B3%E6%9B%B8%E9%A4%A8.jpg"},"momiwa":{"author":"Shima0705","license":"CC BY-SA 4.0","link":"https://commons.wikimedia.org/wiki/File:%E7%80%AC%E6%88%B8%E5%86%85%E5%B8%82%E6%B0%91%E5%9B%B3%E6%9B%B8%E9%A4%A8%E3%82%82%E3%81%BF%E3%82%8F%E5%BA%83%E5%A0%B4.jpg"},"yusuhara":{"author":"Asset utilitist","license":"CC0","link":"https://commons.wikimedia.org/wiki/File:%E3%82%86%E3%81%99%E3%81%AF%E3%82%89%E9%9B%B2%E3%81%AE%E4%B8%8A%E3%81%AE%E5%9B%B3%E6%9B%B8%E9%A4%A8%EF%BC%88%E6%A2%BC%E5%8E%9F%E7%94%BA%E7%AB%8B%E5%9B%B3%E6%9B%B8%E9%A4%A8%EF%BC%89_02.jpg"},"otepia":{"author":"Asturio Cantabrio","license":"CC BY-SA 4.0","link":"https://commons.wikimedia.org/wiki/File:Otepia_Kochi_Library_ac_(3).jpg"},"takeo":{"author":"Baked Pudding","license":"CC BY-SA 4.0","link":"https://commons.wikimedia.org/wiki/File:%E6%AD%A6%E9%9B%84%E5%B8%82%E5%9B%B3%E6%9B%B8%E9%A4%A8%E3%83%BB%E6%AD%B4%E5%8F%B2%E8%B3%87%E6%96%99%E9%A4%A8%E3%81%AB%E3%81%82%E3%82%8B%E7%9C%8B%E6%9D%BF.jpg"},"tarami":{"author":"Hotaru2022","license":"CC BY-SA 4.0","link":"https://commons.wikimedia.org/wiki/File:Isahaya_City_Tarami_Library.jpg"},"okinawa-pref":{"author":"663highland","license":"CC BY 2.5","link":"https://commons.wikimedia.org/wiki/File:120214_Okinawa_Prefectural_Library_Naha_Okinawa_pref_Japan02s3.jpg"},"sirius":{"author":"Drivephotographer","license":"CC0","link":"https://commons.wikimedia.org/wiki/File:Yamato_city_library_Sirius.jpg"},"toyama-kirari":{"author":"Asturio Cantabrio","license":"CC BY-SA 4.0","link":"https://commons.wikimedia.org/wiki/File:TOYAMA_KIRARI_exterior_in_the_morning_ac_(3).jpg"},"morinomiya":{"author":"L26","license":"CC BY-SA 4.0","link":"https://commons.wikimedia.org/wiki/File:Osaka_Metropolitan_University_Morinomiya_campus_20251011.jpg"},"ndl-tokyo":{"author":"Peacearth","license":"CC BY-SA 4.0","link":"https://commons.wikimedia.org/wiki/File:Tokyo_Main_Library_of_the_National_Diet_Library_20190202.jpg"},"tobata":{"author":"Ken OHYAMA","license":"CC BY-SA 2.0","link":"https://commons.wikimedia.org/wiki/File:Tobata_Library.jpg"},"hibiya":{"author":"PekePON","license":"CC BY-SA 4.0","link":"https://commons.wikimedia.org/wiki/File:Hibiya_Library_%26_Museum_2016.JPG"}};
+
+const AREAS=["すべて","北海道・東北","関東","中部・北陸","関西","中国・四国","九州・沖縄"];
+const TAGS=["建築","景観","コンセプト","歴史","専門","規模","最新","近場"];
+const HIRAKATA=[34.8146,135.6519];
+const LS_KEY="library-trip-visited";
+
+let state={area:"すべて",tags:new Set(),q:"",sortByDist:false,view:"list"};
+let visited=new Set(JSON.parse(localStorage.getItem(LS_KEY)||"[]"));
+
+/* ---------- 出発地（郵便番号＋移動手段） ---------- */
+const HOME_KEY="library-trip-home";
+const MODES={walk:{label:"徒歩",icon:"🚶"},bike:{label:"自転車",icon:"🚲"},car:{label:"車",icon:"🚗"},train:{label:"電車",icon:"🚃"}};
+let home=null;
+try{home=JSON.parse(localStorage.getItem(HOME_KEY))||null;}catch{}
+
+function origin(){return home?[home.lat,home.lng]:HIRAKATA;}
+function originLabel(){return home?`〒${home.zip}`:"枚方市駅";}
+
+// 直線距離→所要時間の目安（道のり係数1.3で補正）
+function estMinutes(km,mode){
+  const road=km*1.3;
+  let min;
+  if(mode==="walk")min=road/4.5*60;
+  else if(mode==="bike")min=road/14*60;
+  else if(mode==="car")min=road/(road<8?28:road<40?45:70)*60+5;
+  else min=road/(road<15?30:55)*60+20; // 電車: 駅までの移動・待ち・乗換ぶん+20分
+  return Math.max(1,Math.round(min/5)*5);
+}
+function fmtMin(min){return min>=60?`${Math.floor(min/60)}時間${min%60?String(min%60)+"分":""}`:`${min}分`;}
+function accessText(l,short){
+  if(!isFinite(l.km))return null;
+  const mode=home?.mode||"train";
+  const t=`${MODES[mode].icon}約${fmtMin(estMinutes(l.km,mode))}`;
+  return short?t:`${originLabel()}から${t}`;
+}
+function recalcKm(){const o=origin();LIBS.forEach(l=>{l.km=l.lat!=null?dist(o,[l.lat,l.lng]):Infinity;});}
+
+function saveVisited(){localStorage.setItem(LS_KEY,JSON.stringify([...visited]));}
+function dist(a,b){ // haversine km
+  const R=6371,d2r=Math.PI/180;
+  const dLat=(b[0]-a[0])*d2r,dLng=(b[1]-a[1])*d2r;
+  const h=Math.sin(dLat/2)**2+Math.cos(a[0]*d2r)*Math.cos(b[0]*d2r)*Math.sin(dLng/2)**2;
+  return R*2*Math.asin(Math.sqrt(h));
+}
+recalcKm();
+
+function licenseUrl(lic){
+  const m=lic.match(/CC BY-SA (\d\.\d)/i);if(m)return`https://creativecommons.org/licenses/by-sa/${m[1]}/deed.ja`;
+  const b=lic.match(/CC BY (\d\.\d)/i);if(b)return`https://creativecommons.org/licenses/by/${b[1]}/deed.ja`;
+  if(/CC0/i.test(lic))return"https://creativecommons.org/publicdomain/zero/1.0/deed.ja";
+  if(/public domain/i.test(lic))return"https://creativecommons.org/publicdomain/mark/1.0/deed.ja";
+  return"https://commons.wikimedia.org/wiki/Commons:Licensing";
+}
+function gmapUrl(l){return "https://www.google.com/maps/search/?api=1&query="+encodeURIComponent(l.name+" "+l.city);}
+function esc(s){return s.replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
+
+function filtered(){
+  let arr=LIBS.filter(l=>
+    (state.area==="すべて"||l.area===state.area)&&
+    [...state.tags].every(t=>l.tags.includes(t))&&
+    (state.q===""||(l.name+l.pref+l.city+l.access+l.points.join(" ")).toLowerCase().includes(state.q.toLowerCase()))
+  );
+  if(state.sortByDist)arr=[...arr].sort((a,b)=>a.km-b.km);
+  return arr;
+}
+
+/* ---------- header/controls ---------- */
+const tabsEl=document.getElementById("areaTabs");
+AREAS.forEach(a=>{
+  const b=document.createElement("button");
+  b.className="tab"+(a===state.area?" active":"");b.textContent=a;
+  b.onclick=()=>{state.area=a;document.querySelectorAll(".tab").forEach(t=>t.classList.toggle("active",t.textContent===a));render();};
+  tabsEl.appendChild(b);
+});
+const chipsEl=document.getElementById("tagChips");
+TAGS.forEach(t=>{
+  const b=document.createElement("button");
+  b.className="chip";b.textContent=t;
+  b.onclick=()=>{state.tags.has(t)?state.tags.delete(t):state.tags.add(t);b.classList.toggle("active");render();};
+  chipsEl.appendChild(b);
+});
+document.getElementById("search").addEventListener("input",e=>{state.q=e.target.value;render();});
+document.getElementById("sortBtn").onclick=e=>{state.sortByDist=!state.sortByDist;e.target.classList.toggle("active");render();};
+document.getElementById("homeBtn").onclick=openHomeModal;
+
+/* 郵便番号→座標: zipcloud（日本郵便データ）で住所化→Nominatimで座標化。段階的にフォールバック */
+async function geocodeZip(zip,msg){
+  let addr=null;
+  try{
+    const z=await(await fetch(`https://zipcloud.ibsnet.co.jp/api/search?zipcode=${zip}`)).json();
+    const r=z.results?.[0];
+    if(r)addr={pref:r.address1,city:r.address2,town:r.address3};
+  }catch{}
+  const queries=[];
+  if(addr){
+    queries.push(`${addr.pref}${addr.city}${addr.town}`);
+    queries.push(`${addr.pref}${addr.city}`);
+  }
+  for(const q of queries){
+    try{
+      if(msg)msg.textContent=`「${q}」の位置を検索中…`;
+      const j=await(await fetch(`https://nominatim.openstreetmap.org/search?format=json&limit=1&countrycodes=jp&q=${encodeURIComponent(q)}`)).json();
+      if(j[0])return{lat:+j[0].lat,lng:+j[0].lon,addr:addr?`${addr.pref}${addr.city}${addr.town||""}`:""};
+    }catch{}
+  }
+  try{ // 最後の手段: Nominatimの郵便番号検索
+    const j=await(await fetch(`https://nominatim.openstreetmap.org/search?format=json&limit=1&countrycodes=jp&postalcode=${zip}`)).json();
+    if(j[0])return{lat:+j[0].lat,lng:+j[0].lon,addr:""};
+  }catch{}
+  return null;
+}
+
+/* ---------- 出発地設定ダイアログ ---------- */
+function updateHomeBtn(){
+  const b=document.getElementById("homeBtn");
+  b.textContent=home?`🏠 〒${home.zip}・${MODES[home.mode].label}`:"🏠 出発地設定";
+  b.classList.toggle("active",!!home);
+}
+function openHomeModal(){
+  modalEl.innerHTML=`
+    <button class="close-x" aria-label="閉じる">×</button>
+    <div class="modal-body">
+      <h2>出発地を設定</h2>
+      <p class="meta">郵便番号と移動手段を登録すると、各館に自宅からの所要時間の目安が表示されます（データはこの端末にのみ保存）。</p>
+      <h4 class="sec">郵便番号</h4>
+      <input class="search" id="zipInput" inputmode="numeric" placeholder="例: 5730032（ハイフン不要）" value="${home?esc(home.zip):""}" style="width:100%">
+      <h4 class="sec">移動手段</h4>
+      <div class="chips" id="modeChips">
+        ${Object.entries(MODES).map(([k,m])=>`<button class="chip${(home?.mode||"train")===k?" active":""}" data-mode="${k}">${m.icon} ${m.label}</button>`).join("")}
+      </div>
+      <p class="note" style="margin-top:14px">所要時間は直線距離からの概算です。特に電車は乗換・本数により大きく変わるため、正確な時間は Google Maps リンクからご確認ください。</p>
+      <button class="visit-toggle" id="homeSave">この内容で登録する</button>
+      ${home?`<button class="btn" id="homeClear" style="width:100%;margin-top:8px">登録を解除（枚方市駅基準に戻す）</button>`:""}
+      <p class="credit" id="homeMsg"></p>
+    </div>`;
+  modalEl.querySelector(".close-x").onclick=closeModal;
+  let mode=home?.mode||"train";
+  modalEl.querySelectorAll("#modeChips .chip").forEach(c=>{
+    c.onclick=()=>{mode=c.dataset.mode;modalEl.querySelectorAll("#modeChips .chip").forEach(x=>x.classList.toggle("active",x===c));};
+  });
+  const msg=modalEl.querySelector("#homeMsg");
+  modalEl.querySelector("#homeSave").onclick=async()=>{
+    const zip=modalEl.querySelector("#zipInput").value.replace(/[^0-9]/g,"");
+    if(zip.length!==7){msg.textContent="郵便番号は7桁で入力してください";return;}
+    msg.textContent="位置を検索中…";
+    try{
+      const hit=await geocodeZip(zip,msg);
+      if(!hit){msg.textContent="この郵便番号の位置が見つかりませんでした。近隣の郵便番号でもお試しください";return;}
+      home={zip,mode,lat:hit.lat,lng:hit.lng,addr:hit.addr||""};
+      localStorage.setItem(HOME_KEY,JSON.stringify(home));
+      recalcKm();updateHomeBtn();closeModal();render();
+    }catch{msg.textContent="通信エラー。時間をおいて再度お試しください";}
+  };
+  const clearBtn=modalEl.querySelector("#homeClear");
+  if(clearBtn)clearBtn.onclick=()=>{
+    home=null;localStorage.removeItem(HOME_KEY);
+    recalcKm();updateHomeBtn();closeModal();render();
+  };
+  overlay.classList.add("open");
+}
+document.getElementById("listBtn").onclick=()=>switchView("list");
+document.getElementById("mapBtn").onclick=()=>switchView("map");
+
+function switchView(v){
+  state.view=v;
+  document.getElementById("listview").style.display=v==="list"?"":"none";
+  document.getElementById("mapview").style.display=v==="map"?"":"none";
+  document.getElementById("listBtn").classList.toggle("active",v==="list");
+  document.getElementById("mapBtn").classList.toggle("active",v==="map");
+  if(v==="map"){initMap();renderMarkers();setTimeout(()=>map.invalidateSize(),50);}
+}
+
+/* ---------- list ---------- */
+function updateCount(){
+  document.getElementById("visitNum").textContent=visited.size;
+  document.getElementById("totalNum").textContent=LIBS.length;
+}
+function thumbHtml(l,big){
+  return `<div class="${big?"modal-thumb":"thumb"}">
+    <span class="band" style="background:${l.tags.includes("近場")?"var(--shu)":"var(--matsu)"}"></span>
+    <span class="ph-initial">${esc(l.name.charAt(0))}</span>
+    <img src="img/${l.id}.jpg" alt="${esc(l.name)}" loading="lazy"
+      style="position:absolute;inset:0" onerror="this.remove()">
+  </div>`;
+}
+function render(){
+  const arr=filtered();
+  document.getElementById("countLine").textContent=`${arr.length}館を表示${state.sortByDist?"（枚方市駅からの直線距離順）":""}`;
+  const grid=document.getElementById("grid");
+  grid.innerHTML="";
+  arr.forEach(l=>{
+    const c=document.createElement("article");
+    c.className="card";
+    c.innerHTML=`${thumbHtml(l)}
+      <button class="stamp-btn${visited.has(l.id)?" on":""}" aria-label="訪問済みにする">${visited.has(l.id)?"訪":"未訪"}</button>
+      <div class="card-body">
+        <h3>${esc(l.name)}</h3>
+        <p class="meta">${esc(l.pref)} ${esc(l.city)}${l.opened?` ・ ${esc(l.opened)}年開館`:""}</p>
+        <div class="tagrow">${l.tags.map(t=>`<span class="tag">${t}</span>`).join("")}</div>
+        <p class="pt">${esc(l.points[0])}</p>
+        ${(home||state.sortByDist)&&isFinite(l.km)?`<p class="dist">${esc(accessText(l))}（約${Math.round(l.km)}km・目安）</p>`:""}
+      </div>`;
+    c.querySelector(".stamp-btn").onclick=e=>{e.stopPropagation();toggleVisit(l.id,e.target);};
+    c.onclick=()=>openModal(l);
+    grid.appendChild(c);
+  });
+  updateCount();
+  if(state.view==="map")renderMarkers();
+}
+function toggleVisit(id,btn){
+  if(visited.has(id))visited.delete(id);else visited.add(id);
+  saveVisited();
+  if(btn){btn.classList.toggle("on",visited.has(id));btn.textContent=visited.has(id)?"訪":"未訪";
+    if(visited.has(id)){btn.classList.add("animate");setTimeout(()=>btn.classList.remove("animate"),400);}}
+  updateCount();
+  if(state.view==="map")renderMarkers();
+}
+
+/* ---------- modal ---------- */
+const overlay=document.getElementById("overlay"),modalEl=document.getElementById("modal");
+function openModal(l){
+  const cr=CREDITS[l.id];
+  const d=DETAILS[l.id];
+  modalEl.innerHTML=`
+    <button class="close-x" aria-label="閉じる">×</button>
+    ${thumbHtml(l,true)}
+    <div class="modal-body">
+      <h2>${esc(l.name)}</h2>
+      <p class="meta">${esc(l.area)}／${esc(l.pref)} ${esc(l.city)}${l.opened?` ・ ${esc(l.opened)}年開館`:""}</p>
+      <div class="tagrow">${l.tags.map(t=>`<span class="tag">${t}</span>`).join("")}</div>
+      ${d?`<p class="intro">${esc(d.intro)}</p>`:""}
+      <h4 class="sec">見どころ</h4>
+      <ul>${l.points.map(p=>`<li>${esc(p)}</li>`).join("")}</ul>
+      ${d?`<p class="detail-text">${esc(d.highlight)}</p>`:""}
+      ${d?`<div class="tipbox"><h4 class="sec sec-tip">旅のヒント</h4><p>${esc(d.tip)}</p></div>`:""}
+      <p class="info-row"><b>アクセス</b>${esc(l.access)}</p>
+      ${isFinite(l.km)?`<p class="info-row"><b>${esc(originLabel())}から</b>${esc(accessText(l,true))}ほど（直線約${Math.round(l.km)}kmからの目安）</p>`:""}
+      ${l.visit_note?`<p class="note">${esc(l.visit_note)}</p>`:""}
+      ${(RELATED[l.id]||[]).length?`<h4 class="sec">もっと詳しく読む（外部サイト）</h4>
+      <ul class="related">${RELATED[l.id].map(r=>`<li><a href="${esc(r.u)}" target="_blank" rel="noopener">${esc(r.t)}</a></li>`).join("")}</ul>`:""}
+      <div class="links">
+        <a class="link-btn primary" href="${gmapUrl(l)}" target="_blank" rel="noopener">Google Mapsで開く</a>
+        ${l.url?`<a class="link-btn" href="${esc(l.url)}" target="_blank" rel="noopener">公式サイト</a>`:""}
+      </div>
+      ${cr?`<p class="credit">写真: ${esc(cr.author)}／<a href="${esc(licenseUrl(cr.license))}" target="_blank" rel="noopener">${esc(cr.license)}</a>／出典: <a href="${esc(cr.link)}" target="_blank" rel="noopener">Wikimedia Commons</a></p>`:""}
+      <button class="visit-toggle${visited.has(l.id)?" on":""}">${visited.has(l.id)?"訪問済み（タップで取り消し）":"訪問済みスタンプを押す"}</button>
+    </div>`;
+  modalEl.querySelector(".close-x").onclick=closeModal;
+  modalEl.querySelector(".visit-toggle").onclick=e=>{toggleVisit(l.id,null);
+    e.target.classList.toggle("on",visited.has(l.id));
+    e.target.textContent=visited.has(l.id)?"訪問済み（タップで取り消し）":"訪問済みスタンプを押す";render();};
+  overlay.classList.add("open");
+}
+function closeModal(){overlay.classList.remove("open");}
+overlay.onclick=e=>{if(e.target===overlay)closeModal();};
+document.addEventListener("keydown",e=>{if(e.key==="Escape")closeModal();});
+
+/* ---------- features ---------- */
+const FEATURES=[
+ {title:"図書館ランキング TOP10",sub:"いま行きたい注目館・管理人セレクト",ranked:true,
+  lead:"受賞歴・話題性・空間の体験価値をもとにした当サイトの総合ランキングです。『旅の目的地としてどれだけ心が動くか』を基準に選びました。順位は独断と偏見、でも本気です。",
+  items:[
+   {id:"ishikawa-pref",why:"円形劇場の書架は現時点の日本の図書館建築の到達点。2022年開館の話題性も圧倒的"},
+   {id:"media-cosmos",why:"グローブの下で過ごす時間の心地よさは唯一無二。伊東豊雄建築の集大成"},
+   {id:"umimirai",why:"6,000個の丸窓が生む光。海外メディア常連の『世界の美しい図書館』"},
+   {id:"yusuhara",why:"靴を脱いで木の香りに浸る没入感。町全体が隈研吾ミュージアム"},
+   {id:"sendai-mediatheque",why:"現代建築史に残る一棟。四半世紀経っても古びない先進性"},
+   {id:"takeo",why:"図書館の風景を変えた元祖TSUTAYA図書館。温泉とセットの旅先力も高い"},
+   {id:"kadokawa-musashino",why:"本棚劇場のプロジェクションマッピングは唯一無二のエンタメ体験"},
+   {id:"nakanoshima",why:"120年現役の重文図書館。ドームの下に立つだけで来た甲斐がある"},
+   {id:"tokuyama",why:"新幹線ホームと並走する全長120mの本棚。駅直結の気軽さも魅力"},
+   {id:"taki",why:"日本海を眺めながらの読書と夕日。景観部門なら文句なしの全国一"}
+  ]},
+ {title:"安藤忠雄『こども本の森』三部作をめぐる",sub:"遠野・中之島・神戸",
+  lead:"建築家・安藤忠雄が設計し、各都市に寄贈した『こども本の森』。壁一面の本棚という共通言語を持ちながら、遠野は古民家リノベ、中之島は公園の中、神戸は震災復興の地と、それぞれ土地の物語を背負っています。三館すべて巡ると安藤建築の引き出しの多さに驚くはず。",
+  ids:["tono-honnomori","honnomori-nakanoshima","honnomori-kobe"]},
+ {title:"京阪沿線・枚方から日帰り図書館さんぽ",sub:"電車でめぐる近場の名館",
+  lead:"枚方市駅を起点に、京阪電車だけでこれだけ回れます。まずは地元の中央図書館で肩慣らし、寝屋川・門真の駅前新世代館を経て、終点は中之島の重文図書館とこども本の森。1日で明治建築から2026年開館の最新館まで120年分の図書館史を縦断できる、当サイトいちおしのコースです。",
+  ids:["hirakata-central","neyagawa","kadomado","nakanoshima","honnomori-nakanoshima"]},
+ {title:"隈研吾の木の図書館めぐり",sub:"富山・守山・梼原・所沢",
+  lead:"木を編むように使う隈研吾建築は図書館と相性抜群。斜めの光が射すTOYAMAキラリ、琵琶湖畔の大屋根、雲の上の町・梼原の木格子、そして巨石のような角川武蔵野ミュージアム。同じ建築家でこれだけ表情が違うのかと唸る4館です。",
+  ids:["toyama-kirari","moriyama","yusuhara","kadokawa-musashino"]},
+ {title:"泊まる・眺める、ごほうび図書館旅",sub:"温泉・海・リゾート",
+  lead:"読書そのものを旅の目的にしたい日に。日本海を一望する閲覧席、大村湾のスナメリ、そして本棚の間に布団を敷いて眠る一日一組の宿。図書館は借りる場所から『過ごす場所』へ——それを一番実感できる組み合わせです。",
+  ids:["taki","tarami","akatsuki","yusuhara"]},
+ {title:"おしゃれ図書館16選",sub:"ことりっぷ掲載の全国名館",
+  lead:"旅行ガイド『ことりっぷ』の記事「日本一美しい本棚や美術館併設も♪つい長居したくなる全国のおしゃれな図書館16選」で紹介された16館は、すべて当サイトに収録しています。北は石巻から南は武雄まで、デザインの美しさで選ぶならこのリストから。",
+  link:{t:"ことりっぷの元記事を読む",u:"https://co-trip.jp/article/510820"},
+  ids:["toyama-kirari","kawanokami","umimirai","ishikawa-pref","kadokawa-musashino","ota-artlib","kodomo-tosho","toyo-bunko","hibiya","media-cosmos","honnomori-nakanoshima","sumoto","yusuhara","tokuyama","tobata","takeo"]},
+ {title:"蔵書量で圧倒されたい日の巨大図書館",sub:"『なんでもある』への信頼",
+  lead:"調べ物が趣味なら一度は浴びたい国内最大級クラス。閲覧空間そのものが円形劇場の石川県立、蔵書規模全国トップ級の大阪府立中央、四国最大のオーテピア。『ここに無ければ諦めがつく』という安心感は巨大館だけの魅力です。",
+  ids:["ishikawa-pref","osaka-pref-central","otepia","sirius","okinawa-pref"]},
+];
+const stripEl=document.getElementById("featureStrip");
+FEATURES.forEach((f,i)=>{
+  const c=document.createElement("div");
+  c.className="feature-card";c.dataset.num=String(i+1).padStart(2,"0");
+  c.innerHTML=`<h3>${esc(f.title)}</h3><p>${esc(f.sub)}｜${(f.ids||f.items).length}館</p>`;
+  c.onclick=()=>openFeature(f);
+  stripEl.appendChild(c);
+});
+function openFeature(f){
+  modalEl.innerHTML=`
+    <button class="close-x" aria-label="閉じる">×</button>
+    <div class="modal-body feature-body">
+      <h2>${esc(f.title)}</h2>
+      <p class="meta">${esc(f.sub)}</p>
+      <p class="lead">${esc(f.lead)}</p>
+      ${f.link?`<p style="margin:4px 0 8px"><a class="link-btn" href="${esc(f.link.u)}" target="_blank" rel="noopener">${esc(f.link.t)}</a></p>`:""}
+      ${(f.items||f.ids.map(id=>({id}))).map((it,i)=>{const l=LIBS.find(x=>x.id===it.id);return `
+        <div class="feature-lib" data-id="${it.id}">
+          ${f.ranked?`<span class="rank r${i+1}">${i+1}</span>`:""}
+          <div><p class="n">${esc(l.name)}</p><p class="c">${esc(l.pref)} ${esc(l.city)}｜${it.why?esc(it.why):esc(l.access)}</p></div>
+          ${visited.has(it.id)?'<span class="visited-mark">訪</span>':""}
+        </div>`;}).join("")}
+    </div>`;
+  modalEl.querySelector(".close-x").onclick=closeModal;
+  modalEl.querySelectorAll(".feature-lib").forEach(el=>{
+    el.onclick=()=>openModal(LIBS.find(x=>x.id===el.dataset.id));
+  });
+  overlay.classList.add("open");
+}
+
+/* ---------- map ---------- */
+let map=null,markerLayer=null;
+function initMap(){
+  if(map)return;
+  map=L.map("map").setView(origin(),9);
+  L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png",{
+    maxZoom:19,attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+  }).addTo(map);
+  markerLayer=L.layerGroup().addTo(map);
+}
+function markerIcon(on){
+  return L.divIcon({className:"",iconSize:[22,22],iconAnchor:[11,11],
+    html:`<div style="width:20px;height:20px;border-radius:50%;border:2.5px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,.4);background:${on?"var(--shu)":"var(--matsu)"}"></div>`});
+}
+function renderMarkers(){
+  if(!map)return;
+  markerLayer.clearLayers();
+  filtered().forEach(l=>{
+    if(l.lat==null)return;
+    const m=L.marker([l.lat,l.lng],{icon:markerIcon(visited.has(l.id))}).addTo(markerLayer);
+    const div=document.createElement("div");
+    div.innerHTML=`<p class="popup-name">${esc(l.name)}</p><p class="popup-city">${esc(l.pref)} ${esc(l.city)}</p><span class="popup-open">詳細を見る</span>`;
+    div.querySelector(".popup-open").onclick=()=>openModal(l);
+    m.bindPopup(div);
+  });
+}
+
+updateHomeBtn();
+render();
+</script>
+</body>
+</html>
