@@ -111,7 +111,9 @@ main{max-width:1080px;margin:18px auto 40px;padding:0 16px}
 .f-head .f-actions{margin-top:12px;display:flex;gap:10px;flex-wrap:wrap}
 .f-head .link-btn{border-color:rgba(255,255,255,.5);color:#fff}
 .f-back{border:1px solid rgba(255,255,255,.5);background:transparent;color:#fff;border-radius:8px;padding:7px 14px;font:inherit;font-size:13px;cursor:pointer}
-#featureMap{height:320px;border:1px solid var(--line);border-radius:10px;margin-bottom:16px}
+#featureMapWrap{position:sticky;top:8px;z-index:600}
+#featureMap{height:320px;border:1px solid var(--line);border-radius:10px;margin-bottom:16px;box-shadow:0 4px 14px rgba(31,42,58,.18)}
+@media(max-width:480px){#featureMap{height:210px}}
 .card .rank-ov{position:absolute;left:10px;top:10px;z-index:3;width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;
   font-family:var(--serif);font-weight:700;font-size:15px;background:rgba(255,255,255,.92);color:var(--ink);border:1.5px solid var(--line)}
 .card .rank-ov.r1{background:var(--shu);color:#fff;border-color:var(--shu)}
@@ -307,7 +309,7 @@ const tabsEl=document.getElementById("areaTabs");
 AREAS.forEach(a=>{
   const b=document.createElement("button");
   b.className="tab"+(a===state.area?" active":"");b.textContent=a;
-  b.onclick=()=>{exitFeature();state.area=a;document.querySelectorAll(".tab").forEach(t=>t.classList.toggle("active",t.textContent===a));render();};
+  b.onclick=()=>{exitFeature();state.area=a;document.querySelectorAll(".tab").forEach(t=>t.classList.toggle("active",t.textContent===a));renderFeatureStrip();render();};
   tabsEl.appendChild(b);
 });
 const chipsEl=document.getElementById("tagChips");
@@ -519,7 +521,7 @@ const FEATURES=[
  {title:"安藤忠雄『こども本の森』三部作をめぐる",sub:"遠野・中之島・神戸",
   lead:"建築家・安藤忠雄が設計し、各都市に寄贈した『こども本の森』。壁一面の本棚という共通言語を持ちながら、遠野は古民家リノベ、中之島は公園の中、神戸は震災復興の地と、それぞれ土地の物語を背負っています。三館すべて巡ると安藤建築の引き出しの多さに驚くはず。",
   ids:["tono-honnomori","honnomori-nakanoshima","honnomori-kobe"]},
- {title:"京阪沿線・枚方から日帰り図書館さんぽ",sub:"電車でめぐる近場の名館",
+ {title:"京阪沿線・枚方から日帰り図書館さんぽ",sub:"電車でめぐる近場の名館",area:"関西",
   lead:"枚方市駅を起点に、京阪電車だけでこれだけ回れます。まずは地元の中央図書館で肩慣らし、寝屋川・門真の駅前新世代館を経て、終点は中之島の重文図書館とこども本の森。1日で明治建築から2026年開館の最新館まで120年分の図書館史を縦断できる、当サイトいちおしのコースです。",
   ids:["hirakata-central","neyagawa","kadomado","nakanoshima","honnomori-nakanoshima"]},
  {title:"隈研吾の木の図書館めぐり",sub:"富山・守山・梼原・所沢",
@@ -532,18 +534,41 @@ const FEATURES=[
   lead:"旅行ガイド『ことりっぷ』の記事「日本一美しい本棚や美術館併設も♪つい長居したくなる全国のおしゃれな図書館16選」で紹介された16館は、すべて当サイトに収録しています。北は石巻から南は武雄まで、デザインの美しさで選ぶならこのリストから。",
   link:{t:"ことりっぷの元記事を読む",u:"https://co-trip.jp/article/510820"},
   ids:["toyama-kirari","kawanokami","umimirai","ishikawa-pref","kadokawa-musashino","ota-artlib","kodomo-tosho","toyo-bunko","hibiya","media-cosmos","honnomori-nakanoshima","sumoto","yusuhara","tokuyama","tobata","takeo"]},
+ {title:"東北 復興と再生の図書館旅",sub:"物語を継ぐ5館",area:"北海道・東北",
+  lead:"震災からの復興、まちの再生、民話の継承——東北の図書館には、それぞれ背負っている物語があります。仙台を起点に、倉庫を再生した石巻の私設図書館、遠野の安藤建築、公民連携の紫波、特撮の街・須賀川へ。建物の美しさの奥にある『なぜここに建ったのか』を感じる旅です。",
+  ids:["sendai-mediatheque","kawanokami","tono-honnomori","shiwa-ogal","sukagawa-tette"]},
+ {title:"東京 本の名建築 半日さんぽ",sub:"上野から日比谷まで電車で30分圏",area:"関東",
+  lead:"東京は名図書館が地下鉄圏内に密集する贅沢な街。上野公園の明治建築（国際子ども図書館）から駒込のモリソン書庫、永田町の国会図書館本館、日比谷公園の三角図書館まで、半日で日本の『本の殿堂』を縦断できます。締めは所沢の角川武蔵野ミュージアムまで足を伸ばしても。",
+  ids:["kodomo-tosho","toyo-bunko","ndl-tokyo","hibiya","kadokawa-musashino"]},
+ {title:"北陸新幹線で行く 光の図書館めぐり",sub:"長野・富山・金沢を一筆書き",area:"中部・北陸",
+  lead:"北陸新幹線の駅からアクセスできる名館を一筆書きでつなぐ王道コース。小布施の三角屋根から始めて、富山で斜めに射す光、金沢で6,000個の丸窓と円形劇場の書架へ。どの館も『光の設計』が主役なので、晴れた日の午前中に当てるのがおすすめです。",
+  ids:["terrasow","toyama-kirari","umimirai","ishikawa-pref"]},
+ {title:"瀬戸内・四国 海と山の図書館旅",sub:"景色ごと味わう5館",area:"中国・四国",
+  lead:"日本海に開いた多伎のオーシャンビューから、瀬戸内の市民がつくった もみわ広場、駅直結の徳山、山を登って雲の上の梼原、高知の巨大館オーテピアまで。移動距離は長めですが、車窓も含めて全部が旅になるエリアです。",
+  ids:["taki","momiwa","tokuyama","yusuhara","otepia"]},
+ {title:"九州・沖縄 温泉と海の図書館旅",sub:"読書と休養を両立する5館",area:"九州・沖縄",
+  lead:"武雄温泉で元祖TSUTAYA図書館、古湯温泉で泊まれる図書館——九州は『図書館×温泉』の聖地です。戸畑の昭和モダン建築、大村湾を見下ろす たらみを経て、最後は那覇の駅直結館で次の旅の予習を。休むために本を読む、そんな旅ができます。",
+  ids:["takeo","akatsuki","tobata","tarami","okinawa-pref"]},
  {title:"蔵書量で圧倒されたい日の巨大図書館",sub:"『なんでもある』への信頼",
   lead:"調べ物が趣味なら一度は浴びたい国内最大級クラス。閲覧空間そのものが円形劇場の石川県立、蔵書規模全国トップ級の大阪府立中央、四国最大のオーテピア。『ここに無ければ諦めがつく』という安心感は巨大館だけの魅力です。",
   ids:["ishikawa-pref","osaka-pref-central","otepia","sirius","okinawa-pref"]},
 ];
-const stripEl=document.getElementById("featureStrip");
-FEATURES.forEach((f,i)=>{
-  const c=document.createElement("div");
-  c.className="feature-card";c.dataset.num=String(i+1).padStart(2,"0");
-  c.innerHTML=`<h3>${esc(f.title)}</h3><p>${esc(f.sub)}｜${(f.ids||f.items).length}館</p>`;
-  c.onclick=()=>openFeature(f);
-  stripEl.appendChild(c);
-});
+function renderFeatureStrip(){
+  const stripEl=document.getElementById("featureStrip");
+  const h2=document.querySelector(".features h2");
+  const list=state.area==="すべて"?FEATURES.filter(f=>!f.area):FEATURES.filter(f=>f.area===state.area);
+  h2.textContent=state.area==="すべて"?"おすすめのめぐり方":`${state.area}のおすすめのめぐり方`;
+  stripEl.innerHTML="";
+  list.forEach((f,i)=>{
+    const c=document.createElement("div");
+    c.className="feature-card";c.dataset.num=String(i+1).padStart(2,"0");
+    c.innerHTML=`<h3>${esc(f.title)}</h3><p>${esc(f.sub)}｜${(f.ids||f.items).length}館</p>`;
+    c.onclick=()=>openFeature(f);
+    stripEl.appendChild(c);
+  });
+  document.getElementById("features").style.display=list.length?"":"none";
+}
+renderFeatureStrip();
 function featureEntries(f){return (f.items||f.ids.map(id=>({id}))).map(it=>({...it,lib:LIBS.find(x=>x.id===it.id)})).filter(e=>e.lib);}
 function openFeature(f){
   state.feature=f;
@@ -557,7 +582,7 @@ function exitFeature(){
   state.feature=null;
   document.getElementById("featureHead").innerHTML="";
   document.getElementById("featureMapWrap").style.display="none";
-  document.getElementById("features").style.display="";
+  renderFeatureStrip();
 }
 function renderFeatureHead(){
   const f=state.feature;
