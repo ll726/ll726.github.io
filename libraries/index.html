@@ -404,7 +404,7 @@ document.getElementById("mapBtn").onclick=()=>{exitFeature();render();switchView
 function switchView(v){
   state.view=v;
   document.getElementById("listview").style.display=v==="list"?"":"none";
-  document.getElementById("mapview").style.display=v==="map"?"":"none";
+  document.getElementById("mapview").style.display=v==="map"?"block":"none";
   document.getElementById("listBtn").classList.toggle("active",v==="list");
   document.getElementById("mapBtn").classList.toggle("active",v==="map");
   if(v==="map"){initMap();renderMarkers();setTimeout(()=>map.invalidateSize(),50);}
