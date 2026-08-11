@@ -443,6 +443,10 @@ function render(){
       </div>`;
     c.querySelector(".stamp-btn").onclick=e2=>{e2.stopPropagation();toggleVisit(l.id,e2.target);};
     c.onclick=()=>openModal(l);
+    if(f){
+      c.onmouseenter=()=>highlightMarker(l.id,true);
+      c.onmouseleave=()=>highlightMarker(l.id,false);
+    }
     grid.appendChild(c);
   });
   updateCount();
@@ -571,7 +575,25 @@ function renderFeatureHead(){
   document.getElementById("featureHead").querySelector(".f-back").onclick=()=>{exitFeature();render();};
   renderFeatureMap();
 }
-let fmap=null,fmarkers=null;
+let fmap=null,fmarkers=null,fmarkerById={};
+function fIconHtml(f,i,hi){
+  const size=hi?34:24;
+  const bg=hi?"var(--shu)":(i===0&&f.ranked?"var(--shu)":"var(--matsu)");
+  return L.divIcon({className:"",iconSize:[size+2,size+2],iconAnchor:[(size+2)/2,(size+2)/2],
+    html:`<div style="width:${size}px;height:${size}px;border-radius:50%;display:flex;align-items:center;justify-content:center;font:700 ${hi?15:12}px var(--serif);border:${hi?3:2}px solid #fff;box-shadow:0 1px ${hi?10:4}px rgba(0,0,0,.5);background:${bg};color:#fff;transition:all .1s">${f.ranked?i+1:"●"}</div>`});
+}
+function highlightMarker(id,on){
+  const e=fmarkerById[id];
+  if(!e)return;
+  e.marker.setIcon(fIconHtml(state.feature,e.index,on));
+  e.marker.setZIndexOffset(on?1000:0);
+  if(on){
+    e.marker.bindTooltip(e.name,{permanent:true,direction:"top",offset:[0,-18]}).openTooltip();
+    if(!fmap.getBounds().contains(e.marker.getLatLng()))fmap.panTo(e.marker.getLatLng());
+  }else{
+    e.marker.unbindTooltip();
+  }
+}
 function renderFeatureMap(){
   const f=state.feature;
   document.getElementById("featureMapWrap").style.display="";
@@ -583,14 +605,14 @@ function renderFeatureMap(){
     fmarkers=L.layerGroup().addTo(fmap);
   }
   fmarkers.clearLayers();
+  fmarkerById={};
   const pts=[];
   featureEntries(f).forEach((e,i)=>{
     const l=e.lib;
     if(l.lat==null)return;
     pts.push([l.lat,l.lng]);
-    const icon=L.divIcon({className:"",iconSize:[26,26],iconAnchor:[13,13],
-      html:`<div style="width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font:700 12px var(--serif);border:2px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,.4);background:${i===0&&f.ranked?"var(--shu)":"var(--matsu)"};color:#fff">${f.ranked?i+1:"●"}</div>`});
-    const m=L.marker([l.lat,l.lng],{icon}).addTo(fmarkers);
+    const m=L.marker([l.lat,l.lng],{icon:fIconHtml(f,i,false)}).addTo(fmarkers);
+    fmarkerById[l.id]={marker:m,index:i,name:l.name};
     const div=document.createElement("div");
     div.innerHTML=`<p class="popup-name">${esc(l.name)}</p><p class="popup-city">${esc(l.pref)} ${esc(l.city)}</p><span class="popup-open">詳細を見る</span>`;
     div.querySelector(".popup-open").onclick=()=>openModal(l);
