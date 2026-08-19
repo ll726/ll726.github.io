@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>枚方市の図書館ぜんぶ | 図書館をめぐる旅</title>
+<meta name="description" content="枚方市立図書館の全施設ガイド。中央図書館・7つの分館・市駅前図書館・6つの分室・自動車文庫を、開館時間と目的別の使い分けまでまとめた特集ページ。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;500;600;700&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#f4f4f0; --paper-2:#ecebe4; --card:#ffffff;
+  --ink:#1b2534; --ink-2:#2b3849; --sub:#6b7789; --line:#dcdcd3;
+  --hair:rgba(27,37,52,.14); --shu:#b23a2f; --matsu:#40695b;
+  --serif:"Shippori Mincho",serif; --sans:"Zen Kaku Gothic New",sans-serif;
+  --wrap:860px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--paper);color:var(--ink);font-family:var(--sans);line-height:1.95;font-size:15.5px;
+  background-image:radial-gradient(rgba(27,37,52,.045) 1px,transparent 1px);background-size:22px 22px;
+  -webkit-font-smoothing:antialiased}
+a{color:var(--matsu)}
+::selection{background:rgba(178,58,47,.16)}
+
+#bar{position:fixed;top:0;left:0;height:2px;width:0;background:var(--shu);z-index:100;transition:width .1s linear}
+
+header{position:sticky;top:0;z-index:60;background:var(--paper);border-bottom:1px solid var(--hair)}
+.h-inner{max-width:var(--wrap);margin:0 auto;padding:11px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.brand{font-family:var(--serif);font-size:13.5px;letter-spacing:.16em;color:var(--ink);text-decoration:none;white-space:nowrap}
+.brand span{color:var(--shu)}
+.back{font-size:12px;letter-spacing:.06em;text-decoration:none;color:var(--sub);white-space:nowrap;
+  border-bottom:1px solid transparent;padding-bottom:2px;transition:.2s}
+.back:hover{color:var(--ink);border-color:var(--ink)}
+
+.hero{position:relative;background:var(--ink);color:#fff;overflow:hidden;padding:76px 20px 62px}
+.hero::before{content:"";position:absolute;inset:0;
+  background:repeating-linear-gradient(90deg,rgba(255,255,255,.045) 0 1px,transparent 1px 68px);pointer-events:none}
+.hero::after{content:"枚";position:absolute;right:-3%;bottom:-22%;font-family:var(--serif);font-weight:700;
+  font-size:clamp(240px,42vw,460px);line-height:1;color:rgba(255,255,255,.035);pointer-events:none;user-select:none}
+.hero-inner{position:relative;max-width:var(--wrap);margin:0 auto;z-index:2}
+.vlabel{position:absolute;left:-46px;top:4px;writing-mode:vertical-rl;font-family:var(--serif);
+  font-size:12px;letter-spacing:.5em;color:rgba(255,255,255,.45)}
+.eyebrow{display:flex;align-items:center;gap:12px;font-size:10.5px;letter-spacing:.34em;color:rgba(255,255,255,.55);margin-bottom:20px}
+.eyebrow::after{content:"";flex:1;height:1px;background:rgba(255,255,255,.22)}
+.hero h1{font-family:var(--serif);font-weight:600;font-size:clamp(27px,6.2vw,50px);line-height:1.44;letter-spacing:.02em}
+.hero h1 em{font-style:normal;color:#e8a89f;white-space:nowrap}
+.hero h1 .sm{display:block;font-size:.56em;color:rgba(255,255,255,.7);letter-spacing:.14em;margin-top:14px;font-weight:500}
+.hero-meta{display:flex;flex-wrap:wrap;gap:8px 18px;margin-top:26px;font-size:11.5px;letter-spacing:.16em;color:rgba(255,255,255,.55)}
+.hero-meta span{display:flex;align-items:center;gap:8px}
+.hero-meta span::before{content:"";width:5px;height:5px;border:1px solid rgba(255,255,255,.5);transform:rotate(45deg)}
+.hero .lead{max-width:44em;font-size:15px;line-height:2.15;color:rgba(255,255,255,.9);margin-top:30px;
+  padding-top:26px;border-top:1px solid rgba(255,255,255,.2)}
+.hero .lead::first-letter{font-family:var(--serif);font-size:2.5em;float:left;line-height:.92;padding:6px 10px 0 0;color:#e8a89f}
+
+.toc{position:sticky;top:47px;z-index:50;background:var(--paper);border-bottom:1px solid var(--hair);
+  box-shadow:0 6px 14px -12px rgba(27,37,52,.5)}
+.toc-inner{max-width:var(--wrap);margin:0 auto;padding:0 20px;display:flex;gap:20px;overflow-x:auto;scrollbar-width:none}
+.toc-inner::-webkit-scrollbar{display:none}
+.toc a{flex:0 0 auto;font-size:11.5px;letter-spacing:.1em;color:var(--sub);text-decoration:none;
+  padding:11px 0;border-bottom:2px solid transparent;transition:.2s;white-space:nowrap}
+.toc a:hover{color:var(--ink)}
+.toc a.on{color:var(--ink);border-color:var(--shu)}
+
+main{max-width:var(--wrap);margin:0 auto;padding:0 20px 40px}
+section{padding-top:74px;scroll-margin-top:96px}
+.shead{display:flex;align-items:flex-start;gap:18px;margin-bottom:26px}
+.snum{font-family:var(--serif);font-size:clamp(30px,7vw,46px);line-height:.9;color:var(--shu);opacity:.32;font-weight:700;flex:0 0 auto}
+.shead h2{font-family:var(--serif);font-size:clamp(19px,3.6vw,25px);font-weight:600;letter-spacing:.05em;line-height:1.5;padding-top:.28em}
+.shead h2 small{display:block;font-family:var(--sans);font-size:10.5px;letter-spacing:.28em;color:var(--sub);margin-top:9px;font-weight:400}
+p{margin-bottom:15px}
+strong{font-weight:700;background:linear-gradient(transparent 66%,rgba(178,58,47,.15) 66%)}
+.note-s{font-size:12.5px;color:var(--sub);line-height:1.85}
+
+.pull{margin:42px 0;padding:0 0 0 26px;border-left:2px solid var(--shu)}
+.pull p{font-family:var(--serif);font-size:clamp(17px,3.2vw,22px);line-height:1.85;color:var(--ink-2);margin:0;letter-spacing:.02em}
+
+.callout{position:relative;background:var(--card);border:1px solid var(--line);border-radius:2px;
+  padding:28px 30px 26px;margin:32px 0;box-shadow:0 1px 0 var(--line),14px 14px 0 -4px rgba(27,37,52,.055)}
+.callout h3{font-family:var(--serif);font-size:17px;font-weight:600;margin-bottom:12px;letter-spacing:.04em}
+.callout h3::before{content:"";display:inline-block;width:20px;height:1px;background:var(--shu);vertical-align:6px;margin-right:10px}
+.callout p:last-child{margin-bottom:0}
+
+.quiet{background:var(--paper-2);border-radius:2px;padding:24px 26px;margin:30px 0}
+.quiet h3{font-family:var(--serif);font-size:15.5px;font-weight:600;margin-bottom:10px;letter-spacing:.04em}
+.quiet p:last-child{margin-bottom:0}
+
+.tablewrap{overflow-x:auto;margin:26px 0;scrollbar-width:thin}
+table{border-collapse:collapse;width:100%;min-width:540px;font-size:13.5px;background:var(--card)}
+caption{caption-side:top;text-align:left;font-family:var(--serif);font-size:12px;color:var(--sub);letter-spacing:.14em;padding-bottom:10px}
+th,td{padding:13px 16px;text-align:left;vertical-align:top;border-bottom:1px solid var(--hair);line-height:1.75}
+thead th{font-family:var(--serif);font-size:12.5px;letter-spacing:.1em;white-space:nowrap;color:var(--ink);
+  border-bottom:1.5px solid var(--ink);background:transparent}
+tbody th{font-family:var(--serif);font-weight:600;color:var(--sub);font-size:12.5px;width:9.5em;background:var(--paper-2)}
+tbody tr:last-child th,tbody tr:last-child td{border-bottom:none}
+
+/* 館カード */
+.libs{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:24px}
+.lib{position:relative;background:var(--card);border:1px solid var(--line);border-radius:2px;padding:20px 22px 18px;
+  transition:transform .25s,box-shadow .25s}
+.lib:hover{transform:translateY(-3px);box-shadow:0 10px 26px rgba(27,37,52,.09)}
+.lib::before{content:attr(data-n);position:absolute;right:14px;top:8px;font-family:var(--serif);font-weight:700;
+  font-size:40px;color:rgba(27,37,52,.055);line-height:1}
+.lib .kind{display:inline-block;font-family:var(--serif);font-size:10.5px;letter-spacing:.18em;color:var(--shu);
+  border-bottom:1px solid var(--shu);padding-bottom:2px;margin-bottom:11px}
+.lib .kind.b{color:var(--matsu);border-color:var(--matsu)}
+.lib h3{font-family:var(--serif);font-size:17px;font-weight:600;line-height:1.5;margin-bottom:9px;letter-spacing:.02em}
+.lib p{font-size:13px;line-height:1.9;margin-bottom:8px}
+.lib .adr{font-size:11.5px;color:var(--sub);border-top:1px solid var(--hair);padding-top:11px;margin-top:12px;line-height:1.85}
+.lib .adr a{text-decoration:none;border-bottom:1px solid rgba(64,105,91,.4)}
+
+.rooms{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:20px}
+.room{background:var(--card);border:1px solid var(--line);border-radius:2px;padding:13px 15px}
+.room b{font-family:var(--serif);font-size:14.5px;font-weight:600;display:block}
+.room span{font-size:11.5px;color:var(--sub)}
+
+ul.plain{list-style:none;margin:16px 0}
+ul.plain li{padding-left:1.7em;position:relative;margin-bottom:11px;font-size:14.5px;line-height:1.9}
+ul.plain li::before{content:"";position:absolute;left:0;top:.72em;width:7px;height:7px;border:1px solid var(--matsu);transform:rotate(45deg)}
+
+.linkrow{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px}
+.link-btn{font-size:12.5px;letter-spacing:.06em;text-decoration:none;border:1px solid var(--matsu);color:var(--matsu);
+  border-radius:2px;padding:9px 18px;transition:.2s}
+.link-btn:hover{background:var(--matsu);color:#fff}
+.link-btn.primary{background:var(--matsu);color:#fff}
+.link-btn.primary:hover{background:var(--ink);border-color:var(--ink)}
+
+.closing{background:var(--ink);color:#fff;margin-top:80px;padding:58px 20px;position:relative;overflow:hidden}
+.closing::after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(90deg,rgba(255,255,255,.04) 0 1px,transparent 1px 68px)}
+.closing-inner{position:relative;z-index:2;max-width:var(--wrap);margin:0 auto;text-align:center}
+.closing p{font-family:var(--serif);font-size:clamp(16px,3vw,21px);line-height:1.9;color:rgba(255,255,255,.94);margin-bottom:24px}
+.closing .link-btn{border-color:rgba(255,255,255,.55);color:#fff}
+.closing .link-btn:hover{background:#fff;color:var(--ink);border-color:#fff}
+.closing .linkrow{justify-content:center}
+
+footer{background:var(--paper);padding:30px 20px 40px;color:var(--sub);font-size:11.5px;line-height:1.9}
+.f-inner{max-width:var(--wrap);margin:0 auto}
+.f-inner p{margin-bottom:6px}
+
+.rv{opacity:0;transform:translateY(14px);transition:opacity .7s ease,transform .7s ease}
+.rv.in{opacity:1;transform:none}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.rv{opacity:1;transform:none;transition:none}.lib:hover{transform:none}}
+
+@media(max-width:640px){
+  body{font-size:15px}
+  .hero{padding:52px 20px 46px}
+  .vlabel{display:none}
+  .hero .lead{margin-top:24px;padding-top:20px;font-size:14.5px;line-height:2.05}
+  .toc{top:45px}
+  section{padding-top:56px}
+  .shead{gap:13px;margin-bottom:20px}
+  .libs{grid-template-columns:1fr;gap:12px}
+  .rooms{grid-template-columns:1fr 1fr}
+  .callout{padding:22px 20px;box-shadow:0 1px 0 var(--line),9px 9px 0 -3px rgba(27,37,52,.055)}
+  .quiet{padding:20px}
+  .pull{margin:34px 0;padding-left:18px}
+  .closing{margin-top:60px;padding:46px 20px}
+}
+</style>
+</head>
+<body>
+<div id="bar"></div>
+
+<header>
+  <div class="h-inner">
+    <a class="brand" href="./">図書館をめぐる旅<span>　特集</span></a>
+    <a class="back" href="./">← 図書館一覧へ</a>
+  </div>
+</header>
+
+<div class="hero">
+  <div class="hero-inner">
+    <span class="vlabel">LOCAL</span>
+    <p class="eyebrow">HIRAKATA CITY LIBRARIES</p>
+    <h1>ホームタウンには、<em>16の本の場所。</em>
+      <span class="sm">枚方市の図書館ぜんぶ</span>
+    </h1>
+    <div class="hero-meta">
+      <span>図書館 9館</span>
+      <span>分室 6か所</span>
+      <span>自動車文庫 2台</span>
+    </div>
+    <p class="lead">遠くの名建築を訪ねるのも旅ですが、いちばん多く通うのは家の近くの図書館です。枚方市には中央図書館と7つの分館、駅直結の市駅前図書館、そして6つの分室と2台の自動車文庫がある。この特集は、そのぜんぶを一度に見渡して、今日はどこへ行こうかを決めるためのページです。</p>
+  </div>
+</div>
+
+<nav class="toc">
+  <div class="toc-inner" id="toc">
+    <a href="#s1">枚方の図書館網</a>
+    <a href="#s2">9つの図書館</a>
+    <a href="#s3">分室と自動車文庫</a>
+    <a href="#s4">開館時間の違い</a>
+    <a href="#s5">目的別の選び方</a>
+  </div>
+</nav>
+
+<main>
+
+<section id="s1" class="rv">
+  <div class="shead">
+    <div class="snum">01</div>
+    <h2>枚方の図書館網<small>THE NETWORK</small></h2>
+  </div>
+  <p>枚方市の図書館は、ひとつの大きな館にすべてを集める形ではなく、<strong>市内に細かく散らして、どこに住んでいても歩いて行ける</strong>という考え方で作られています。淀川沿いの平地から東の丘陵地まで市域が広く、生活圏がいくつにも分かれている土地だからです。</p>
+  <p>その結果が、中央図書館1館・分館7館・市駅前図書館1館という9つの図書館と、6つの分室、そして本を積んで巡回する2台の自動車文庫「ひなぎく号」「カワセミ号」という布陣。貸出カードは共通で、<strong>どの館で借りてどの館で返してもかまいません</strong>。予約した本を受け取る場所も選べます。</p>
+  <div class="pull">
+    <p>「近所の図書館」が、<br>市内に16か所ある贅沢。</p>
+  </div>
+</section>
+
+<section id="s2" class="rv">
+  <div class="shead">
+    <div class="snum">02</div>
+    <h2>9つの図書館<small>NINE LIBRARIES</small></h2>
+  </div>
+  <p>中央図書館と市駅前図書館、そして7つの分館。それぞれ性格が違います。</p>
+
+  <div class="libs">
+    <div class="lib" data-n="中">
+      <span class="kind">中央図書館</span>
+      <h3>枚方市立中央図書館</h3>
+      <p>市内最大の蔵書を持つ、枚方の図書館の中枢。輝きプラザきらら内にあり、点字図書や録音図書の製作・貸出も担っています。調べ物や、市内のどこかにある一冊を取り寄せる拠点として使う館です。</p>
+      <p>ほかの館と違い<strong>金曜が休館</strong>、閉館も19時と早めなので、思い立って行く前にカレンダーの確認を。</p>
+      <p class="adr">車塚2丁目1-1／050-7105-8141<br>京阪御殿山駅から徒歩約15分　<a href="https://www.google.com/maps/search/?api=1&query=%E6%9E%9A%E6%96%B9%E5%B8%82%E7%AB%8B%E4%B8%AD%E5%A4%AE%E5%9B%B3%E6%9B%B8%E9%A4%A8%20%E6%9E%9A%E6%96%B9%E5%B8%82" target="_blank" rel="noopener">地図</a></p>
+    </div>
+
+    <div class="lib" data-n="駅">
+      <span class="kind">市駅前図書館</span>
+      <h3>枚方市立市駅前図書館</h3>
+      <p>2024年9月開館。枚方市駅直結のステーションヒル枚方5階にあり、生涯学習交流センターとの複合施設です。約2万冊と規模は小さいものの、<strong>日曜・祝日も21時まで開いている</strong>のはここだけ。</p>
+      <p>木を模した柱が並ぶ「ボタニカル」がテーマの明るい空間で、交流スペースがゆったり取られています。仕事帰りや買い物ついでに寄る館。</p>
+      <p class="adr">岡東町19-1（ステーションヒル枚方5階）／072-841-1103<br>京阪・JR 枚方市駅直結　<a href="https://www.google.com/maps/search/?api=1&query=%E6%9E%9A%E6%96%B9%E5%B8%82%E7%AB%8B%E5%B8%82%E9%A7%85%E5%89%8D%E5%9B%B3%E6%9B%B8%E9%A4%A8" target="_blank" rel="noopener">地図</a></p>
+    </div>
+
+    <div class="lib" data-n="香">
+      <span class="kind b">分館</span>
+      <h3>香里ケ丘図書館</h3>
+      <p>2020年7月に建て替えでリニューアルした、分館のなかの目玉。閲覧スペースは以前の約2倍、蔵書は約10万冊まで増えました。<strong>自習室は1階11席・2階32席の計43席</strong>と、市内でも屈指の充実ぶり。</p>
+      <p>隣の香里ケ丘中央公園の一部を「みどりの広場」として図書館と一体で運営していて、2階から直接ブリッジで出られます。本を持って外で読める分館です。</p>
+      <p class="adr">香里ケ丘4丁目2-1／050-7102-3111　<a href="https://www.google.com/maps/search/?api=1&query=%E6%9E%9A%E6%96%B9%E5%B8%82%E7%AB%8B%E9%A6%99%E9%87%8C%E3%82%B1%E4%B8%98%E5%9B%B3%E6%9B%B8%E9%A4%A8" target="_blank" rel="noopener">地図</a></p>
+    </div>
+
+    <div class="lib" data-n="楠">
+      <span class="kind b">分館</span>
+      <h3>楠葉図書館</h3>
+      <p>市の北端、樟葉エリアの分館。くずはモール周辺の買い物圏にあり、京都府との境に近い立地です。夜21時まで開いているので、帰宅前に立ち寄る使い方が向いています。</p>
+      <p class="adr">楠葉並木2丁目29-5／050-7102-3113　<a href="https://www.google.com/maps/search/?api=1&query=%E6%9E%9A%E6%96%B9%E5%B8%82%E7%AB%8B%E6%A5%A0%E8%91%89%E5%9B%B3%E6%9B%B8%E9%A4%A8" target="_blank" rel="noopener">地図</a></p>
+    </div>
+
+    <div class="lib" data-n="菅">
+      <span class="kind b">分館</span>
+      <h3>菅原図書館</h3>
+      <p>市の東部、長尾元町にある分館。JR片町線（学研都市線）沿いの生活圏を受け持ちます。市の中心から離れているぶん、落ち着いて過ごせる館です。</p>
+      <p class="adr">長尾元町1丁目35-1／050-7102-3115　<a href="https://www.google.com/maps/search/?api=1&query=%E6%9E%9A%E6%96%B9%E5%B8%82%E7%AB%8B%E8%8F%85%E5%8E%9F%E5%9B%B3%E6%9B%B8%E9%A4%A8" target="_blank" rel="noopener">地図</a></p>
+    </div>
+
+    <div class="lib" data-n="さ">
+      <span class="kind b">分館</span>
+      <h3>さだ図書館</h3>
+      <p>市の南部、北中振の分館。寝屋川市との境に近く、京阪沿線の南側に住む人の最寄りになります。</p>
+      <p class="adr">北中振3丁目27-10／050-7102-3117　<a href="https://www.google.com/maps/search/?api=1&query=%E6%9E%9A%E6%96%B9%E5%B8%82%E7%AB%8B%E3%81%95%E3%81%A0%E5%9B%B3%E6%9B%B8%E9%A4%A8" target="_blank" rel="noopener">地図</a></p>
+    </div>
+
+    <div class="lib" data-n="御">
+      <span class="kind b">分館</span>
+      <h3>御殿山図書館</h3>
+      <p>御殿山生涯学習美術センター内の分館。中央図書館とは同じ御殿山エリアにありますが、こちらは<strong>21時まで開いていて休館日も違う</strong>ので、中央が閉まっている金曜の受け皿になります。</p>
+      <p class="adr">御殿山町10-16／050-7102-3119　<a href="https://www.google.com/maps/search/?api=1&query=%E6%9E%9A%E6%96%B9%E5%B8%82%E7%AB%8B%E5%BE%A1%E6%AE%BF%E5%B1%B1%E5%9B%B3%E6%9B%B8%E9%A4%A8" target="_blank" rel="noopener">地図</a></p>
+    </div>
+
+    <div class="lib" data-n="牧">
+      <span class="kind b">分館</span>
+      <h3>牧野図書館</h3>
+      <p>宇山町、牧野エリアの分館。市の西部・淀川寄りの住宅地を受け持ちます。</p>
+      <p class="adr">宇山町4-5／050-7102-3121　<a href="https://www.google.com/maps/search/?api=1&query=%E6%9E%9A%E6%96%B9%E5%B8%82%E7%AB%8B%E7%89%A7%E9%87%8E%E5%9B%B3%E6%9B%B8%E9%A4%A8" target="_blank" rel="noopener">地図</a></p>
+    </div>
+
+    <div class="lib" data-n="津">
+      <span class="kind b">分館</span>
+      <h3>津田図書館</h3>
+      <p>市の東端、津田北町の分館。国見山のふもと、枚方でもっとも自然に近いエリアにあります。</p>
+      <p class="adr">津田北町2丁目25-3／050-7102-3123　<a href="https://www.google.com/maps/search/?api=1&query=%E6%9E%9A%E6%96%B9%E5%B8%82%E7%AB%8B%E6%B4%A5%E7%94%B0%E5%9B%B3%E6%9B%B8%E9%A4%A8" target="_blank" rel="noopener">地図</a></p>
+    </div>
+  </div>
+</section>
+
+<section id="s3" class="rv">
+  <div class="shead">
+    <div class="snum">03</div>
+    <h2>分室と自動車文庫<small>BRANCHES ON WHEELS</small></h2>
+  </div>
+  <p>図書館9館のほかに、生涯学習市民センターなどに置かれた<strong>6つの分室</strong>があります。規模は小さいものの、予約した本の受け取りに使えるのが便利なところ。</p>
+  <div class="rooms">
+    <div class="room"><b>枚方公園分室</b><span>072-844-7773</span></div>
+    <div class="room"><b>村野分室</b><span>072-849-2416</span></div>
+    <div class="room"><b>藤阪分室</b><span>072-868-1987</span></div>
+    <div class="room"><b>香里園分室</b><span>072-831-6080</span></div>
+    <div class="room"><b>宮之阪分室</b><span>072-848-2421</span></div>
+    <div class="room"><b>氷室分室</b><span>072-859-2562</span></div>
+  </div>
+  <div class="callout">
+    <h3>走る図書館「ひなぎく号」「カワセミ号」</h3>
+    <p>枚方市には自動車文庫が2台あります。本を積んで市内の巡回地点をまわる、いわば動く分室です。図書館から遠い地区や、坂の多い地域に住む人にとっては、これがいちばん近い図書館になります。</p>
+    <p style="margin-bottom:0">巡回の場所と日時は決まっているので、近所に停まる日があるかどうかは公式サイトの巡回予定で確認してみてください。拠点は中央図書館（050-7105-8114）です。</p>
+  </div>
+</section>
+
+<section id="s4" class="rv">
+  <div class="shead">
+    <div class="snum">04</div>
+    <h2>開館時間の違いに注意<small>OPENING HOURS</small></h2>
+  </div>
+  <p>枚方市立図書館でいちばん間違えやすいのが、<strong>館によって開館時間も休館日も違う</strong>ことです。とくに中央図書館だけが大きく違うので、ここだけは覚えておくと空振りしません。</p>
+  <div class="tablewrap">
+    <table>
+      <caption>2026年8月時点</caption>
+      <thead><tr><th></th><th>開館時間</th><th>休館日</th></tr></thead>
+      <tbody>
+        <tr><th>中央図書館</th><td>月〜木 9:30〜19:00<br>土日祝 9:30〜17:00</td><td>金曜日、第4火曜日<br>（第4火曜が祝日の場合は開館）</td></tr>
+        <tr><th>分館 7館</th><td>月〜土 9:00〜21:00<br>日祝 9:00〜17:00</td><td>第4月曜日<br>（祝日の場合は開館）</td></tr>
+        <tr><th>市駅前図書館</th><td>毎日 9:00〜21:00</td><td>第4月曜日<br>（祝日の場合は開館）</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="note-s">いずれも年末年始と蔵書点検期間は休館します。分室の開館時間は施設ごとに異なるため、公式サイトでご確認ください。</p>
+  <div class="quiet">
+    <h3>覚え方はひとつだけ</h3>
+    <p style="margin-bottom:0"><strong>「金曜は中央が休み、そのぶん分館は21時まで開いている」</strong>。金曜の夜に本が必要になったら、中央ではなく分館か市駅前へ。逆に第4月曜は分館と市駅前が休みで、中央が開いています。うまく補い合う設計になっています。</p>
+  </div>
+</section>
+
+<section id="s5" class="rv">
+  <div class="shead">
+    <div class="snum">05</div>
+    <h2>目的別・今日はどこへ<small>WHICH ONE TODAY</small></h2>
+  </div>
+  <ul class="plain">
+    <li><strong>じっくり調べ物をしたい</strong> → 中央図書館。市内最大の蔵書で、ここで見つからなければ府立図書館へ取り寄せる相談ができます。</li>
+    <li><strong>仕事帰りに寄りたい</strong> → 市駅前図書館。駅直結で毎日21時まで。分館も土曜まで21時まで開いています。</li>
+    <li><strong>休日に子どもと過ごしたい</strong> → 香里ケ丘図書館。隣接の「みどりの広場」へ2階から直接出られるので、本と外遊びを行き来できます。</li>
+    <li><strong>自習したい</strong> → 香里ケ丘図書館の自習室（1階11席・2階32席）。</li>
+    <li><strong>予約した本を受け取るだけ</strong> → いちばん近い分室で十分。6か所どこでも受け取れます。</li>
+    <li><strong>日曜の夕方に借りたい</strong> → 市駅前図書館。日祝も21時までなのはここだけです。</li>
+  </ul>
+  <div class="callout">
+    <h3>旅の起点として</h3>
+    <p style="margin-bottom:0">このサイトは枚方を起点に全国の図書館をめぐる記録です。遠出の前に中央図書館で旅行ガイドや時刻表を借りて、帰ってきたら市駅前図書館で写真を整理する——地元の図書館は、旅の始まりと終わりの場所でもあります。</p>
+  </div>
+  <div class="linkrow">
+    <a class="link-btn primary" href="https://www.city.hirakata.osaka.jp/0000022869.html" target="_blank" rel="noopener">枚方市立図書館 施設案内（公式）</a>
+    <a class="link-btn" href="https://www.city.hirakata.osaka.jp/0000010384.html" target="_blank" rel="noopener">蔵書検索・利用者のページ</a>
+  </div>
+</section>
+
+</main>
+
+<div class="closing">
+  <div class="closing-inner">
+    <p>いちばん遠くの図書館より、<br>いちばん近い図書館のほうが、人生では長く付き合う。</p>
+    <div class="linkrow">
+      <a class="link-btn" href="./">全国45館を見る</a>
+      <a class="link-btn" href="./ndl.html">国立国会図書館の特集を読む</a>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="f-inner">
+    <p>掲載内容は2026年8月時点の情報です。開館時間・休館日は変更されることがあります。訪問前に枚方市立図書館の公式サイトでご確認ください。</p>
+    <p>個人が趣味で運営するキュレーションサイト「<a href="./">図書館をめぐる旅</a>」の特集ページです。</p>
+  </div>
+</footer>
+
+<script>
+const bar=document.getElementById("bar");
+addEventListener("scroll",()=>{
+  const h=document.documentElement;
+  const p=h.scrollTop/(h.scrollHeight-h.clientHeight||1);
+  bar.style.width=(p*100).toFixed(2)+"%";
+},{passive:true});
+
+const reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;
+if(!reduce&&"IntersectionObserver" in window){
+  const io=new IntersectionObserver(es=>{
+    es.forEach(e=>{if(e.isIntersecting){e.target.classList.add("in");io.unobserve(e.target);}});
+  },{rootMargin:"0px 0px -12% 0px"});
+  document.querySelectorAll(".rv").forEach(el=>io.observe(el));
+}else{
+  document.querySelectorAll(".rv").forEach(el=>el.classList.add("in"));
+}
+
+const links=[...document.querySelectorAll(".toc a")];
+const secs=links.map(a=>document.querySelector(a.getAttribute("href"))).filter(Boolean);
+if("IntersectionObserver" in window){
+  const io2=new IntersectionObserver(es=>{
+    es.forEach(e=>{
+      if(e.isIntersecting){
+        links.forEach(a=>a.classList.toggle("on",a.getAttribute("href")==="#"+e.target.id));
+        const on=document.querySelector(".toc a.on");
+        if(on)on.scrollIntoView({block:"nearest",inline:"nearest"});
+      }
+    });
+  },{rootMargin:"-45% 0px -50% 0px"});
+  secs.forEach(s=>io2.observe(s));
+}
+</script>
+<!-- アクセス解析: GoatCounter（Cookieなし・個人データ収集なし） -->
+<script data-goatcounter="https://ll726.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

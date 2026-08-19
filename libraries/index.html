@@ -597,6 +597,11 @@ function openModal(l){
       <p class="info-row"><b>アクセス</b>${esc(l.access)}</p>
       ${isFinite(l.km)?`<p class="info-row"><b>${esc(originLabel())}から</b>${esc(accessText(l,true))}ほど（直線約${Math.round(l.km)}kmからの目安）</p>`:""}
       ${l.visit_note?`<p class="note">${esc(l.visit_note)}</p>`:""}
+      ${l.id==="hirakata-central"?`<div class="tipbox" style="border-left:3px solid var(--shu);border-radius:0 8px 8px 0">
+        <h4 class="sec sec-tip">特集ページ</h4>
+        <p>枚方市には図書館9館・分室6か所・自動車文庫2台があります。全施設と開館時間の違い、目的別の使い分けをまとめました。</p>
+        <p style="margin-top:8px"><a class="link-btn" href="hirakata.html">枚方市の図書館ぜんぶを読む →</a></p>
+      </div>`:""}
       ${(l.id==="ndl-tokyo"||l.id==="ndl-kansai")?`<div class="tipbox" style="border-left:3px solid var(--shu);border-radius:0 8px 8px 0">
         <h4 class="sec sec-tip">特集ページ</h4>
         <p>納本制度・2館の違い・初めての利用の流れ・少年ジャンプが読める理由まで、くわしくまとめました。</p>
@@ -635,6 +640,8 @@ document.addEventListener("keydown",e=>{if(e.key==="Escape")closeModal();});
 const FEATURES=[
  {title:"国立国会図書館という場所",sub:"特集ページを読む",href:"ndl.html",
   lead:"",ids:["ndl-tokyo","ndl-kansai"]},
+ {title:"枚方市の図書館ぜんぶ",sub:"地元16か所・特集ページ",href:"hirakata.html",
+  lead:"",ids:["hirakata-central"]},
  {title:"図書館ランキング TOP10",sub:"いま行きたい注目館・管理人セレクト",ranked:true,
   lead:"受賞歴・話題性・空間の体験価値をもとにした当サイトの総合ランキングです。『旅の目的地としてどれだけ心が動くか』を基準に選びました。順位は独断と偏見、でも本気です。",
   items:[
