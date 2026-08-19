@@ -1,0 +1,742 @@
+{
+  "meta": {
+    "title": "図書館 PC作業・ノマド利用データ",
+    "version": 1,
+    "checked_at": "2026-08-20",
+    "count": 45,
+    "status_values": {
+      "yes": "利用可・確認済み",
+      "limited": "条件付き・一部のみ",
+      "no": "利用不可",
+      "unknown": "公式情報で未確認"
+    },
+    "confidence_values": {
+      "high": "公式情報で明確に確認",
+      "medium": "一部条件が不明",
+      "low": "確認不十分"
+    },
+    "score": "1〜5。PC作業拠点としての総合評価。"
+  },
+  "libraries": [
+    {
+      "id": "nakajima",
+      "pc": "yes",
+      "power": "unknown",
+      "wifi": "yes",
+      "work": "limited",
+      "web_meeting": "unknown",
+      "fee": "free",
+      "registration": "limited_hours",
+      "score": 3,
+      "confidence": "medium",
+      "note": "学外者は利用時間に制限。Wi-Fi確認、電源未確認。",
+      "sources": [
+        "https://library.aiu.ac.jp/service/for-public"
+      ]
+    },
+    {
+      "id": "sendai-mediatheque",
+      "pc": "yes",
+      "power": "unknown",
+      "wifi": "yes",
+      "work": "yes",
+      "web_meeting": "unknown",
+      "fee": "free",
+      "registration": "none",
+      "score": 3,
+      "confidence": "medium",
+      "note": "無料Wi-Fiあり。一般向け電源席は未確認。",
+      "sources": [
+        "https://www.smt.jp/faqs/"
+      ]
+    },
+    {
+      "id": "kawanokami",
+      "pc": "limited",
+      "power": "unknown",
+      "wifi": "unknown",
+      "work": "limited",
+      "web_meeting": "unknown",
+      "fee": "free",
+      "registration": "none",
+      "score": 2,
+      "confidence": "low",
+      "note": "私設図書館＋カフェ。PC作業設備は未確認。",
+      "sources": [
+        "http://kawanokami.com/hyappyokan"
+      ]
+    },
+    {
+      "id": "tono-honnomori",
+      "pc": "limited",
+      "power": "unknown",
+      "wifi": "unknown",
+      "work": "no",
+      "web_meeting": "no",
+      "fee": "free",
+      "registration": "none",
+      "score": 1,
+      "confidence": "low",
+      "note": "読書主体。PC作業設備は未確認。",
+      "sources": [
+        "https://kodomohonnomori-tono.com/"
+      ]
+    },
+    {
+      "id": "shiwa-ogal",
+      "pc": "yes",
+      "power": "no",
+      "wifi": "yes",
+      "work": "yes",
+      "web_meeting": "unknown",
+      "fee": "free",
+      "registration": "none",
+      "score": 3,
+      "confidence": "high",
+      "note": "持込PC・Wi-Fi可。コンセント不可。",
+      "sources": [
+        "https://lib.town.shiwa.iwate.jp/"
+      ]
+    },
+    {
+      "id": "sukagawa-tette",
+      "pc": "yes",
+      "power": "yes",
+      "wifi": "yes",
+      "work": "limited",
+      "web_meeting": "unknown",
+      "fee": "free",
+      "registration": "none",
+      "score": 4,
+      "confidence": "high",
+      "note": "学習ルームに専用電源。学習用途中心。",
+      "sources": [
+        "https://www01.s-tette.jp/about/005793.html"
+      ]
+    },
+    {
+      "id": "kadokawa-musashino",
+      "pc": "limited",
+      "power": "unknown",
+      "wifi": "yes",
+      "work": "no",
+      "web_meeting": "unknown",
+      "fee": "paid",
+      "registration": "ticket",
+      "score": 2,
+      "confidence": "medium",
+      "note": "Wi-Fiあり。有料ミュージアムで作業向けではない。",
+      "sources": [
+        "https://kadcul.com/"
+      ]
+    },
+    {
+      "id": "miruru",
+      "pc": "yes",
+      "power": "unknown",
+      "wifi": "yes",
+      "work": "yes",
+      "web_meeting": "unknown",
+      "fee": "free",
+      "registration": "none",
+      "score": 3,
+      "confidence": "medium",
+      "note": "PC・Wi-Fi可。電源未確認。",
+      "sources": [
+        "https://www.nasushiobara-library.jp/"
+      ]
+    },
+    {
+      "id": "ota-artlib",
+      "pc": "yes",
+      "power": "limited",
+      "wifi": "yes",
+      "work": "yes",
+      "web_meeting": "unknown",
+      "fee": "free",
+      "registration": "none",
+      "score": 4,
+      "confidence": "medium",
+      "note": "持込PC・Wi-Fi可。電源は一部席情報。",
+      "sources": [
+        "https://www.artmuseumlibraryota.jp/"
+      ]
+    },
+    {
+      "id": "toyo-bunko",
+      "pc": "limited",
+      "power": "unknown",
+      "wifi": "yes",
+      "work": "no",
+      "web_meeting": "no",
+      "fee": "paid",
+      "registration": "ticket",
+      "score": 1,
+      "confidence": "medium",
+      "note": "観覧目的のミュージアム。作業向けではない。",
+      "sources": [
+        "https://toyo-bunko.or.jp/museum/"
+      ]
+    },
+    {
+      "id": "kodomo-tosho",
+      "pc": "yes",
+      "power": "no",
+      "wifi": "yes",
+      "work": "limited",
+      "web_meeting": "no",
+      "fee": "free",
+      "registration": "none",
+      "score": 3,
+      "confidence": "high",
+      "note": "PC・Wi-Fi可。利用者向け電源提供なし。",
+      "sources": [
+        "https://www.kodomo.go.jp/"
+      ]
+    },
+    {
+      "id": "ndl-tokyo",
+      "pc": "yes",
+      "power": "yes",
+      "wifi": "yes",
+      "work": "yes",
+      "web_meeting": "no",
+      "fee": "free",
+      "registration": "required",
+      "score": 5,
+      "confidence": "high",
+      "note": "持込PC・電源・Wi-Fiあり。18歳以上。",
+      "sources": [
+        "https://www.ndl.go.jp/"
+      ]
+    },
+    {
+      "id": "hibiya",
+      "pc": "yes",
+      "power": "yes",
+      "wifi": "yes",
+      "work": "yes",
+      "web_meeting": "limited",
+      "fee": "free",
+      "registration": "some_seats",
+      "score": 5,
+      "confidence": "high",
+      "note": "Wi-Fi・電源席あり。席数等に制限。",
+      "sources": [
+        "https://www.library.chiyoda.tokyo.jp/hibiya/"
+      ]
+    },
+    {
+      "id": "sirius",
+      "pc": "yes",
+      "power": "yes",
+      "wifi": "yes",
+      "work": "yes",
+      "web_meeting": "limited",
+      "fee": "free",
+      "registration": "some_areas",
+      "score": 5,
+      "confidence": "medium",
+      "note": "電源・ネット利用可能エリアあり。",
+      "sources": [
+        "https://yamato-bunka.jp/"
+      ]
+    },
+    {
+      "id": "toyama-kirari",
+      "pc": "yes",
+      "power": "yes",
+      "wifi": "yes",
+      "work": "yes",
+      "web_meeting": "unknown",
+      "fee": "free",
+      "registration": "none",
+      "score": 5,
+      "confidence": "high",
+      "note": "持込PC専用席、電源、Free Wi-Fiあり。",
+      "sources": [
+        "https://www.library.toyama.toyama.jp/"
+      ]
+    },
+    {
+      "id": "umimirai",
+      "pc": "yes",
+      "power": "unknown",
+      "wifi": "yes",
+      "work": "yes",
+      "web_meeting": "unknown",
+      "fee": "free",
+      "registration": "none",
+      "score": 3,
+      "confidence": "high",
+      "note": "持込PC・Wi-Fi可。電源未確認。",
+      "sources": [
+        "https://www.lib.kanazawa.ishikawa.jp/umimirai"
+      ]
+    },
+    {
+      "id": "ishikawa-pref",
+      "pc": "yes",
+      "power": "yes",
+      "wifi": "yes",
+      "work": "yes",
+      "web_meeting": "yes",
+      "fee": "free",
+      "registration": "none",
+      "score": 5,
+      "confidence": "high",
+      "note": "テレワーク公式対応。全館Wi-Fi、多くの席に電源、Web会議可能エリア。",
+      "sources": [
+        "https://www.library.pref.ishikawa.lg.jp/category/bypurpose/1019.html"
+      ]
+    },
+    {
+      "id": "terrasow",
+      "pc": "yes",
+      "power": "no",
+      "wifi": "no",
+      "work": "limited",
+      "web_meeting": "no",
+      "fee": "free",
+      "registration": "none",
+      "score": 2,
+      "confidence": "high",
+      "note": "持込PC可。Wi-Fiなし、電源不可。有線LAN可。",
+      "sources": [
+        "https://www.town.obuse.nagano.jp/lib/docs/7052.html"
+      ]
+    },
+    {
+      "id": "media-cosmos",
+      "pc": "yes",
+      "power": "yes",
+      "wifi": "yes",
+      "work": "yes",
+      "web_meeting": "unknown",
+      "fee": "free",
+      "registration": "none",
+      "score": 5,
+      "confidence": "high",
+      "note": "持込PC専用席、電源、有線LAN、Wi-Fiあり。",
+      "sources": [
+        "https://g-mediacosmos.jp/lib/guide/service/"
+      ]
+    },
+    {
+      "id": "anforet",
+      "pc": "yes",
+      "power": "yes",
+      "wifi": "yes",
+      "work": "yes",
+      "web_meeting": "limited",
+      "fee": "free",
+      "registration": "none",
+      "score": 5,
+      "confidence": "high",
+      "note": "コンセント席・無料Wi-Fiあり。",
+      "sources": [
+        "https://www.library.city.anjo.aichi.jp/"
+      ]
+    },
+    {
+      "id": "nakanoshima",
+      "pc": "yes",
+      "power": "yes",
+      "wifi": "yes",
+      "work": "limited",
+      "web_meeting": "no",
+      "fee": "free",
+      "registration": "some_seats",
+      "score": 5,
+      "confidence": "high",
+      "note": "持込PC席・Wi-Fi・電源あり。自習ルール注意。",
+      "sources": [
+        "https://www.library.pref.osaka.jp/site/nakato/tebiki.html"
+      ]
+    },
+    {
+      "id": "honnomori-nakanoshima",
+      "pc": "no",
+      "power": "no",
+      "wifi": "unknown",
+      "work": "no",
+      "web_meeting": "no",
+      "fee": "free",
+      "registration": "reservation_when_busy",
+      "score": 1,
+      "confidence": "high",
+      "note": "自習・PC・タブレット利用は不可。",
+      "sources": [
+        "https://kodomohonnomori.osaka/guide/"
+      ]
+    },
+    {
+      "id": "kadomado",
+      "pc": "yes",
+      "power": "yes",
+      "wifi": "yes",
+      "work": "yes",
+      "web_meeting": "limited",
+      "fee": "free",
+      "registration": "library_card_for_some_services",
+      "score": 5,
+      "confidence": "high",
+      "note": "3階学習席に電源・Wi-Fi。",
+      "sources": [
+        "https://kadomado.jp/guide/library/"
+      ]
+    },
+    {
+      "id": "ndl-kansai",
+      "pc": "yes",
+      "power": "yes",
+      "wifi": "yes",
+      "work": "yes",
+      "web_meeting": "no",
+      "fee": "free",
+      "registration": "required",
+      "score": 5,
+      "confidence": "high",
+      "note": "持込PC・電源席・Wi-Fiあり。18歳以上。",
+      "sources": [
+        "https://www.ndl.go.jp/jp/kansai/"
+      ]
+    },
+    {
+      "id": "osaka-pref-central",
+      "pc": "yes",
+      "power": "yes",
+      "wifi": "yes",
+      "work": "yes",
+      "web_meeting": "no",
+      "fee": "free",
+      "registration": "some_seats",
+      "score": 5,
+      "confidence": "high",
+      "note": "電源利用可能席と無線LANあり。",
+      "sources": [
+        "https://www.library.pref.osaka.jp/?page_id=51018"
+      ]
+    },
+    {
+      "id": "osaka-city-central",
+      "pc": "yes",
+      "power": "yes",
+      "wifi": "yes",
+      "work": "yes",
+      "web_meeting": "no",
+      "fee": "free",
+      "registration": "some_seats",
+      "score": 5,
+      "confidence": "high",
+      "note": "電子機器利用席・電源・無料Wi-Fiあり。",
+      "sources": [
+        "https://www.oml.city.osaka.lg.jp/"
+      ]
+    },
+    {
+      "id": "morinomiya",
+      "pc": "yes",
+      "power": "limited",
+      "wifi": "no",
+      "work": "limited",
+      "web_meeting": "no",
+      "fee": "paid_registration",
+      "registration": "required",
+      "score": 2,
+      "confidence": "high",
+      "note": "一般利用登録有料。学外者向けFree Wi-Fiなし。",
+      "sources": [
+        "https://www.omu.ac.jp/library/outline/morinomiya/"
+      ]
+    },
+    {
+      "id": "neyagawa",
+      "pc": "yes",
+      "power": "unknown",
+      "wifi": "yes",
+      "work": "yes",
+      "web_meeting": "unknown",
+      "fee": "free",
+      "registration": "none",
+      "score": 3,
+      "confidence": "medium",
+      "note": "持込PC・無料Wi-Fi確認。電源未確認。",
+      "sources": [
+        "https://www.city.neyagawa.osaka.jp/organization_list/kyoiku_shakaikyoiku/tyuutosyo/tosyotop/index.html"
+      ]
+    },
+    {
+      "id": "hirakata-central",
+      "pc": "yes",
+      "power": "no",
+      "wifi": "yes",
+      "work": "yes",
+      "web_meeting": "no",
+      "fee": "free",
+      "registration": "none",
+      "score": 3,
+      "confidence": "high",
+      "note": "PC・Wi-Fi可。図書館コンセント使用禁止。",
+      "sources": [
+        "https://www.city.hirakata.osaka.jp/0000036141.html"
+      ]
+    },
+    {
+      "id": "honnomori-kobe",
+      "pc": "no",
+      "power": "no",
+      "wifi": "unknown",
+      "work": "no",
+      "web_meeting": "no",
+      "fee": "free",
+      "registration": "reservation_when_busy",
+      "score": 1,
+      "confidence": "high",
+      "note": "読書と関係のないPC・タブレット利用は不可。",
+      "sources": [
+        "https://kodomohonnomori-kobe.jp/"
+      ]
+    },
+    {
+      "id": "sumoto",
+      "pc": "limited",
+      "power": "unknown",
+      "wifi": "unknown",
+      "work": "limited",
+      "web_meeting": "unknown",
+      "fee": "free",
+      "registration": "none",
+      "score": 2,
+      "confidence": "low",
+      "note": "館内端末あり。持込PC・Wi-Fi・電源は未確認。",
+      "sources": [
+        "https://www.im.licsre-saas.jp/sumoto/riyou.html"
+      ]
+    },
+    {
+      "id": "wakayama-civic",
+      "pc": "yes",
+      "power": "yes",
+      "wifi": "yes",
+      "work": "yes",
+      "web_meeting": "limited",
+      "fee": "free",
+      "registration": "none",
+      "score": 5,
+      "confidence": "medium",
+      "note": "PC・電源・Wi-Fi対応。",
+      "sources": [
+        "https://wakayama.civic-library.jp/"
+      ]
+    },
+    {
+      "id": "nara-pref",
+      "pc": "yes",
+      "power": "unknown",
+      "wifi": "yes",
+      "work": "yes",
+      "web_meeting": "unknown",
+      "fee": "free",
+      "registration": "some_seats",
+      "score": 4,
+      "confidence": "high",
+      "note": "持込PC・Free Wi-Fi・座席予約あり。電源未確認。",
+      "sources": [
+        "https://www.library.pref.nara.jp/guide/computer/mobile"
+      ]
+    },
+    {
+      "id": "moriyama",
+      "pc": "yes",
+      "power": "yes",
+      "wifi": "yes",
+      "work": "yes",
+      "web_meeting": "unknown",
+      "fee": "free",
+      "registration": "none",
+      "score": 5,
+      "confidence": "high",
+      "note": "仕事資料作成可。PC用コンセント・Free Wi-Fiあり。",
+      "sources": [
+        "https://moriyama-city-lib.jp/policy/faq/"
+      ]
+    },
+    {
+      "id": "kyoto-manga",
+      "pc": "limited",
+      "power": "unknown",
+      "wifi": "unknown",
+      "work": "no",
+      "web_meeting": "no",
+      "fee": "paid",
+      "registration": "reservation",
+      "score": 1,
+      "confidence": "high",
+      "note": "研究閲覧室でPC持込可だが一般作業向けではない。",
+      "sources": [
+        "https://www.kyotomm.jp/HP/reading_room_guide.html"
+      ]
+    },
+    {
+      "id": "tokuyama",
+      "pc": "yes",
+      "power": "yes",
+      "wifi": "yes",
+      "work": "yes",
+      "web_meeting": "limited",
+      "fee": "free",
+      "registration": "none",
+      "score": 5,
+      "confidence": "medium",
+      "note": "持込PC・電源・Wi-Fi利用に対応。",
+      "sources": [
+        "https://shunan.ekimae-library.jp/"
+      ]
+    },
+    {
+      "id": "taki",
+      "pc": "limited",
+      "power": "unknown",
+      "wifi": "unknown",
+      "work": "limited",
+      "web_meeting": "unknown",
+      "fee": "free",
+      "registration": "none",
+      "score": 2,
+      "confidence": "low",
+      "note": "学習利用・館内PCあり。持込PC用Wi-Fi・電源は未確認。",
+      "sources": [
+        "https://izumolib.icv.ne.jp/library/lib-taki/"
+      ]
+    },
+    {
+      "id": "momiwa",
+      "pc": "yes",
+      "power": "unknown",
+      "wifi": "yes",
+      "work": "yes",
+      "web_meeting": "unknown",
+      "fee": "free",
+      "registration": "none",
+      "score": 4,
+      "confidence": "high",
+      "note": "社会人向けスタディルーム・Free Wi-Fiあり。電源未確認。",
+      "sources": [
+        "https://lib.city.setouchi.lg.jp/ya/yaguide"
+      ]
+    },
+    {
+      "id": "yusuhara",
+      "pc": "yes",
+      "power": "unknown",
+      "wifi": "unknown",
+      "work": "yes",
+      "web_meeting": "unknown",
+      "fee": "free",
+      "registration": "none",
+      "score": 3,
+      "confidence": "high",
+      "note": "ノートPC・タブレット使用自由。Wi-Fi・電源未確認。",
+      "sources": [
+        "https://kumonoue-lib.jp/index.php/users-guide/14-library-guidance"
+      ]
+    },
+    {
+      "id": "otepia",
+      "pc": "yes",
+      "power": "unknown",
+      "wifi": "yes",
+      "work": "yes",
+      "web_meeting": "unknown",
+      "fee": "free",
+      "registration": "none",
+      "score": 4,
+      "confidence": "high",
+      "note": "持込PC・Free Wi-Fi・自習可。通常席の電源未確認。",
+      "sources": [
+        "https://otepia.kochi.jp/library/faq.html"
+      ]
+    },
+    {
+      "id": "takeo",
+      "pc": "yes",
+      "power": "yes",
+      "wifi": "yes",
+      "work": "yes",
+      "web_meeting": "limited",
+      "fee": "free",
+      "registration": "none",
+      "score": 5,
+      "confidence": "high",
+      "note": "持込PC用電源席・無料Wi-Fiあり。",
+      "sources": [
+        "https://takeo.city-library.jp/guide/entry-2157.html"
+      ]
+    },
+    {
+      "id": "tobata",
+      "pc": "limited",
+      "power": "unknown",
+      "wifi": "yes",
+      "work": "limited",
+      "web_meeting": "unknown",
+      "fee": "free",
+      "registration": "none",
+      "score": 3,
+      "confidence": "medium",
+      "note": "学習室で無料Wi-Fi。持込PC・電源条件未確認。",
+      "sources": [
+        "https://www.toshokan.city.kitakyushu.jp/branches/tobata/2025/07/72-wi-fi.html"
+      ]
+    },
+    {
+      "id": "tarami",
+      "pc": "limited",
+      "power": "unknown",
+      "wifi": "yes",
+      "work": "limited",
+      "web_meeting": "unknown",
+      "fee": "free",
+      "registration": "none",
+      "score": 2,
+      "confidence": "high",
+      "note": "市Wi-Fiあり。自習室なし、閲覧席は調べもの向け。",
+      "sources": [
+        "https://www.lib.isahaya.nagasaki.jp/content/faq.html"
+      ]
+    },
+    {
+      "id": "akatsuki",
+      "pc": "yes",
+      "power": "yes",
+      "wifi": "unknown",
+      "work": "yes",
+      "web_meeting": "yes",
+      "fee": "paid",
+      "registration": "reservation",
+      "score": 3,
+      "confidence": "medium",
+      "note": "有料一棟貸切。会議・ワーケーション可。",
+      "sources": [
+        "https://library-inn.jp/day-reserve/"
+      ]
+    },
+    {
+      "id": "okinawa-pref",
+      "pc": "yes",
+      "power": "yes",
+      "wifi": "yes",
+      "work": "yes",
+      "web_meeting": "limited",
+      "fee": "free",
+      "registration": "some_seats",
+      "score": 5,
+      "confidence": "high",
+      "note": "自主学習席・ビジネス席・無料Wi-Fi・電源席あり。",
+      "sources": [
+        "https://www.library.pref.okinawa.jp/"
+      ]
+    }
+  ]
+}
