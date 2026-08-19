@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>国立国会図書館という場所 | 図書館をめぐる旅</title>
+<meta name="description" content="日本で出版されたほぼすべての本が集まる国立国会図書館。東京本館と関西館の違い、見どころ、利用方法、少年ジャンプまで読める理由をまとめた特集ページ。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;600;700&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#f5f6f3; --card:#ffffff; --ink:#1f2a3a; --sub:#66738a; --line:#dcdfd8;
+  --shu:#b23a2f; --matsu:#40695b;
+  --serif:"Shippori Mincho",serif; --sans:"Zen Kaku Gothic New",sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--paper);color:var(--ink);font-family:var(--sans);line-height:1.9;font-size:15px}
+a{color:var(--matsu)}
+img{max-width:100%;height:auto;display:block}
+
+header{border-bottom:3px double var(--line);background:var(--card);padding:14px 16px}
+.h-inner{max-width:820px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.brand{font-family:var(--serif);font-size:14px;letter-spacing:.12em;color:var(--sub);text-decoration:none}
+.back{font-size:12.5px;text-decoration:none;border:1px solid var(--line);border-radius:8px;padding:5px 12px;color:var(--ink)}
+.back:hover{background:var(--paper)}
+
+.hero{background:var(--ink);color:#fff;padding:34px 16px 30px}
+.hero-inner{max-width:820px;margin:0 auto}
+.hero .eyebrow{font-size:11px;letter-spacing:.3em;color:rgba(255,255,255,.6);margin-bottom:10px}
+.hero h1{font-family:var(--serif);font-size:clamp(22px,5vw,32px);font-weight:600;line-height:1.5;letter-spacing:.04em}
+.hero .sub{font-size:13px;color:rgba(255,255,255,.72);margin-top:8px}
+.hero .lead{font-size:14.5px;line-height:2;color:rgba(255,255,255,.93);margin-top:16px;border-top:1px solid rgba(255,255,255,.25);padding-top:16px}
+
+main{max-width:820px;margin:0 auto;padding:0 16px 48px}
+section{margin-top:38px}
+h2{font-family:var(--serif);font-size:20px;font-weight:600;letter-spacing:.06em;line-height:1.5;
+  border-bottom:1px solid var(--line);padding-bottom:8px;margin-bottom:14px}
+h2::before{content:"◆ ";color:var(--shu);font-size:12px;vertical-align:2px}
+h3{font-family:var(--serif);font-size:16px;font-weight:600;margin:22px 0 6px;letter-spacing:.04em}
+p{margin-bottom:12px}
+.note-s{font-size:12.5px;color:var(--sub)}
+
+.callout{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--shu);
+  border-radius:0 10px 10px 0;padding:16px 18px;margin:18px 0}
+.callout h3{margin-top:0}
+.quiet{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px 18px;margin:18px 0}
+.quiet h3{margin-top:0}
+
+.tablewrap{overflow-x:auto;margin:16px 0;border:1px solid var(--line);border-radius:10px;background:var(--card)}
+table{border-collapse:collapse;width:100%;min-width:560px;font-size:13.5px}
+th,td{padding:10px 12px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+thead th{background:var(--paper);font-family:var(--serif);font-size:13px;letter-spacing:.06em;white-space:nowrap}
+tbody th{font-family:var(--serif);font-weight:600;color:var(--sub);font-size:13px;white-space:nowrap;width:8.5em}
+tbody tr:last-child th,tbody tr:last-child td{border-bottom:none}
+
+ol.steps{list-style:none;counter-reset:s;margin:16px 0}
+ol.steps li{counter-increment:s;position:relative;padding:0 0 18px 46px;border-left:1px dashed var(--line);margin-left:14px}
+ol.steps li:last-child{border-left:none;padding-bottom:0}
+ol.steps li::before{content:counter(s);position:absolute;left:-14px;top:-2px;width:28px;height:28px;border-radius:50%;
+  background:var(--matsu);color:#fff;font-family:var(--serif);font-weight:700;font-size:14px;
+  display:flex;align-items:center;justify-content:center}
+ol.steps li b{font-family:var(--serif);display:block;font-size:15px;margin-bottom:2px}
+
+ul.plain{list-style:none;margin:10px 0}
+ul.plain li{padding-left:1.4em;position:relative;margin-bottom:8px;font-size:14px;line-height:1.85}
+ul.plain li::before{content:"◆";position:absolute;left:0;color:var(--matsu);font-size:9px;top:.6em}
+ul.no li::before{content:"×";color:var(--shu);font-size:13px;top:.1em}
+
+.cards2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:16px}
+.pcard{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px 18px}
+.pcard .tag{display:inline-block;font-size:11px;color:var(--shu);border:1px solid var(--shu);border-radius:3px;padding:0 7px;margin-bottom:8px}
+.pcard h3{margin-top:0}
+.pcard p{font-size:13.5px;line-height:1.85;margin-bottom:8px}
+.linkrow{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.link-btn{font-size:12.5px;text-decoration:none;border:1px solid var(--matsu);color:var(--matsu);border-radius:8px;padding:6px 13px}
+.link-btn.primary{background:var(--matsu);color:#fff}
+
+footer{border-top:3px double var(--line);background:var(--card);padding:24px 16px;color:var(--sub);font-size:12px}
+.f-inner{max-width:820px;margin:0 auto}
+.f-inner p{margin-bottom:6px}
+
+@media(max-width:600px){
+  .cards2{grid-template-columns:1fr}
+  ol.steps li{padding-left:40px}
+  body{font-size:14.5px}
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="h-inner">
+    <a class="brand" href="./">図書館をめぐる旅</a>
+    <a class="back" href="./">← 図書館一覧に戻る</a>
+  </div>
+</header>
+
+<div class="hero">
+  <div class="hero-inner">
+    <p class="eyebrow">SPECIAL FEATURE ・ 特集</p>
+    <h1>日本中の本が、ここにある。<br>国立国会図書館という場所</h1>
+    <p class="sub">東京本館（永田町）と関西館（京都・精華町）</p>
+    <p class="lead">「読みたい本が、どこにもない」。そのときの最後の駆け込み寺が国立国会図書館です。日本国内で出版されたものは、法律でここに納めることが決められています。専門書も、雑誌も、マンガも、古い電話帳も。ほかの図書館とは目的からして違うこの2館を、旅の目的地として楽しむための案内です。</p>
+  </div>
+</div>
+
+<main>
+
+<section>
+  <h2>そもそも、どんな図書館？</h2>
+  <p>国立国会図書館は、国会の活動を支えるために設置された、日本で唯一の国立図書館です。ですが国会議員だけの場所ではありません。<strong>満18歳以上なら、誰でも無料で利用できます</strong>。</p>
+  <p>最大の特徴は「<strong>納本制度</strong>」。日本国内で出版された出版物は、発行者がこの図書館に納めることが法律で義務づけられています。つまりここは、売れ筋かどうかもジャンルも問わず、<strong>日本の出版物を丸ごと保存するための場所</strong>なのです。</p>
+
+  <div class="callout">
+    <h3>「どんな本でも読める」の実際</h3>
+    <p>難しい学術書ばかりの場所だと思われがちですが、納本制度はジャンルを選びません。国立国会図書館は<strong>1948年以降に国内で刊行されたマンガ（単行本・雑誌）も所蔵</strong>しています。</p>
+    <p>だから、<strong>『週刊少年ジャンプ』のバックナンバーを請求して読む</strong>ということができます。自分が生まれた週の号を取り寄せて、当時の連載陣や広告を眺める——そんな遊び方もできるわけです。2000年までに出版されたマンガ雑誌の一部はデジタル化されており、目次情報から「あの作品は何年の何号に載ったのか」を検索することもできます（本文の閲覧は館内限定）。</p>
+    <p class="note-s">※ 所蔵は完全ではなく、欠号や利用制限のある資料もあります。目当てがある場合は、行く前に「国立国会図書館サーチ」で所蔵を確かめておくと確実です。</p>
+  </div>
+
+  <p>ほかにも、雑誌、政府刊行物、地図、楽譜、博士論文、古い電話帳や企業の社史など、普通の図書館なら処分してしまうような資料が残っています。「ここに無ければ諦めがつく」と言われるのは、このためです。</p>
+</section>
+
+<section>
+  <h2>ほかの図書館とは、ここが違う</h2>
+  <p>地元の市立図書館とは、そもそもの設計思想が違います。「本を借りる場所」ではなく「資料を残し、調べさせる場所」だと思って行くと、ギャップがありません。</p>
+  <div class="tablewrap">
+    <table>
+      <thead><tr><th></th><th>一般的な公共図書館</th><th>国立国会図書館</th></tr></thead>
+      <tbody>
+        <tr><th>蔵書の集め方</th><td>利用者のニーズに合わせて選ぶ</td><td>納本制度により、原則すべて集める</td></tr>
+        <tr><th>本の並び</th><td>開架。棚を見て選べる</td><td>大部分が書庫（閉架）。端末で請求する</td></tr>
+        <tr><th>貸出</th><td>できる</td><td><strong>個人への貸出はなし（館内閲覧のみ）</strong></td></tr>
+        <tr><th>年齢</th><td>制限なし</td><td>原則満18歳以上</td></tr>
+        <tr><th>過ごし方</th><td>読書・学習・いこいの場</td><td>調べ物・研究が中心</td></tr>
+        <tr><th>古い資料</th><td>定期的に除籍される</td><td>捨てない。永く保存し続ける</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p>この違いは、実際の体験にも直結します。棚をぶらぶら歩いて偶然の一冊と出会う楽しみは少ない代わりに、<strong>調べたいものが決まってさえいれば、ほぼ確実に辿り着けるという安心感</strong>があります。</p>
+</section>
+
+<section>
+  <h2>東京本館と関西館、どちらに行く？</h2>
+  <p>意外と知られていませんが、<strong>関西館は東京本館の「分館」ではありません</strong>。どちらも対等な「中央館」として役割を分担しています。東京本館の書庫が限界に近づいたことを受け、2002年10月に京都府精華町のけいはんな学研都市に生まれました。</p>
+  <div class="cards2">
+    <div class="pcard">
+      <span class="tag">東京本館</span>
+      <h3>国会議事堂の隣、永田町</h3>
+      <p>国会のすぐそばに建つ、国内最大の蔵書を持つ本丸。民主主義のインフラとして作られた建築そのものに重量感があります。</p>
+      <p>憲政資料、新聞、音楽・映像資料など、日本の近現代を調べるための資料が集まります。東京観光のついでに寄れる立地の良さも魅力です。</p>
+      <p class="note-s">開館 9:30〜19:00（土曜は〜17:00）／資料請求受付 9:30〜18:00（土曜は〜16:00）</p>
+      <div class="linkrow">
+        <a class="link-btn primary" href="./">サイト内の詳細</a>
+        <a class="link-btn" href="https://www.ndl.go.jp/jp/tokyo/" target="_blank" rel="noopener">公式サイト</a>
+      </div>
+    </div>
+    <div class="pcard">
+      <span class="tag">関西館</span>
+      <h3>丘の下に広がるガラスの大閲覧室</h3>
+      <p>地上からは芝生の丘のようにしか見えないのに、中に入ると天井高いっぱいのガラス越しに緑が透ける大空間が現れます。設計は陶器二三雄。</p>
+      <p>科学技術関係資料、アジア言語の資料、1983年以降の博士論文などを重点的に担当。アジア情報室はここならではの空間です。</p>
+      <p class="note-s">開館 9:30〜18:00／資料請求受付 10:00〜17:15</p>
+      <div class="linkrow">
+        <a class="link-btn primary" href="./">サイト内の詳細</a>
+        <a class="link-btn" href="https://www.ndl.go.jp/jp/kansai/" target="_blank" rel="noopener">公式サイト</a>
+      </div>
+    </div>
+  </div>
+  <p class="note-s">両館とも休館日は、日曜日・国民の祝日・休日・年末年始・第3水曜日（資料整理休館日）。土曜日は開いています。</p>
+  <div class="quiet">
+    <h3>選び方の目安</h3>
+    <ul class="plain">
+      <li>調べたいのが<strong>歴史・政治・新聞・音楽映像</strong>なら → 東京本館</li>
+      <li>調べたいのが<strong>科学技術・アジア言語・博士論文</strong>なら → 関西館</li>
+      <li>関西在住で「まず一度行ってみたい」なら → 関西館（枚方から車で約30分）</li>
+      <li>どちらの館の資料も取り寄せて利用できます（到着まで日数がかかります）</li>
+    </ul>
+  </div>
+</section>
+
+<section>
+  <h2>初めての利用の流れ</h2>
+  <p>事前予約は不要で、思い立った日に行けます。初回は入館手続きに10分ほど見ておくと安心です。</p>
+  <ol class="steps">
+    <li><b>本人確認書類を持って行く</b>運転免許証、マイナンバーカード、健康保険証など、氏名・生年月日・現住所が確認できるものを忘れずに。</li>
+    <li><b>利用者登録カウンターでカードを作る</b>その場で「登録利用者カード」が発行されます。有効期限は3年で、利用するたびに自動で更新されます。一度作れば、東京本館でも関西館でも共通で使えます。</li>
+    <li><b>荷物をロッカーに預ける</b>資料保護のため、カバンや封筒などは持ち込めません。筆記用具やパソコンは持ち込み可。ロッカーに使う100円玉は返ってきます。</li>
+    <li><b>端末で読みたい資料を請求する</b>館内の検索端末から請求すると、書庫から資料が運ばれてきます。到着まで数十分かかることもあり、一度に請求できる点数には上限があります。</li>
+    <li><b>閲覧室で読む</b>受取カウンターで受け取ったら、席でじっくり。必要な部分は複写（コピー）を申し込めます。</li>
+  </ol>
+  <div class="quiet">
+    <h3>登録しなくても入れます（ただし制限あり）</h3>
+    <p style="margin-bottom:0">利用者登録をしない場合でも「当日利用カード」で入館でき、閲覧室に出ている開架資料の閲覧と即日複写はできます。ただし<strong>書庫の中の資料（つまり大部分）は登録利用者しか請求できません</strong>。マンガや古い雑誌が目当てなら、最初に登録しておきましょう。</p>
+  </div>
+</section>
+
+<section>
+  <h2>知っておきたい、できないこと</h2>
+  <ul class="plain no">
+    <li><strong>本は借りられません。</strong>国立国会図書館は個人への貸出を行っていません。読むのは館内だけです。</li>
+    <li><strong>丸ごとコピーはできません。</strong>複写は著作権法の範囲内（資料の一部分）に限られます。</li>
+    <li><strong>原則として満18歳未満は利用できません。</strong>ただし、レポートや卒業論文などの調査でここにしかない資料が必要な場合は、事前に電話で相談し、申込みをすれば利用できます。</li>
+    <li><strong>のんびりくつろぐことが主目的の場所ではありません。</strong>食堂や喫茶室はありますが、あくまで調べ物の合間の休憩用です。</li>
+  </ul>
+  <p>逆に言えば、<strong>「調べたいこと」をひとつ決めて行くだけで、この図書館は一気に面白くなります</strong>。「昔住んでいた町の古い地図」「生まれた年の雑誌」「祖父が勤めていた会社の社史」——そんな個人的なテーマでも、ちゃんと答えが見つかるのがここのすごさです。</p>
+</section>
+
+<section>
+  <h2>行かなくても使える</h2>
+  <p>遠方でなかなか行けない人のための仕組みもあります。旅の前の下調べにも便利です。</p>
+  <ul class="plain">
+    <li><strong>国立国会図書館デジタルコレクション</strong>——デジタル化された資料をインターネットで検索・閲覧できます。</li>
+    <li><strong>個人向けデジタル化資料送信サービス</strong>——絶版などで入手が困難な資料を、自宅のパソコンやスマホで閲覧・印刷できます（利用者登録が必要）。</li>
+    <li><strong>遠隔複写サービス</strong>——必要なページのコピーを郵送で取り寄せられます（有料）。</li>
+    <li><strong>リサーチ・ナビ</strong>——「マンガについて調べる」など、テーマ別の調べ方ガイド。行く前に読んでおくと当日が速いです。</li>
+  </ul>
+  <div class="linkrow">
+    <a class="link-btn primary" href="https://ndlsearch.ndl.go.jp/" target="_blank" rel="noopener">国立国会図書館サーチ</a>
+    <a class="link-btn" href="https://dl.ndl.go.jp/" target="_blank" rel="noopener">デジタルコレクション</a>
+    <a class="link-btn" href="https://ndlsearch.ndl.go.jp/rnavi/humanities/post_900" target="_blank" rel="noopener">リサーチ・ナビ「マンガについて調べる」</a>
+  </div>
+</section>
+
+<section>
+  <h2>旅の組み立て方</h2>
+  <div class="cards2">
+    <div class="pcard">
+      <h3>東京本館の日</h3>
+      <p>永田町・霞が関の官庁街を歩き、国会議事堂を眺めてから入館。帰りは徒歩圏の日比谷図書文化館へ回れば、<strong>国の図書館と区の図書館を飲み比べるように味わえます</strong>。上野の国際子ども図書館を加えれば、国立国会図書館の3施設制覇です。</p>
+    </div>
+    <div class="pcard">
+      <h3>関西館の日</h3>
+      <p>枚方から車で約30分。けいはんな学研都市の研究施設群を眺めつつ、帰りは奈良側へ抜けるルートが快適です。<strong>土曜日も開いている</strong>ので、平日に休みが取れない人でも旅程に組み込みやすいのが嬉しいところ。</p>
+    </div>
+  </div>
+  <div class="callout">
+    <h3>最初の1点におすすめ</h3>
+    <p style="margin-bottom:0">「何を請求すればいいか分からない」という人は、<strong>自分が生まれた日の新聞、または子どもの頃に読んでいた雑誌のバックナンバー</strong>から始めるのがおすすめです。「こんなものまで残っているのか」という驚きが、この図書館の一番のお土産になります。</p>
+  </div>
+</section>
+
+<section>
+  <h2>基本情報</h2>
+  <div class="tablewrap">
+    <table>
+      <thead><tr><th></th><th>東京本館</th><th>関西館</th></tr></thead>
+      <tbody>
+        <tr><th>所在地</th><td>東京都千代田区永田町1-10-1</td><td>京都府相楽郡精華町精華台8-1-3</td></tr>
+        <tr><th>アクセス</th><td>地下鉄永田町駅から徒歩5分</td><td>JR祝園駅・近鉄新祝園駅からバス</td></tr>
+        <tr><th>開館時間</th><td>9:30〜19:00（土曜は〜17:00）</td><td>9:30〜18:00</td></tr>
+        <tr><th>資料請求受付</th><td>9:30〜18:00（土曜は〜16:00）</td><td>10:00〜17:15</td></tr>
+        <tr><th>休館日</th><td colspan="2">日曜日、国民の祝日・休日、年末年始、第3水曜日（資料整理休館日）</td></tr>
+        <tr><th>利用資格</th><td colspan="2">原則満18歳以上。利用は無料</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="note-s">2026年8月時点の公式情報にもとづきます。開館日やサービス内容は変更されることがあるため、お出かけ前に必ず公式サイトでご確認ください。</p>
+  <div class="linkrow">
+    <a class="link-btn primary" href="./">ほかの図書館も見る</a>
+    <a class="link-btn" href="https://www.ndl.go.jp/" target="_blank" rel="noopener">国立国会図書館 公式サイト</a>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="f-inner">
+    <p>掲載内容は2026年8月時点の情報です。<strong>訪問前に公式サイトで最新情報をご確認ください。</strong></p>
+    <p>個人が趣味で運営するキュレーションサイト「<a href="./">図書館をめぐる旅</a>」の特集ページです。</p>
+  </div>
+</footer>
+<!-- アクセス解析: GoatCounter（Cookieなし・個人データ収集なし） -->
+<script data-goatcounter="https://ll726.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>
