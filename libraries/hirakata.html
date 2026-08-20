@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>枚方市の図書館ぜんぶ | 図書館をめぐる旅</title>
 <meta name="description" content="枚方市立図書館の全施設ガイド。中央図書館・7つの分館・市駅前図書館・6つの分室・自動車文庫を、開館時間と目的別の使い分けまでまとめた特集ページ。">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;500;600;700&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet">
@@ -95,10 +97,23 @@ thead th{font-family:var(--serif);font-size:12.5px;letter-spacing:.1em;white-spa
 tbody th{font-family:var(--serif);font-weight:600;color:var(--sub);font-size:12.5px;width:9.5em;background:var(--paper-2)}
 tbody tr:last-child th,tbody tr:last-child td{border-bottom:none}
 
+/* 地図 */
+.mapwrap{margin:24px 0 8px;position:relative}
+#hmap{height:440px;border:1px solid var(--line);border-radius:2px;background:var(--paper-2)}
+.mapcap{font-size:11.5px;color:var(--sub);margin-top:9px;line-height:1.8}
+.hpin{display:flex;align-items:center;justify-content:center;border-radius:50%;border:2px solid #fff;
+  box-shadow:0 2px 7px rgba(27,37,52,.4);font-family:var(--serif);font-weight:700;color:#fff;transition:.15s}
+.leaflet-popup-content{margin:11px 14px;font-family:var(--sans)}
+.pop-n{font-family:var(--serif);font-weight:600;font-size:14px;color:var(--ink)}
+.pop-a{font-size:11.5px;color:var(--sub);margin-top:3px}
+.pop-l{display:inline-block;margin-top:7px;font-size:11.5px;color:var(--matsu)}
+@media(max-width:640px){#hmap{height:320px}}
+
 /* 館カード */
 .libs{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:24px}
 .lib{position:relative;background:var(--card);border:1px solid var(--line);border-radius:2px;padding:20px 22px 18px;
   transition:transform .25s,box-shadow .25s}
+.lib{cursor:pointer}
 .lib:hover{transform:translateY(-3px);box-shadow:0 10px 26px rgba(27,37,52,.09)}
 .lib::before{content:attr(data-n);position:absolute;right:14px;top:8px;font-family:var(--serif);font-weight:700;
   font-size:40px;color:rgba(27,37,52,.055);line-height:1}
@@ -214,10 +229,15 @@ footer{background:var(--paper);padding:30px 20px 40px;color:var(--sub);font-size
     <div class="snum">02</div>
     <h2>9つの図書館<small>NINE LIBRARIES</small></h2>
   </div>
-  <p>中央図書館と市駅前図書館、そして7つの分館。それぞれ性格が違います。</p>
+  <p>中央図書館と市駅前図書館、そして7つの分館。それぞれ性格が違います。まずは市内のどこにあるかを地図で。</p>
+
+  <div class="mapwrap">
+    <div id="hmap"></div>
+    <p class="mapcap">朱色は中央図書館と市駅前図書館、緑は分館です。ピンをタップすると館名と地図リンクが出ます。パソコンでは下のカードにマウスを載せると、その館のピンが光ります。</p>
+  </div>
 
   <div class="libs">
-    <div class="lib" data-n="中">
+    <div class="lib" data-n="中" data-id="chuo">
       <span class="kind">中央図書館</span>
       <h3>枚方市立中央図書館</h3>
       <p>市内最大の蔵書を持つ、枚方の図書館の中枢。輝きプラザきらら内にあり、点字図書や録音図書の製作・貸出も担っています。調べ物や、市内のどこかにある一冊を取り寄せる拠点として使う館です。</p>
@@ -225,7 +245,7 @@ footer{background:var(--paper);padding:30px 20px 40px;color:var(--sub);font-size
       <p class="adr">車塚2丁目1-1／050-7105-8141<br>京阪御殿山駅から徒歩約15分　<a href="https://www.google.com/maps/search/?api=1&query=%E6%9E%9A%E6%96%B9%E5%B8%82%E7%AB%8B%E4%B8%AD%E5%A4%AE%E5%9B%B3%E6%9B%B8%E9%A4%A8%20%E6%9E%9A%E6%96%B9%E5%B8%82" target="_blank" rel="noopener">地図</a></p>
     </div>
 
-    <div class="lib" data-n="駅">
+    <div class="lib" data-n="駅" data-id="ekimae">
       <span class="kind">市駅前図書館</span>
       <h3>枚方市立市駅前図書館</h3>
       <p>2024年9月開館。枚方市駅直結のステーションヒル枚方5階にあり、生涯学習交流センターとの複合施設です。約2万冊と規模は小さいものの、<strong>日曜・祝日も21時まで開いている</strong>のはここだけ。</p>
@@ -233,7 +253,7 @@ footer{background:var(--paper);padding:30px 20px 40px;color:var(--sub);font-size
       <p class="adr">岡東町19-1（ステーションヒル枚方5階）／072-841-1103<br>京阪・JR 枚方市駅直結　<a href="https://www.google.com/maps/search/?api=1&query=%E6%9E%9A%E6%96%B9%E5%B8%82%E7%AB%8B%E5%B8%82%E9%A7%85%E5%89%8D%E5%9B%B3%E6%9B%B8%E9%A4%A8" target="_blank" rel="noopener">地図</a></p>
     </div>
 
-    <div class="lib" data-n="香">
+    <div class="lib" data-n="香" data-id="korigaoka">
       <span class="kind b">分館</span>
       <h3>香里ケ丘図書館</h3>
       <p>2020年7月に建て替えでリニューアルした、分館のなかの目玉。閲覧スペースは以前の約2倍、蔵書は約10万冊まで増えました。<strong>自習室は1階11席・2階32席の計43席</strong>と、市内でも屈指の充実ぶり。</p>
@@ -241,42 +261,42 @@ footer{background:var(--paper);padding:30px 20px 40px;color:var(--sub);font-size
       <p class="adr">香里ケ丘4丁目2-1／050-7102-3111　<a href="https://www.google.com/maps/search/?api=1&query=%E6%9E%9A%E6%96%B9%E5%B8%82%E7%AB%8B%E9%A6%99%E9%87%8C%E3%82%B1%E4%B8%98%E5%9B%B3%E6%9B%B8%E9%A4%A8" target="_blank" rel="noopener">地図</a></p>
     </div>
 
-    <div class="lib" data-n="楠">
+    <div class="lib" data-n="楠" data-id="kuzuha">
       <span class="kind b">分館</span>
       <h3>楠葉図書館</h3>
       <p>市の北端、樟葉エリアの分館。くずはモール周辺の買い物圏にあり、京都府との境に近い立地です。夜21時まで開いているので、帰宅前に立ち寄る使い方が向いています。</p>
       <p class="adr">楠葉並木2丁目29-5／050-7102-3113　<a href="https://www.google.com/maps/search/?api=1&query=%E6%9E%9A%E6%96%B9%E5%B8%82%E7%AB%8B%E6%A5%A0%E8%91%89%E5%9B%B3%E6%9B%B8%E9%A4%A8" target="_blank" rel="noopener">地図</a></p>
     </div>
 
-    <div class="lib" data-n="菅">
+    <div class="lib" data-n="菅" data-id="sugawara">
       <span class="kind b">分館</span>
       <h3>菅原図書館</h3>
       <p>市の東部、長尾元町にある分館。JR片町線（学研都市線）沿いの生活圏を受け持ちます。市の中心から離れているぶん、落ち着いて過ごせる館です。</p>
       <p class="adr">長尾元町1丁目35-1／050-7102-3115　<a href="https://www.google.com/maps/search/?api=1&query=%E6%9E%9A%E6%96%B9%E5%B8%82%E7%AB%8B%E8%8F%85%E5%8E%9F%E5%9B%B3%E6%9B%B8%E9%A4%A8" target="_blank" rel="noopener">地図</a></p>
     </div>
 
-    <div class="lib" data-n="さ">
+    <div class="lib" data-n="さ" data-id="sada">
       <span class="kind b">分館</span>
       <h3>さだ図書館</h3>
       <p>市の南部、北中振の分館。寝屋川市との境に近く、京阪沿線の南側に住む人の最寄りになります。</p>
       <p class="adr">北中振3丁目27-10／050-7102-3117　<a href="https://www.google.com/maps/search/?api=1&query=%E6%9E%9A%E6%96%B9%E5%B8%82%E7%AB%8B%E3%81%95%E3%81%A0%E5%9B%B3%E6%9B%B8%E9%A4%A8" target="_blank" rel="noopener">地図</a></p>
     </div>
 
-    <div class="lib" data-n="御">
+    <div class="lib" data-n="御" data-id="gotenyama">
       <span class="kind b">分館</span>
       <h3>御殿山図書館</h3>
       <p>御殿山生涯学習美術センター内の分館。中央図書館とは同じ御殿山エリアにありますが、こちらは<strong>21時まで開いていて休館日も違う</strong>ので、中央が閉まっている金曜の受け皿になります。</p>
       <p class="adr">御殿山町10-16／050-7102-3119　<a href="https://www.google.com/maps/search/?api=1&query=%E6%9E%9A%E6%96%B9%E5%B8%82%E7%AB%8B%E5%BE%A1%E6%AE%BF%E5%B1%B1%E5%9B%B3%E6%9B%B8%E9%A4%A8" target="_blank" rel="noopener">地図</a></p>
     </div>
 
-    <div class="lib" data-n="牧">
+    <div class="lib" data-n="牧" data-id="makino">
       <span class="kind b">分館</span>
       <h3>牧野図書館</h3>
       <p>宇山町、牧野エリアの分館。市の西部・淀川寄りの住宅地を受け持ちます。</p>
       <p class="adr">宇山町4-5／050-7102-3121　<a href="https://www.google.com/maps/search/?api=1&query=%E6%9E%9A%E6%96%B9%E5%B8%82%E7%AB%8B%E7%89%A7%E9%87%8E%E5%9B%B3%E6%9B%B8%E9%A4%A8" target="_blank" rel="noopener">地図</a></p>
     </div>
 
-    <div class="lib" data-n="津">
+    <div class="lib" data-n="津" data-id="tsuda">
       <span class="kind b">分館</span>
       <h3>津田図書館</h3>
       <p>市の東端、津田北町の分館。国見山のふもと、枚方でもっとも自然に近いエリアにあります。</p>
@@ -372,7 +392,64 @@ footer{background:var(--paper);padding:30px 20px 40px;color:var(--sub);font-size
   </div>
 </footer>
 
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 <script>
+/* ---------- 枚方市立図書館 9館の地図 ---------- */
+const HLIBS=[
+ {id:"chuo",n:"1",name:"枚方市立中央図書館",addr:"車塚2丁目1-1",lat:34.833367,lng:135.671662,main:true},
+ {id:"ekimae",n:"2",name:"枚方市立市駅前図書館",addr:"岡東町19-1（ステーションヒル枚方5階）",lat:34.816139,lng:135.648721,main:true},
+ {id:"korigaoka",n:"3",name:"香里ケ丘図書館",addr:"香里ケ丘4丁目2-1",lat:34.790655,lng:135.651403,main:false},
+ {id:"kuzuha",n:"4",name:"楠葉図書館",addr:"楠葉並木2丁目29-5",lat:34.858778,lng:135.679866,main:false},
+ {id:"sugawara",n:"5",name:"菅原図書館",addr:"長尾元町1丁目35-1",lat:34.825002,lng:135.706517,main:false},
+ {id:"sada",n:"6",name:"さだ図書館",addr:"北中振3丁目27-10",lat:34.798187,lng:135.629043,main:false},
+ {id:"gotenyama",n:"7",name:"御殿山図書館",addr:"御殿山町10-16",lat:34.829241,lng:135.656868,main:false},
+ {id:"makino",n:"8",name:"牧野図書館",addr:"宇山町4-5",lat:34.842851,lng:135.668811,main:false},
+ {id:"tsuda",n:"9",name:"津田図書館",addr:"津田北町2丁目25-3",lat:34.809695,lng:135.703307,main:false}
+];
+const esc=(t)=>String(t).replace(/[&<>"']/g,(c)=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const hIcon=(l,hi)=>{
+  const size=hi?34:26;
+  const bg=hi?"#b23a2f":(l.main?"#b23a2f":"#40695b");
+  return L.divIcon({className:"",iconSize:[size,size],iconAnchor:[size/2,size/2],
+    html:'<div class="hpin" style="width:'+size+'px;height:'+size+'px;background:'+bg+';font-size:'+(hi?15:12)+'px">'+l.n+'</div>'});
+};
+let hmap=null;const hMarkers={};
+function initHmap(){
+  if(hmap)return;
+  hmap=L.map("hmap",{scrollWheelZoom:false});
+  L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png",{maxZoom:19,
+    attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'}).addTo(hmap);
+  HLIBS.forEach((l)=>{
+    const m=L.marker([l.lat,l.lng],{icon:hIcon(l,false)}).addTo(hmap);
+    const g="https://www.google.com/maps/search/?api=1&query="+encodeURIComponent(l.name+" 枚方市");
+    m.bindPopup('<p class="pop-n">'+esc(l.name)+'</p><p class="pop-a">'+esc(l.addr)+'</p>'+
+      '<a class="pop-l" href="'+g+'" target="_blank" rel="noopener">Google Mapsで開く →</a>');
+    hMarkers[l.id]=m;
+  });
+  hmap.fitBounds(HLIBS.map((l)=>[l.lat,l.lng]),{padding:[36,36]});
+}
+function hHighlight(id,on){
+  const m=hMarkers[id],l=HLIBS.find((x)=>x.id===id);
+  if(!m||!l)return;
+  m.setIcon(hIcon(l,on));
+  m.setZIndexOffset(on?1000:0);
+  if(on)m.bindTooltip(l.name,{permanent:true,direction:"top",offset:[0,-16]}).openTooltip();
+  else m.unbindTooltip();
+}
+initHmap();
+document.querySelectorAll(".lib[data-id]").forEach((c)=>{
+  c.addEventListener("mouseenter",()=>hHighlight(c.dataset.id,true));
+  c.addEventListener("mouseleave",()=>hHighlight(c.dataset.id,false));
+  c.addEventListener("click",(e)=>{
+    if(e.target.closest("a"))return;
+    const m=hMarkers[c.dataset.id];
+    if(!m)return;
+    document.getElementById("hmap").scrollIntoView({behavior:"smooth",block:"center"});
+    setTimeout(()=>{hmap.setView(m.getLatLng(),15,{animate:true});m.openPopup();},60);
+  });
+});
+
 const bar=document.getElementById("bar");
 addEventListener("scroll",()=>{
   const h=document.documentElement;
